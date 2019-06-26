@@ -14,11 +14,11 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import util.Consts;
 
 public class ApiHelper {
-
-	public String getDataFromApi() {
+	
+	public String getDataFromApi(String url) {
 		try {
 			HttpClient client = HttpClientBuilder.create().build();
-			HttpGet request = new HttpGet(Consts.API_URL);
+			HttpGet request = new HttpGet(url);
 			request.addHeader("X-API-Key", Consts.API_KEY);
 			HttpResponse response = client.execute(request);
 			System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
