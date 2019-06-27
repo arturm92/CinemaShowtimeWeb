@@ -8,40 +8,35 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import model.Cinema;
-import model.Cinemas;
 import util.Consts;
+import util.Utils;
 
 @WebServlet("/hi")
 
 public class Main extends HttpServlet {
-
+	
 	private static final long serialVersionUID = 1L;
-
-	public void listCinemas(String json) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			TypeReference<Cinemas> mapType = new TypeReference<Cinemas>(){};
-			Cinemas cinemas = mapper.readValue(json, mapType);
-			for (Cinema cinema : cinemas.getCinemas()) {
-				System.out.println(cinema.getName());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
+	
+	public Utils utils = new Utils();
+	
+	public ApiHelper api = new ApiHelper();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/plain; charset=UTF-8");
-		ApiHelper api = new ApiHelper();
-		String json = api.getDataFromApi(Consts.CINEMAS);
-		listCinemas(json);
+		String json = api.getDataFromApi(utils.getUrl("CINEMAS"));
+		utils.listValues(json);
 		resp.getWriter().write("Response on cinema request: \n" + json);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String param = req.getParameter("endpoint");
+		String json = api.getDataFromApi(utils.getUrl(param));
+		utils.listValues(json);
+		resp.setContentType("text/plain; charset=UTF-8");
+		resp.getWriter().write("Parameter from request: \n" + param);
+		resp.getWriter().write("\nJSON: \n" + json);
 	}
 
 }

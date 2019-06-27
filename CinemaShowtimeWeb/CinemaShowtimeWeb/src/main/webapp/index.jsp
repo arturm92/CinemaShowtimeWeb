@@ -1,15 +1,14 @@
 <html>
 <body>
 	<h2>Pobierz dane z API</h2>
-	<form id="form" action="/CinemaShowtimeWeb/hi" method="get">
-		<div>
-			<select>
-				<option value="SHOWTIMES">SHOWTIMES</option>
-				<option value="CINEMAS">CINEMAS</option>
-				<option value="MOVEIS">MOVEIS</option>
-			</select>
-		</div>
+	<form id="form" action="/CinemaShowtimeWeb/hi" method="post">
+		<select id="id" name="endpoint" required>
+			<option value="SHOWTIMES">SHOWTIMES</option>
+			<option value="CINEMAS">CINEMAS</option>
+			<option value="MOVEIS">MOVEIS</option>
+			<option value="CITIES">CITIES</option>
+		</select>
+		<input type="submit" value="Submit">
 	</form>
-	<button type="submit" form="form" formmethod="get">Pobierz</button>
 </body>
 </html>
