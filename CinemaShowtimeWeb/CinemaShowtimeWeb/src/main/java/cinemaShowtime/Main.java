@@ -1,14 +1,17 @@
 package cinemaShowtime;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import util.Consts;
+import model.json.Cinema;
 import util.Utils;
 
 @WebServlet("/hi")
@@ -34,9 +37,10 @@ public class Main extends HttpServlet {
 		String param = req.getParameter("endpoint");
 		String json = api.getDataFromApi(utils.getUrl(param));
 		utils.listValues(json);
-		resp.setContentType("text/plain; charset=UTF-8");
-		resp.getWriter().write("Parameter from request: \n" + param);
-		resp.getWriter().write("\nJSON: \n" + json);
+		Object[] forwardParams = utils.getForwardParams();
+		req.setAttribute("list",forwardParams[0]);
+		req.getRequestDispatcher((String) forwardParams[1]).forward(req, resp);
+		
 	}
 
 }

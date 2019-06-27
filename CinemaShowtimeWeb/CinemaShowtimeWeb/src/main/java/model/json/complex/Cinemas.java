@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import model.json.Cinema;
 import model.json.JsonModel;
 
-public class Cinemas extends JsonModel implements JsonList<Cinema>{
+public class Cinemas extends JsonModel implements JsonList<Cinema> {
 
 	@JsonProperty("cinemas")
 	private List<Cinema> list;
@@ -20,6 +20,13 @@ public class Cinemas extends JsonModel implements JsonList<Cinema>{
 	@Override
 	public void setList(List<Cinema> list) {
 		this.list = list;
+	}
+
+	@Override
+	public void showAllElements() {
+		for (Cinema cinema : list) {
+			System.out.println("CinemaId: " + cinema.getId() + " name: " + cinema.getName());
+		}
 	}
 
 }

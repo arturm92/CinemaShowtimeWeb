@@ -8,4 +8,6 @@ public interface JsonList<T> {
 	
 	public void setList(List<T> list);
 	
+	public void showAllElements();
+	
 }

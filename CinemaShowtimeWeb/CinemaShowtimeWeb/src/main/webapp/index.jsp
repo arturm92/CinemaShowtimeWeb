@@ -5,7 +5,7 @@
 		<select id="id" name="endpoint" required>
 			<option value="SHOWTIMES">SHOWTIMES</option>
 			<option value="CINEMAS">CINEMAS</option>
-			<option value="MOVEIS">MOVEIS</option>
+			<option value="MOVIES">MOVIES</option>
 			<option value="CITIES">CITIES</option>
 		</select>
 		<input type="submit" value="Submit">

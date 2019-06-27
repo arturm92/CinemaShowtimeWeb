@@ -21,5 +21,14 @@ public class Cities extends JsonModel implements JsonList<City>{
 	public void setList(List<City> list) {
 		this.list = list;
 	}
+	
+	@Override
+	public void showAllElements() {
+		for (City city : list) {
+			System.out.println("CityId: " + city.getId() + " name: " + city.getName());
+		}
+	}
+	
+	
 
 }
