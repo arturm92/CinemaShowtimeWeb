@@ -2,7 +2,9 @@ package model.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Movie {
+import model.json.base.BaseModel;
+
+public class Movie extends BaseModel{
 	/*
 	 * { "meta_info":{"range_from":0,"range_to":4459,"total_count":4460},
 	 * "movies":[{"id":"47080", "slug":"toy-story-4", "title":"Toy Story 4",
@@ -10,19 +12,10 @@ public class Movie {
 	 * "http://image.tmdb.org/t/p/w154/ehYkgIEVkJY0SBX8cGHjmKtCeri.jpg" }
 	 */
 
-	private Long id;
 	private String slug;
 	private String title;
 	@JsonProperty("poster_image_thumbnail")
 	private String poster;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getSlug() {
 		return slug;
@@ -50,5 +43,9 @@ public class Movie {
 
 	public String getName() {
 		return getTitle();
+	}
+	
+	public Object getInfo() {
+		return getPoster();
 	}
 }

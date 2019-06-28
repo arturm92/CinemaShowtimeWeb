@@ -5,9 +5,9 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import model.json.City;
-import model.json.JsonModel;
+import model.json.base.BaseComplexModel;
 
-public class Cities extends JsonModel implements JsonList<City>{
+public class Cities extends BaseComplexModel implements JsonList<City>{
 	
 	@JsonProperty("cities")
 	private List<City> list;

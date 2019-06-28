@@ -5,9 +5,9 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import model.json.Cinema;
-import model.json.JsonModel;
+import model.json.base.BaseComplexModel;
 
-public class Cinemas extends JsonModel implements JsonList<Cinema> {
+public class Cinemas extends BaseComplexModel implements JsonList<Cinema> {
 
 	@JsonProperty("cinemas")
 	private List<Cinema> list;

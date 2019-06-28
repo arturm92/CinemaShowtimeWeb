@@ -1,13 +1,13 @@
-package model.json;
+package model.json.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JsonModel {
+public class BaseComplexModel {
 
 	@JsonProperty("meta_info")
 	private Object metaInfo;
 
-	public JsonModel() {
+	public BaseComplexModel() {
 	}
 
 	public Object getMetaInfo() {

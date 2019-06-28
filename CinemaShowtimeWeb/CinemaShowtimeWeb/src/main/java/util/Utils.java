@@ -1,7 +1,6 @@
 package util;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -48,7 +47,7 @@ public class Utils {
 	public void listValues(String json) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			switch (this.currentEndpoint) {
+			switch (currentEndpoint) {
 			case Consts.CINEMAS:
 				TypeReference<Cinemas> map1 = new TypeReference<Cinemas>() {
 				};
@@ -89,10 +88,22 @@ public class Utils {
 	public List<Movie> getMoviesList() {
 		return movies.getList();
 	}
+	
+	public Object getList() {
+		switch (currentEndpoint) {
+		case Consts.CINEMAS:
+			return getCinemasList();
+		case Consts.MOVIES:
+			return getMoviesList();
+		case Consts.CITIES:
+			return getCitiesList();
+		}
+		return null;
+	}
 
 	public Object[] getForwardParams() {
 		Object[] ret = new Object[2];
-		switch (this.currentEndpoint) {
+		switch (currentEndpoint) {
 		case Consts.CINEMAS:
 			ret[0] = getCinemasList();
 			ret[1] = "/result.jsp";
@@ -109,4 +120,5 @@ public class Utils {
 		}
 		return ret;
 	}
+
 }
