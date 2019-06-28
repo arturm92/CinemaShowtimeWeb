@@ -99,11 +99,11 @@ public class Utils {
 			break;
 		case Consts.CITIES:
 			ret[0] = getCitiesList();
-			ret[1] = "/result.jsp";
+			ret[1] = "/result2.xhtml";
 			break;
 		case Consts.MOVIES:
 			ret[0] = getMoviesList();
-			ret[1] = "/result.jsp";
+			ret[1] = "/result2.xhtml";
 			break;
 		default:
 		}

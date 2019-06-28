@@ -1,7 +1,9 @@
 $(document).ready(function() {
-	$("tr").click(function() {
+	$("#table tr").click(function() {
 		$(this).addClass('selected').siblings().removeClass('selected');
 		var value = $(this).find('td:first').html();
-		alert(value);
+		
+		var det = document.getElementById('selectedItem');
+		det.value = value;
 	});
 });

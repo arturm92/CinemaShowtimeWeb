@@ -1,0 +1,28 @@
+.topAligned {
+	vertical-align: top;
+}
+
+.selected {
+	background-color: brown;
+	color: #FFF;
+}
+
+.order-table {
+	border-style: groove;
+}
+
+.order-table-header {
+	background: none repeat scroll 0 0 #E5E5E5;
+	border-style: groove;
+	padding: 16px;
+}
+
+.order-table-odd-row {
+	background: none repeat scroll 0 0 #FFFFFFF;
+	border-style: groove;
+}
+
+.order-table-even-row {
+	background: none repeat scroll 0 0 #F9F9F9;
+	border-top: 1px solid #BBBBBB;
+}
