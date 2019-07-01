@@ -22,26 +22,10 @@ public class Utils {
 	private Cinemas cinemas;
 	private Cities cities;
 	private Movies movies;
-
-	public String getUrl(String endpoint) {
-		switch (endpoint) {
-		case "SHOWTIMES":
-			this.currentEndpoint = Consts.SHOWTIMES;
-			break;
-		case "CINEMAS":
-			this.currentEndpoint = Consts.CINEMAS;
-			break;
-		case "MOVIES":
-			this.currentEndpoint = Consts.MOVIES;
-			break;
-		case "CITIES":
-			this.currentEndpoint = Consts.CITIES;
-			break;
-		default:
-			this.currentEndpoint = null;
-			break;
-		}
-		return currentEndpoint;
+	
+	
+	public void setCurrentEndpoint(String endpoint){
+		this.currentEndpoint = endpoint;
 	}
 
 	public void listValues(String json) {
@@ -119,6 +103,18 @@ public class Utils {
 		default:
 		}
 		return ret;
+	}
+
+	public Cinemas getCinemas() {
+		return cinemas;
+	}
+
+	public Cities getCities() {
+		return cities;
+	}
+
+	public Movies getMovies() {
+		return movies;
 	}
 
 }

@@ -17,4 +17,5 @@ public class BaseComplexModel {
 	public void setMetaInfo(Object metaInfo) {
 		this.metaInfo = metaInfo;
 	}
+	
 }

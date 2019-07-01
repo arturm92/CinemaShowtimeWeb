@@ -11,11 +11,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import model.json.City;
 import util.Consts;
 
 public class ApiHelper {
-	
-	public String getDataFromApi(String url) {
+
+	public static String getDataFromApi(String url) {
 		try {
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpGet request = new HttpGet(url);
@@ -31,7 +32,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	private String readResultContent(HttpResponse response) throws UnsupportedEncodingException, IOException {
+	private static String readResultContent(HttpResponse response) throws UnsupportedEncodingException, IOException {
 		BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
 		StringBuffer result = new StringBuffer();
 		String line = "";
@@ -39,5 +40,16 @@ public class ApiHelper {
 			result.append(line);
 		}
 		return result.toString();
+	}
+
+	public static String getAllCinemasInCity(City city) {
+		String params =  "?location=" + city.getLat() + "," + city.getLon();
+		params += "&distance=30";
+		return getDataFromApi(Consts.CINEMAS + params);
+	}
+	
+	public static String getAllMoviesInCinema(String cinemaId) {
+		String params =  "?cinema_id=" + cinemaId;
+		return getDataFromApi(Consts.MOVIES + params);
 	}
 }

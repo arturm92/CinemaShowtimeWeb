@@ -13,40 +13,42 @@
 	<h:body>
 		<h:panelGrid id="panelGrid" columns="3"
 			columnClasses="topAligned,topAligned,topAligned">
-			<h:dataTable id="table" value="#{controllerBean.list}" var="item"
-				styleClass="order-table" headerClass="order-table-header"
-				rowClasses="order-table-odd-row,order-table-even-row">
 
-				<h:column>
-					<f:facet name="header">Id</f:facet>
-					<h:outputText value="${item.id}" />
-				</h:column>
+			<ui:include src="modules/dataTable.xhtml">
+				<ui:param name="prefix" value="main" />
+				<ui:param name="bean" value="${controllerBean}" />
+			</ui:include>
 
-				<h:column>
-					<f:facet name="header">Name</f:facet>
-					<h:outputText value="${item.name}" />
-				</h:column>
-
-				<h:column>
-					<f:facet name="header">Info</f:facet>
-					<h:graphicImage value="${item.info}" />
-				</h:column>
-
-			</h:dataTable>
-
-			<h:panelGrid id="javaScriptSelectedPanelGrid" columns="2">
-				<h:outputText value="Wybrany rekord" />
-				<h:inputText id="selectedItem" value="" />
-			</h:panelGrid>
-
-			<h:panelGrid id="selectedPanelGrid" columns="2">
-				<h:form>
-					<h:commandButton id="showButton" value="Pokaż wybrane"
-						update=":showTextArea" />
-					<h:inputTextarea id="showTextArea"
-						value="#{controllerBean.checkedItems}" cols="30" rows="10" />
+			<h:panelGrid id="selectedPanelGrid">
+				<h:form id="selectedFrom">
+					<h:outputText value="Wybrany rekord" />
+					<h:inputText id="selectedItem" value="${controllerBean.selected}" />
+					<h:commandButton id="showShowtimeTablesButton"
+						value="Pokaż szczegóły" update="selectedDetail" />
 				</h:form>
+
+				<h:panelGroup id="selectedDetail">
+					<ui:include src="city/cityDetail.xhtml">
+						<ui:param name="prefix" value="city" />
+						<ui:param name="selectedCity"
+							value="${controllerBean.selectedCity}" />
+					</ui:include>
+
+					<h:form>
+						<h:commandButton id="showCinemasInCityButton"
+							value="Pokaż kina w mieście"
+							action="${controllerBean.showCinemasInCity}"></h:commandButton>
+					</h:form>
+					
+					<ui:include src="modules/dataTable.xhtml">
+						<ui:param name="prefix" value="cinemaInCity" />
+						<ui:param name="bean" value="${controllerBean.cinemaBean}" />
+					</ui:include>
+
+				</h:panelGroup>
+
 			</h:panelGrid>
+
 		</h:panelGrid>
 	</h:body>
 </ui:composition>

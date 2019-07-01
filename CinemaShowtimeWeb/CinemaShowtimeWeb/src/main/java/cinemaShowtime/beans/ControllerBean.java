@@ -1,13 +1,12 @@
 package cinemaShowtime.beans;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
 import cinemaShowtime.ApiHelper;
+import model.json.City;
 import util.Consts;
 import util.Utils;
 
@@ -17,16 +16,14 @@ public class ControllerBean {
 
 	private String endpoint;
 	public Utils utils;
-	public ApiHelper api;
-	//private List<BaseModel> checkedItems;
-	private String checkedItems;
-	
-	private Map<Long, Boolean> checked = new HashMap<Long, Boolean>();
-	//private List<> checkedItemsList = new ArrayList<Application>();
-	
+	private String selected;
+	private City selectedCity;
+
+	private CinemaBean cinemaBean;
+
 	public ControllerBean() {
 		utils = new Utils();
-		api = new ApiHelper();
+		utils.setCurrentEndpoint(Consts.CITIES);
 		System.out.println("ControllerBean started!");
 	}
 
@@ -47,16 +44,51 @@ public class ControllerBean {
 	}
 
 	public String getNextPage() {
-		String url = utils.getUrl(endpoint);
-		String json = api.getDataFromApi(url);
+		String json = ApiHelper.getDataFromApi(Consts.CITIES);
 		utils.listValues(json);
-		/*return endpoint.toLowerCase() + ".xhtml";*/
 		return "result.xhtml";
-				
+
 	}
-	
+
+	public String getMoviesInCinemaTable() {
+		String param = getSelected();
+		// String json = api.getAllMoviesInCinema(param);
+		return null;
+
+	}
+
 	public Object getList() {
 		return utils.getList();
 	}
-	
+
+	public String getSelected() {
+		return selected;
+	}
+
+	public void setSelected(String selected) {
+		this.selected = selected;
+	}
+
+	public City getSelectedCity() {
+		City city = utils.getCities().findCity(getSelected());
+		setSelectedCity(city);
+		return selectedCity;
+	}
+
+	public void setSelectedCity(City selectedCity) {
+		this.selectedCity = selectedCity;
+	}
+
+	public String showCinemasInCity() {
+		cinemaBean = new CinemaBean(selectedCity);
+		return null;
+	}
+
+	public CinemaBean getCinemaBean() {
+		return cinemaBean;
+	}
+
+	public void setCinemaBean(CinemaBean cinemaBean) {
+		this.cinemaBean = cinemaBean;
+	}
 }

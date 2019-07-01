@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import model.json.City;
 import model.json.base.BaseComplexModel;
 
-public class Cities extends BaseComplexModel implements JsonList<City>{
-	
+public class Cities extends BaseComplexModel implements JsonList<City> {
+
 	@JsonProperty("cities")
 	private List<City> list;
 
@@ -21,14 +21,25 @@ public class Cities extends BaseComplexModel implements JsonList<City>{
 	public void setList(List<City> list) {
 		this.list = list;
 	}
-	
+
 	@Override
 	public void showAllElements() {
 		for (City city : list) {
 			System.out.println("CityId: " + city.getId() + " name: " + city.getName());
 		}
 	}
-	
-	
+
+	public City findCity(String cityId) {
+		if (cityId != null) {
+			Long id = Long.valueOf(cityId);
+			for (City city : list) {
+				if (city.getId().compareTo(id) == 0) {
+					return city;
+				}
+			}
+		}
+		System.out.println("City with id " + cityId + " not found");
+		return null;
+	}
 
 }
