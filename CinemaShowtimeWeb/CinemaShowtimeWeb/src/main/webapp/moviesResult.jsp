@@ -7,19 +7,14 @@
 <script src="js/script.js" type="text/javascript"></script>
 </head>
 <body>
-	<table id="table">
-		<tr>
-			<th>Id</th>
-			<th>Name</th>
-			<th>Info</th>
-		</tr>
-		<c:forEach items='${list}' var="item">
-			<tr>
-				<td><c:out value='${item.id}' /></td>
-				<td><c:out value='${item.name}' /></td>
-				<td><img src='${item.poster}'></td>
-			</tr>
-		</c:forEach>
-	</table>
+		<!-- 		<div id="content">
+			<h:form>
+				<h:selectOneMenu value="#{controllerBean.endpoint}">
+					<f:selectItems value="#{controllerBean.endpointList}" />
+				</h:selectOneMenu>
+				<h:commandButton action="${controllerBean.getNextPage}"
+					value="Pobierz"></h:commandButton>
+			</h:form>
+		</div> -->
 </body>
 </html>

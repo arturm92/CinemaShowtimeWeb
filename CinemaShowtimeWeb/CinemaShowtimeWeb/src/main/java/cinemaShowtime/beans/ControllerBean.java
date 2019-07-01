@@ -2,8 +2,8 @@ package cinemaShowtime.beans;
 
 import java.util.List;
 
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import cinemaShowtime.ApiHelper;
 import model.json.City;
@@ -11,7 +11,7 @@ import util.Consts;
 import util.Utils;
 
 @ManagedBean(name = "controllerBean", eager = true)
-@ApplicationScoped
+@SessionScoped
 public class ControllerBean {
 
 	private String endpoint;
@@ -24,6 +24,8 @@ public class ControllerBean {
 	public ControllerBean() {
 		utils = new Utils();
 		utils.setCurrentEndpoint(Consts.CITIES);
+		String json = ApiHelper.getDataFromApi(Consts.CITIES);
+		utils.listValues(json);
 		System.out.println("ControllerBean started!");
 	}
 

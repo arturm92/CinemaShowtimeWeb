@@ -1,3 +1,15 @@
+#main {
+	background-repeat: no-repeat;
+	background-size: auto;
+	background: url("#{resource['img/cinemaBackground.jpg']}");
+}
+
+#content {
+	padding-left: 270px;
+	padding-top: 55px;
+	filter: invert(1);
+}
+
 .topAligned {
 	vertical-align: top;
 }
@@ -23,6 +35,6 @@
 }
 
 .order-table-even-row {
-	background: none repeat scroll 0 0 #F9F9F9;
+	background: none repeat scroll 0 0 #FFFFFFF;
 	border-top: 1px solid #BBBBBB;
 }
