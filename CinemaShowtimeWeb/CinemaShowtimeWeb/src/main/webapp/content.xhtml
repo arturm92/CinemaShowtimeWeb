@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<p:growl id="msgs" showDetail="true" />
+
+		<h:panelGrid id="panelGrid" columns="1" columnClasses="topAligned">
+			<h:panelGrid id="dataPanelGrid">
+				<h:form>
+					<p:autoComplete id="cityAutoComplete"
+						value="#{controllerBean.cityBean.autoCompleteCity}"
+						completeMethod="#{controllerBean.cityBean.getCitiesList}" var="item"
+						itemValue="#{item}" itemLabel="#{item.name}"
+						converter="cityConverter" dropdown="true">
+					</p:autoComplete>
+
+					<p:commandButton id="showShowtimeTablesButton"
+						value="Pokaż kina w pobliżu" update="selectedDetail" />
+
+				</h:form>
+
+				<h:panelGroup id="selectedDetail">
+					<h:inputText id="selectedItem"
+						value="${controllerBean.cityBean.autoCompleteCity.name}" />
+
+					<ui:include src="city/cityDetail.xhtml">
+						<ui:param name="prefix" value="city" />
+						<ui:param name="selectedCity"
+							value="${controllerBean.cityBean.autoCompleteCity}" />
+					</ui:include>
+				</h:panelGroup>
+
+			</h:panelGrid>
+
+		</h:panelGrid>
+	</h:body>
+</ui:composition>

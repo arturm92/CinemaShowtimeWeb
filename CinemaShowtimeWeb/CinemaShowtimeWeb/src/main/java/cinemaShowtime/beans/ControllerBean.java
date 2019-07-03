@@ -6,7 +6,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import cinemaShowtime.ApiHelper;
-import model.json.City;
 import util.Consts;
 import util.Utils;
 
@@ -15,22 +14,18 @@ import util.Utils;
 public class ControllerBean {
 
 	private String endpoint;
-	public Utils utils;
-	private String selected;
-	private City selectedCity;
 
+	private CityBean cityBean;
 	private CinemaBean cinemaBean;
 
 	public ControllerBean() {
-		utils = new Utils();
-		utils.setCurrentEndpoint(Consts.CITIES);
+		Utils.getInstance().setCurrentEndpoint(Consts.CITIES);
 		String json = ApiHelper.getDataFromApi(Consts.CITIES);
-		utils.listValues(json);
-		System.out.println("ControllerBean started!");
-	}
+		Utils.getInstance().listValues(json);
 
-	public String getMessage() {
-		return "Hello World!";
+		cityBean = new CityBean();
+
+		System.out.println("ControllerBean started!");
 	}
 
 	public List<String> getEndpointList() {
@@ -45,46 +40,28 @@ public class ControllerBean {
 		this.endpoint = endpoint;
 	}
 
-	public String getNextPage() {
-		String json = ApiHelper.getDataFromApi(Consts.CITIES);
-		utils.listValues(json);
-		return "result.xhtml";
-
-	}
-
 	public String getMoviesInCinemaTable() {
-		String param = getSelected();
 		// String json = api.getAllMoviesInCinema(param);
 		return null;
 
 	}
 
 	public Object getList() {
-		return utils.getList();
+		return Utils.getInstance().getList();
 	}
 
-	public String getSelected() {
-		return selected;
+	public CityBean getCityBean() {
+		return cityBean;
 	}
 
-	public void setSelected(String selected) {
-		this.selected = selected;
+	public void setCityBean(CityBean cityBean) {
+		this.cityBean = cityBean;
 	}
 
-	public City getSelectedCity() {
-		City city = utils.getCities().findCity(getSelected());
-		setSelectedCity(city);
-		return selectedCity;
-	}
-
-	public void setSelectedCity(City selectedCity) {
-		this.selectedCity = selectedCity;
-	}
-
-	public String showCinemasInCity() {
-		cinemaBean = new CinemaBean(selectedCity);
-		return null;
-	}
+	/*
+	 * public String showCinemasInCity() { cinemaBean = new
+	 * CinemaBean(selectedCity); return null; }
+	 */
 
 	public CinemaBean getCinemaBean() {
 		return cinemaBean;
@@ -93,4 +70,5 @@ public class ControllerBean {
 	public void setCinemaBean(CinemaBean cinemaBean) {
 		this.cinemaBean = cinemaBean;
 	}
+
 }

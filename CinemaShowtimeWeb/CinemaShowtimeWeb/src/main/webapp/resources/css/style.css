@@ -1,6 +1,4 @@
 #main {
-	background-repeat: no-repeat;
-	background-size: auto;
 	background: url("#{resource['img/cinemaBackground.jpg']}");
 }
 

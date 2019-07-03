@@ -17,14 +17,22 @@ import model.json.complex.Movies;
 
 public class Utils {
 
+	private static Utils instance = null;
+
 	public String currentEndpoint;
 
 	private Cinemas cinemas;
 	private Cities cities;
 	private Movies movies;
-	
-	
-	public void setCurrentEndpoint(String endpoint){
+
+	public static Utils getInstance() {
+		if (instance == null)
+			instance = new Utils();
+
+		return instance;
+	}
+
+	public void setCurrentEndpoint(String endpoint) {
 		this.currentEndpoint = endpoint;
 	}
 
@@ -72,7 +80,7 @@ public class Utils {
 	public List<Movie> getMoviesList() {
 		return movies.getList();
 	}
-	
+
 	public Object getList() {
 		switch (currentEndpoint) {
 		case Consts.CINEMAS:

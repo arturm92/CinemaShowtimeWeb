@@ -29,7 +29,7 @@ public class Cities extends BaseComplexModel implements JsonList<City> {
 		}
 	}
 
-	public City findCity(String cityId) {
+	public City findCityById(String cityId) {
 		if (cityId != null && !cityId.isEmpty() ) {
 			Long id = Long.valueOf(cityId);
 			for (City city : list) {
@@ -39,6 +39,18 @@ public class Cities extends BaseComplexModel implements JsonList<City> {
 			}
 		}
 		System.out.println("City with id " + cityId + " not found");
+		return null;
+	}
+
+	public City findCityByName(String cityName) {
+		if (cityName != null && !cityName.isEmpty() ) {
+			for (City city : list) {
+				if (city.getName().equals(cityName)) {
+					return city;
+				}
+			}
+		}
+		System.out.println("City with name " + cityName + " not found");
 		return null;
 	}
 
