@@ -5,31 +5,36 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
-		<p:growl id="msgs" showDetail="true" />
-
 		<h:panelGrid id="panelGrid" columns="1" columnClasses="topAligned">
 			<h:panelGrid id="dataPanelGrid">
 				<h:form>
 					<p:autoComplete id="cityAutoComplete"
-						value="#{controllerBean.cityBean.autoCompleteCity}"
-						completeMethod="#{controllerBean.cityBean.getCitiesList}" var="item"
-						itemValue="#{item}" itemLabel="#{item.name}"
+						value="#{controllerBean.cityBean.selectedCity}"
+						completeMethod="#{controllerBean.cityBean.getCitiesList}"
+						var="item" itemValue="#{item}" itemLabel="#{item.name}"
 						converter="cityConverter" dropdown="true">
 					</p:autoComplete>
-
-					<p:commandButton id="showShowtimeTablesButton"
-						value="Pokaż kina w pobliżu" update="selectedDetail" />
-
+					<p:commandButton id="showCinemasNearCityButton"
+						value="Pokaż kina w pobliżu"
+						update="selectedCityDetailPanelGroup,cinemaInCityPanelGroup" 
+						action="${controllerBean.cityBean.getCinemaInCity}"/>
 				</h:form>
 
-				<h:panelGroup id="selectedDetail">
-					<h:inputText id="selectedItem"
-						value="${controllerBean.cityBean.autoCompleteCity.name}" />
+				<h:panelGroup id="selectedCityDetailPanelGroup">
+					<h:inputText id="selectedCityName"
+						value="${controllerBean.cityBean.selectedCity.name}" />
 
 					<ui:include src="city/cityDetail.xhtml">
 						<ui:param name="prefix" value="city" />
 						<ui:param name="selectedCity"
-							value="${controllerBean.cityBean.autoCompleteCity}" />
+							value="${controllerBean.cityBean.selectedCity}" />
+					</ui:include>
+				</h:panelGroup>
+
+				<h:panelGroup id="cinemaInCityPanelGroup">
+					<ui:include src="modules/dataTablePrime.xhtml">
+						<ui:param name="bean"
+							value="${controllerBean.cityBean.cinemaBean}" />
 					</ui:include>
 				</h:panelGroup>
 

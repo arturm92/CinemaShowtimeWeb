@@ -10,21 +10,22 @@ import util.Utils;
 
 public class CinemaBean {
 
-	City city;
-	private Utils util;
+	private City city;
 	public List<Cinema> list;
+	private Cinema selectedCinema;
+	private MovieBean movieBean;
 
 	public CinemaBean(City city) {
 		this.city = city;
-		util = new Utils();
-		util.setCurrentEndpoint(Consts.CINEMAS);
+		Utils.getInstance().setCurrentEndpoint(Consts.CINEMAS);
 		initCinemaList();
+		System.out.println("CinemaBean started!");
 	}
 
 	private void initCinemaList() {
 		String json = ApiHelper.getAllCinemasInCity(city);
-		util.listValues(json);
-		setList(util.getCinemasList());
+		Utils.getInstance().listValues(json);
+		setList(Utils.getInstance().getCinemasList());
 	}
 
 	public List<Cinema> getList() {
@@ -34,7 +35,26 @@ public class CinemaBean {
 	public void setList(List<Cinema> list) {
 		this.list = list;
 	}
-	
-	
+
+	public Cinema getSelectedCinema() {
+		return selectedCinema;
+	}
+
+	public void setSelectedCinema(Cinema selectedCinema) {
+		this.selectedCinema = selectedCinema;
+	}
+
+	public void getCinemaShowtime() {
+		movieBean = new MovieBean(selectedCinema);
+		System.out.println("It's showtime");
+	}
+
+	public MovieBean getMovieBean() {
+		return movieBean;
+	}
+
+	public void setMovieBean(MovieBean movieBean) {
+		this.movieBean = movieBean;
+	}
 
 }

@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<h:form id="cinemaSelectionForm">
+
+			<p:dataTable id="cinemaDataTable" var="item" value="#{bean.list}"
+				selectionMode="single" selection="#{bean.selectedCinema}"
+				rowKey="#{item.id}">
+
+				<p:column headerText="Wybierz kino">
+					<h:outputText value="#{item.name}" />
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton process="cinemaDataTable" value="Pokaż repertuar"
+						action="#{bean.getCinemaShowtime}" />
+						
+						<!-- oncomplete="PF('carDialog').show()"  -->
+				</f:facet>
+			</p:dataTable>
+
+		</h:form>
+	</h:body>
+</ui:composition>

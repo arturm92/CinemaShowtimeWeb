@@ -1,10 +1,13 @@
 #main {
 	background: url("#{resource['img/cinemaBackground.jpg']}");
+	background-position: 50% 0%;
+	height: 800px;
 }
 
 #content {
-	padding-left: 270px;
-	padding-top: 55px;
+	padding-left: 19%;
+	padding-right: 19%;
+	padding-top: 5%;
 	filter: invert(1);
 }
 

@@ -11,6 +11,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import model.json.Cinema;
 import model.json.City;
 import util.Consts;
 
@@ -44,12 +45,14 @@ public class ApiHelper {
 
 	public static String getAllCinemasInCity(City city) {
 		String params =  "?location=" + city.getLat() + "," + city.getLon();
-		params += "&distance=30";
+		params += "&distance=10";
 		return getDataFromApi(Consts.CINEMAS + params);
 	}
 	
-	public static String getAllMoviesInCinema(String cinemaId) {
-		String params =  "?cinema_id=" + cinemaId;
+	public static String getAllMoviesInCinema(Cinema cinema) {
+		String params =  "?cinema_id=" + cinema.getId();
 		return getDataFromApi(Consts.MOVIES + params);
 	}
+
+	
 }

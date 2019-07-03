@@ -5,7 +5,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import cinemaShowtime.ApiHelper;
 import util.Consts;
 import util.Utils;
 
@@ -16,15 +15,9 @@ public class ControllerBean {
 	private String endpoint;
 
 	private CityBean cityBean;
-	private CinemaBean cinemaBean;
 
 	public ControllerBean() {
-		Utils.getInstance().setCurrentEndpoint(Consts.CITIES);
-		String json = ApiHelper.getDataFromApi(Consts.CITIES);
-		Utils.getInstance().listValues(json);
-
 		cityBean = new CityBean();
-
 		System.out.println("ControllerBean started!");
 	}
 
@@ -56,19 +49,6 @@ public class ControllerBean {
 
 	public void setCityBean(CityBean cityBean) {
 		this.cityBean = cityBean;
-	}
-
-	/*
-	 * public String showCinemasInCity() { cinemaBean = new
-	 * CinemaBean(selectedCity); return null; }
-	 */
-
-	public CinemaBean getCinemaBean() {
-		return cinemaBean;
-	}
-
-	public void setCinemaBean(CinemaBean cinemaBean) {
-		this.cinemaBean = cinemaBean;
 	}
 
 }
