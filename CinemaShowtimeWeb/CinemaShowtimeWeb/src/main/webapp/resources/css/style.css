@@ -1,14 +1,30 @@
-#main {
-	background: url("#{resource['img/cinemaBackground.jpg']}");
-	background-position: 50% 0%;
-	height: 800px;
+#header {
+	background: url("#{resource['img/header.jpg']}");
+	background-position: 42% 0%;
+	height: 50px;
 }
 
 #content {
+	background: url("#{resource['img/content.jpg']}");
+	background-position: 50% 0%;
+	min-height: 500px;
+}
+
+#footer {
+	background: url("#{resource['img/footer.jpg']}");
+	background-position: 47% 0%;
+	margin-top: -22px;
+	height: 300px;
+}
+
+#mainContent {
 	padding-left: 19%;
 	padding-right: 19%;
-	padding-top: 5%;
 	filter: invert(1);
+}
+
+.dataTable {
+	text-align: center;
 }
 
 .topAligned {

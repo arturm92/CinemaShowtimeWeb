@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<h:form id="moviesForm">
+
+			<p:dataTable id="moviesDataTable" var="item" value="#{bean.list}"
+				selectionMode="single" selection="#{bean.selectedMovie}"
+				rowKey="#{item.id}" rowStyleClass="dataTable" sortBy="#{item.name}"
+				sortOrder="ascending">
+
+				<p:column>
+					<h:outputText value="#{item.title}" />
+				</p:column>
+
+				<p:column>
+					<p:graphicImage value="#{item.poster}" style="filter: invert(1);" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</h:body>
+</ui:composition>

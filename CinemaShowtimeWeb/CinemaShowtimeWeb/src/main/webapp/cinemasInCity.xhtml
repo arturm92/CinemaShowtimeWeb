@@ -5,22 +5,20 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
-		<h:form id="cinemaSelectionForm">
+		<h:form id="cinemasForm">
 
 			<p:dataTable id="cinemaDataTable" var="item" value="#{bean.list}"
 				selectionMode="single" selection="#{bean.selectedCinema}"
-				rowKey="#{item.id}">
+				rowKey="#{item.id}" rowStyleClass="dataTable" sortBy="#{item.name}"
+				sortOrder="ascending">
 
-				<p:column headerText="Wybierz kino">
+				<p:ajax event="rowSelect" listener="#{bean.select}"
+					update="mainContent,moviesInCiemaPanelGroup" process="cinemaDataTable" />
+
+				<p:column>
 					<h:outputText value="#{item.name}" />
 				</p:column>
 
-				<f:facet name="footer">
-					<p:commandButton process="cinemaDataTable" value="Pokaż repertuar"
-						action="#{bean.getCinemaShowtime}" />
-						
-						<!-- oncomplete="PF('carDialog').show()"  -->
-				</f:facet>
 			</p:dataTable>
 
 		</h:form>
