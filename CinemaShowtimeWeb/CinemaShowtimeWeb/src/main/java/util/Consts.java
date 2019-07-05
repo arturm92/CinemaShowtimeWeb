@@ -1,8 +1,5 @@
 package util;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class Consts {
 	
 	public static final String BASE_URL = "https://api.internationalshowtimes.com/v4/";
@@ -15,6 +12,6 @@ public class Consts {
 	public static final String CITIES  = BASE_URL + "cities";
 	public static final String GENRES = BASE_URL + "genres";
 	
-	public static final List<String> ENDPOINTS = Arrays.asList("CITIES","SHOWTIMES", "CINEMAS", "MOVIES");
+	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	
 }

@@ -31,17 +31,17 @@
 				</h:panelGroup> -->
 
 			<h:panelGroup id="cinemasInCityPanelGroup"
-				rendered="${controllerBean.cityBean.cinemaVisible}">
-				<ui:include src="cinemasInCity.xhtml">
-					<ui:param name="bean" value="${controllerBean.cityBean.cinemaBean}" />
+				rendered="#{controllerBean.cityBean.cinemaVisible}">
+				<ui:include src="cinemas.xhtml">
+					<ui:param name="bean" value="#{controllerBean.cityBean.cinemaBean}" />
 				</ui:include>
 			</h:panelGroup>
 
 			<h:panelGroup id="moviesInCiemaPanelGroup"
-				rendered="${controllerBean.cityBean.cinemaBean.movieVisible}">
-				<ui:include src="moviesInCinema.xhtml">
+				rendered="#{controllerBean.cityBean.cinemaBean.movieVisible}">
+				<ui:include src="movies.xhtml">
 					<ui:param name="bean"
-						value="${controllerBean.cityBean.cinemaBean.movieBean}" />
+						value="#{controllerBean.cityBean.cinemaBean.movieBean}" />
 				</ui:include>
 			</h:panelGroup>
 

@@ -12,6 +12,10 @@
 				rowKey="#{item.id}" rowStyleClass="dataTable" sortBy="#{item.name}"
 				sortOrder="ascending">
 
+				<p:ajax event="rowSelect" listener="#{bean.select}"
+					update="mainContent,moviesForm" process="moviesDataTable"
+					oncomplete="PF('showtimesDialog').show()" />
+
 				<p:column>
 					<h:outputText value="#{item.title}" />
 				</p:column>
@@ -21,6 +25,18 @@
 				</p:column>
 
 			</p:dataTable>
+
+			<p:dialog id="showtimesDialog" widgetVar="showtimesDialog"
+				resizable="false" width="500" showEffect="explode"
+				hideEffect="explode" positionType="absolute" position="top"
+				style="margin-top: 100px;">
+				
+				<ui:include src="showtimes.xhtml">
+					<ui:param name="bean"
+						value="#{bean.showtimeBean}" />
+				</ui:include>
+				
+			</p:dialog>
 
 		</h:form>
 	</h:body>

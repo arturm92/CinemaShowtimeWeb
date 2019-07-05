@@ -18,9 +18,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import model.json.Cinema;
 import model.json.City;
+import model.json.Movie;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
 import model.json.complex.Movies;
+import model.json.complex.Showtimes;
 import util.Consts;
 
 public class ApiHelper {
@@ -103,6 +105,26 @@ public class ApiHelper {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static Showtimes getMovieShowtimesInCinema(Movie movie, Cinema cinema) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Showtimes> map = new TypeReference<Showtimes>() {
+			};
+			String params = "?cinema_id=" + cinema.getId();
+			params += "&movie_id="+ movie.getId();
+			String json = getDataFromApi(Consts.SHOWTIMES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 
 }

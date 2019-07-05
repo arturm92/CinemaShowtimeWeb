@@ -53,6 +53,7 @@ public class CityBean {
 	}
 
 	public void initCinemaBean() {
+		System.out.println("City id - " + selectedCity.getId());
 		cinemaVisible = true;
 		cinemaBean = new CinemaBean(selectedCity);
 	}
