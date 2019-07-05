@@ -5,25 +5,25 @@ import java.util.List;
 import cinemaShowtime.ApiHelper;
 import model.json.Cinema;
 import model.json.Movie;
-import util.Consts;
-import util.Utils;
+import model.json.complex.Movies;
 
 public class MovieBean {
-
+	
+	private Movies movies;
 	private Cinema cinema;
 	public List<Movie> list;
-	
-	public MovieBean(Cinema cinema) {
-		this.cinema = cinema;
-		Utils.getInstance().setCurrentEndpoint(Consts.MOVIES);
-		initMoviesList();
-		System.out.println("CinemaBean started!");
-	}
+	private Movie selectedMovie;
 
-	private void initMoviesList() {
-		String json = ApiHelper.getAllMoviesInCinema(cinema);
-		Utils.getInstance().listValues(json);
-		setList(Utils.getInstance().getMoviesList());
+	public MovieBean(Cinema cinema) {
+		initMovies(cinema);
+		System.out.println("MovieBean started!");
+	}
+	
+	public void initMovies(Cinema cinema) {
+		this.cinema = cinema;
+		this.movies = ApiHelper.getAllMoviesInCinema(cinema);
+		this.list = movies.getList();
+
 	}
 
 	public List<Movie> getList() {
@@ -32,5 +32,17 @@ public class MovieBean {
 
 	public void setList(List<Movie> list) {
 		this.list = list;
+	}
+
+	public Movie getSelectedMovie() {
+		return selectedMovie;
+	}
+
+	public void setSelectedMovie(Movie selectedMovie) {
+		this.selectedMovie = selectedMovie;
+	}
+
+	public Cinema getCinema() {
+		return cinema;
 	}
 }

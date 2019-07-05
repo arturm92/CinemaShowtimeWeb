@@ -2,30 +2,36 @@ package cinemaShowtime.beans;
 
 import java.util.List;
 
+import org.primefaces.event.SelectEvent;
+
 import cinemaShowtime.ApiHelper;
 import model.json.Cinema;
 import model.json.City;
-import util.Consts;
-import util.Utils;
+import model.json.complex.Cinemas;
 
 public class CinemaBean {
 
+	private Cinemas cinemas;
 	private City city;
 	public List<Cinema> list;
 	private Cinema selectedCinema;
+	private boolean movieVisible = false;
 	private MovieBean movieBean;
 
 	public CinemaBean(City city) {
-		this.city = city;
-		Utils.getInstance().setCurrentEndpoint(Consts.CINEMAS);
-		initCinemaList();
+		initCinemas(city);
 		System.out.println("CinemaBean started!");
 	}
 
-	private void initCinemaList() {
-		String json = ApiHelper.getAllCinemasInCity(city);
-		Utils.getInstance().listValues(json);
-		setList(Utils.getInstance().getCinemasList());
+	public void initCinemas(City city) {
+		this.city = city;
+		this.cinemas = ApiHelper.getAllCinemasInCity(city);
+		this.list = cinemas.getList();
+
+	}
+
+	public void select(SelectEvent selectEvent) {
+		initMovieBean();
 	}
 
 	public List<Cinema> getList() {
@@ -44,9 +50,9 @@ public class CinemaBean {
 		this.selectedCinema = selectedCinema;
 	}
 
-	public void getCinemaShowtime() {
+	public void initMovieBean() {
+		this.movieVisible = true;
 		movieBean = new MovieBean(selectedCinema);
-		System.out.println("It's showtime");
 	}
 
 	public MovieBean getMovieBean() {
@@ -55,6 +61,10 @@ public class CinemaBean {
 
 	public void setMovieBean(MovieBean movieBean) {
 		this.movieBean = movieBean;
+	}
+
+	public boolean isMovieVisible() {
+		return movieVisible;
 	}
 
 }
