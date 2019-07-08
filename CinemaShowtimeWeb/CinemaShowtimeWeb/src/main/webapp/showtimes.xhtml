@@ -10,10 +10,6 @@
 			<p:dataTable id="showtimesDataTable" var="item" value="#{bean.list}">
 			
 				<p:column headerText="Początek seansu">
-					<h:outputText value="#{item.startAt}" />
-				</p:column>
-				
-				<p:column headerText="Początek seansu">
 					<h:outputText value="#{item.formattedDate}" />
 				</p:column>
 

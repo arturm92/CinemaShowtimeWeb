@@ -95,8 +95,9 @@ public class Showtime {
 		this.bookingLink = bookingLink;
 	}
 	
-	public Date getFormattedDate() {
-		return DateFormater.formatDate(getStartAt());
+	public String getFormattedDate() {
+		DateFormater df = new DateFormater();
+		return df.formatDate(getStartAt()); 
 	}
 	
 	

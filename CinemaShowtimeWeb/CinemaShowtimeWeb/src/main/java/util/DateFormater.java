@@ -1,24 +1,40 @@
 package util;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
+import java.util.HashMap;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class DateFormater {
 
-	public static Date formatDate(String date) {
+	private HashMap<Integer, String> daysMapping = new HashMap<Integer, String>() {
+		{
+			put(2, "Poniedziałek");
+			put(3, "Wtorek");
+			put(4, "Środa");
+			put(5, "Czwartek");
+			put(6, "Piątek");
+			put(7, "Sobota");
+			put(1, "Niedziela");
+		}
+	};
+
+	public String formatDate(String inputDate) {
 		try {
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-			Date formattedDate  = df.parse(date);
-			System.out.println("date:" + formattedDate);
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		    sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		    System.out.println(sdf.format(formattedDate));
-		    
-			return formattedDate;
+			DateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+			Date date = inputDateFormat.parse(inputDate);
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+			String output = sdf.format(date);
+			output += " " + daysMapping.get(calendar.get(Calendar.DAY_OF_WEEK));
+
+			return output;
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

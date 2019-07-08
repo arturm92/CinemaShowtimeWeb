@@ -12,6 +12,6 @@ public class Consts {
 	public static final String CITIES  = BASE_URL + "cities";
 	public static final String GENRES = BASE_URL + "genres";
 	
-	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
 	
 }
