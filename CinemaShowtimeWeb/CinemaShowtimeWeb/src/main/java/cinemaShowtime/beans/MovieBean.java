@@ -6,8 +6,8 @@ import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.ApiHelper;
 import model.json.Cinema;
-import model.json.Movie;
 import model.json.complex.Movies;
+import model.json.movie.Movie;
 
 public class MovieBean {
 	
@@ -26,6 +26,7 @@ public class MovieBean {
 	public void initMovies(Cinema cinema) {
 		this.cinema = cinema;
 		this.movies = ApiHelper.getAllMoviesInCinema(cinema);
+		movies.updateMoviesDetails();
 		this.list = movies.getList();
 
 	}

@@ -13,16 +13,18 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import model.json.Cinema;
 import model.json.City;
-import model.json.Movie;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
+import model.json.movie.Movie;
 import util.Consts;
 
 public class ApiHelper {
@@ -58,7 +60,8 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Cities> map = new TypeReference<Cities>() {
 			};
-			String json = getDataFromApi(Consts.CITIES);
+			String params = "?lang=" + Consts.LANGUAGE;
+			String json = getDataFromApi(Consts.CITIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -77,6 +80,7 @@ public class ApiHelper {
 			};
 			String params = "?location=" + city.getLat() + "," + city.getLon();
 			params += "&distance=10";
+			params += "&lang=" + Consts.LANGUAGE;
 			String json = getDataFromApi(Consts.CINEMAS + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -95,6 +99,7 @@ public class ApiHelper {
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String params = "?cinema_id=" + cinema.getId();
+			// params += "&lang=" + Consts.LANGUAGE;
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -106,14 +111,14 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 	public static Showtimes getMovieShowtimesInCinema(Movie movie, Cinema cinema) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Showtimes> map = new TypeReference<Showtimes>() {
 			};
 			String params = "?cinema_id=" + cinema.getId();
-			params += "&movie_id="+ movie.getId();
+			params += "&movie_id=" + movie.getId();
 			String json = getDataFromApi(Consts.SHOWTIMES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -124,7 +129,45 @@ public class ApiHelper {
 			e.printStackTrace();
 		}
 		return null;
-		
+
+	}
+
+	public static Movie getMovieMultimedia(Long movieId) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true); 
+			String params = "/" + movieId;
+			params += "?fields=id,poster_image.flat,scene_images.flat,trailers,ratings";
+			params += "&lang=" + Consts.MULTIMEDIA_LANGUAGE;
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, Movie.class);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Movie getMovieDescription(Long movieId) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+			String params = "/" + movieId;
+			params += "?fields=id,title,synopsis,website,cast,crew,genres";
+			params += "&lang=" + Consts.LANGUAGE;
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, Movie.class);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

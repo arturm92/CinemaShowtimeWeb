@@ -2,6 +2,9 @@ package util;
 
 public class Consts {
 	
+	public static final String LANGUAGE = "pl";
+	public static final String MULTIMEDIA_LANGUAGE = "en";
+	
 	public static final String BASE_URL = "https://api.internationalshowtimes.com/v4/";
 	public static final String API_KEY = "2qUjDXiwtOiNzcivBgHBmQnk3vOTqIeh";
 	

@@ -6,13 +6,6 @@ import model.json.base.BaseModel;
 
 public class Cinema extends BaseModel {
 
-	/*
-	 * { "id":"64754", "slug":"kino-gryf-miechow", "name":"Kino Gryf",
-	 * "chain_id":null, "telephone":"+48 41 383 13 31",
-	 * "website":"http://www.ckis.miechow.eu/kino", "location":{},
-	 * "booking_type":"external" }
-	 */
-
 	private String slug;
 	private String telephone;
 	private String website;

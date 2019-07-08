@@ -4,9 +4,9 @@ import java.util.List;
 
 import cinemaShowtime.ApiHelper;
 import model.json.Cinema;
-import model.json.Movie;
 import model.json.Showtime;
 import model.json.complex.Showtimes;
+import model.json.movie.Movie;
 
 public class ShowtimeBean {
 
