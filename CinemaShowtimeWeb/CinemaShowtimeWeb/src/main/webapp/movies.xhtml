@@ -21,7 +21,7 @@
 				</p:column>
 
 				<p:column>
-					<p:graphicImage value="#{item.poster}" style="filter: invert(1);" />
+					<p:graphicImage value="#{item.poster}" styleClass="multimedia"/>
 				</p:column>
 
 			</p:dataTable>
@@ -30,12 +30,11 @@
 				resizable="false" width="80%" showEffect="explode"
 				hideEffect="explode" positionType="absolute" position="top"
 				style="margin-top: 100px;">
-				
+
 				<ui:include src="showtimes.xhtml">
-					<ui:param name="bean"
-						value="#{bean.showtimeBean}" />
+					<ui:param name="bean" value="#{bean.showtimeBean}" />
 				</ui:include>
-				
+
 			</p:dialog>
 
 		</h:form>

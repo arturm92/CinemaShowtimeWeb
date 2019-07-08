@@ -7,8 +7,14 @@
 	<h:body>
 		<h:form id="showtimesForm">
 
+			<h:panelGrid columns="2" cellpadding="10">
+				<p:media value="#{bean.movie.trailerURL}" width="420" height="315"
+					player="flash" styleClass="multimedia" />
+				<h:outputText value="#{bean.movie.description}" />
+			</h:panelGrid>
+
 			<p:dataTable id="showtimesDataTable" var="item" value="#{bean.list}">
-			
+
 				<p:column headerText="Początek seansu">
 					<h:outputText value="#{item.formattedDate}" />
 				</p:column>

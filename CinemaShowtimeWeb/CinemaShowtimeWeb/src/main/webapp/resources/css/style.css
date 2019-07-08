@@ -23,6 +23,10 @@
 	filter: invert(1);
 }
 
+.multimedia {
+	filter: invert(1);
+}
+
 .dataTable {
 	text-align: center;
 }

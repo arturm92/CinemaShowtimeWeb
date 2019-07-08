@@ -132,4 +132,8 @@ public class Movie extends BaseModel {
 	public void setWebsite(String website) {
 		this.website = website;
 	}
+	
+	public String getTrailerURL() {
+		return trailers.get(0).getTrailerFiles().get(0).getUrl().replace("watch?v=", "v/");
+	}
 }

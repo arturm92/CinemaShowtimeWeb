@@ -29,4 +29,8 @@ public class ShowtimeBean {
 	public List<Showtime> getList() {
 		return list;
 	}
+
+	public Movie getMovie() {
+		return movie;
+	}
 }
