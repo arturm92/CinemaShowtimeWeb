@@ -1,3 +1,4 @@
+
 package model.json.movie;
 
 import java.util.List;
@@ -54,6 +55,9 @@ public class Movie extends BaseModel {
 	}
 
 	public String getDescription() {
+		if (description == null || description.isEmpty()) {
+			return "Opis filmu jest niedostępny";
+		}
 		return description;
 	}
 
@@ -129,10 +133,18 @@ public class Movie extends BaseModel {
 		return trailers.get(0).getTrailerFiles().get(0).getUrl().replace("watch?v=", "v/");
 	}
 
+	public String getRating() {
+		if (getImdbRating() != null) {
+			return getImdbRating();
+		}else {
+			return getTmdbRating();
+		}
+	}
+	
 	public String getImdbRating() {
 		Rating imdbRating = ratings.getImdbRating();
 		if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
-			return " IMDB : " + imdbRating.getValue() + " / " + imdbRating.getVoteCount();
+			return " IMDB : " + imdbRating.getValue() + " / " + imdbRating.getVoteCount() + " ocen";
 		}
 		return null;
 	}
@@ -140,8 +152,16 @@ public class Movie extends BaseModel {
 	public String getTmdbRating() {
 		Rating tmdbRating = ratings.getTmdbRating();
 		if (tmdbRating != null && !tmdbRating.getVoteCount().equals("0")) {
-			return " TMDB : " + tmdbRating.getValue() + " / " + tmdbRating.getVoteCount();
+			return " TMDB : " + tmdbRating.getValue() + " / " + tmdbRating.getVoteCount() + " ocen";
 		}
 		return null;
+	}
+	
+	public String getGenreInfo() {
+		String ret = "";
+		for (Genre elem : genre) {
+			ret += "[" + elem.getName() + "] ";
+		}
+		return ret;
 	}
 }

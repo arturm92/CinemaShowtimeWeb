@@ -6,26 +6,51 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form id="showtimesForm">
-		
-			<p:steps activeIndex="3" readonly="false" >
-				<p:menuitem value="Wybierz miasto" actionListener="#{bean.firstStepClicked}" update="mainContent"/>
-				<p:menuitem value="Wybierz kino" actionListener="#{bean.secondStepClicked}" update="mainContent"/>
-				<p:menuitem value="Wybierz film" actionListener="#{bean.thirdStepClicked}" update="mainContent"/>
+
+			<p:steps activeIndex="3" readonly="false">
+				<p:menuitem value="Wybierz miasto"
+					actionListener="#{bean.firstStepClicked}" update="mainContent" />
+				<p:menuitem value="Wybierz kino"
+					actionListener="#{bean.secondStepClicked}" update="mainContent" />
+				<p:menuitem value="Wybierz film"
+					actionListener="#{bean.thirdStepClicked}" update="mainContent" />
 				<p:menuitem value="Wybierz seans" />
 			</p:steps>
 
-			<h:panelGrid columns="2" cellpadding="10">
-				<p:media value="#{bean.movie.trailerURL}" width="420" player="flash"
-					styleClass="multimedia" />
-				<h:outputText value="#{bean.movie.description}" />
+			<h:panelGrid columns="1">
+				<h:panelGroup>
+					<p:accordionPanel multiple="true" style="width:820px;">
+						<p:tab title="Trailer">
+							<h:panelGrid cellpadding="10" style="text-align: center;">
+								<p:media value="#{bean.movie.trailerURL}" player="flash"
+									styleClass="video" />
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="Opis filmu">
+							<h:panelGrid cellpadding="10">
+								<h:outputText value="#{bean.movie.genreInfo}" />
+								<br />
+								<h:outputText value="#{bean.movie.description}" />
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="Obsada">
+							<h:panelGrid columns="2" cellpadding="10">
+								<h:outputText value="Tu będzie obsada" />
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="Seceny z filmu">
+							<h:panelGrid columns="2" cellpadding="10">
+								<h:outputText value="Tu będą sceny z filmu" />
+							</h:panelGrid>
+						</p:tab>
+					</p:accordionPanel>
+				</h:panelGroup>
 			</h:panelGrid>
 
 			<p:dataTable id="showtimesDataTable" var="item" value="#{bean.list}">
-
 				<p:column headerText="Początek seansu">
 					<h:outputText value="#{item.formattedDate}" />
 				</p:column>
-
 			</p:dataTable>
 
 		</h:form>

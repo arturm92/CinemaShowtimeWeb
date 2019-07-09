@@ -52,12 +52,19 @@
 	filter: invert(1);
 }
 
-.multimedia {
+.image {
 	height: 350px;
 	filter: invert(1);
 }
 
+.video {
+	width: 700px;
+	height: 500px;
+	filter: invert(1);
+}
+
 .dataTable {
+	width: 100%;
 	text-align: center;
 }
 

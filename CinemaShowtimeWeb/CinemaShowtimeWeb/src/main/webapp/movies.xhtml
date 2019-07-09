@@ -8,8 +8,10 @@
 		<h:form id="moviesForm">
 
 			<p:steps activeIndex="2" readonly="false">
-				<p:menuitem value="Wybierz miasto" actionListener="#{bean.firstStepClicked}" update="mainContent"/>
-				<p:menuitem value="Wybierz kino" actionListener="#{bean.secondStepClicked}" update="mainContent"/>
+				<p:menuitem value="Wybierz miasto"
+					actionListener="#{bean.firstStepClicked}" update="mainContent" />
+				<p:menuitem value="Wybierz kino"
+					actionListener="#{bean.secondStepClicked}" update="mainContent" />
 				<p:menuitem value="Wybierz film" />
 				<p:menuitem value="Wybierz seans" />
 			</p:steps>
@@ -26,22 +28,17 @@
 				<p:column style="font-size: larger;">
 					<h:outputText value="#{item.title}" />
 					<br />
+					<h:outputText value="#{item.genreInfo}" />
 					<br />
-					<h:outputText value="Ocena w serwisie / Liczba ocen" />
-					<br />
-					<h:panelGroup rendered="#{item.imdbRating != null}">
+					<h:panelGroup rendered="#{item.rating != null}">
 						<i class="fa fa-fw fa-star-o"></i>
-						<h:outputText value="#{item.imdbRating}" />
+						<h:outputText value="#{item.rating}" />
 						<br />
-					</h:panelGroup>
-					<h:panelGroup rendered="#{item.tmdbRating != null}">
-						<i class="fa fa-fw fa-star-o"></i>
-						<h:outputText value="#{item.tmdbRating}" />
 					</h:panelGroup>
 				</p:column>
 
 				<p:column>
-					<p:graphicImage value="#{item.posterImage}" styleClass="multimedia" />
+					<p:graphicImage value="#{item.posterImage}" styleClass="image" />
 				</p:column>
 
 			</p:dataTable>
