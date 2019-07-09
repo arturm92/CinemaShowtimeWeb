@@ -7,13 +7,22 @@
 	<h:body>
 		<h:form id="cinemasForm">
 
+			<p:steps activeIndex="1" readonly="true">
+				<p:menuitem value="Wybierz miasto" />
+				<p:menuitem value="Wybierz kino" />
+				<p:menuitem value="Wybierz film" />
+				<p:menuitem value="Wybierz seans" />
+			</p:steps>
+
+
 			<p:dataTable id="cinemaDataTable" var="item" value="#{bean.list}"
 				selectionMode="single" selection="#{bean.selectedCinema}"
 				rowKey="#{item.id}" rowStyleClass="dataTable" sortBy="#{item.name}"
 				sortOrder="ascending">
 
 				<p:ajax event="rowSelect" listener="#{bean.select}"
-					update="mainContent,moviesInCiemaPanelGroup" process="cinemaDataTable" />
+					update="mainContent,moviesInCinemaPanelGroup"
+					process="cinemaDataTable" />
 
 				<p:column>
 					<h:outputText value="#{item.name}" />

@@ -7,6 +7,7 @@ import model.json.Cinema;
 import model.json.Showtime;
 import model.json.complex.Showtimes;
 import model.json.movie.Movie;
+import util.Utils;
 
 public class ShowtimeBean {
 
@@ -24,6 +25,7 @@ public class ShowtimeBean {
 	public void initShowtimes() {
 		this.showtimes = ApiHelper.getMovieShowtimesInCinema(movie, cinema);
 		this.list = showtimes.getList();
+		Utils.getInstance().setShowtimeSelectionVisible(true);
 	}
 
 	public List<Showtime> getList() {
@@ -32,5 +34,9 @@ public class ShowtimeBean {
 
 	public Movie getMovie() {
 		return movie;
+	}
+	
+	public boolean isShowtimeSelectionVisible() {
+		return Utils.getInstance().isShowtimeSelectionVisible();
 	}
 }

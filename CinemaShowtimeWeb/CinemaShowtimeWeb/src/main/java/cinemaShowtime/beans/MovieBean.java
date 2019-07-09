@@ -8,9 +8,10 @@ import cinemaShowtime.ApiHelper;
 import model.json.Cinema;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
+import util.Utils;
 
 public class MovieBean {
-	
+
 	private Movies movies;
 	private Cinema cinema;
 	public List<Movie> list;
@@ -22,7 +23,7 @@ public class MovieBean {
 		System.out.println("Selected cinema -" + cinema.getId());
 		System.out.println("MovieBean started!");
 	}
-	
+
 	public void initMovies(Cinema cinema) {
 		this.cinema = cinema;
 		this.movies = ApiHelper.getAllMoviesInCinema(cinema);
@@ -32,14 +33,15 @@ public class MovieBean {
 	}
 
 	public void select(SelectEvent selectEvent) {
+		Utils.getInstance().setMovieSelectionVisible(false);
 		initShowtimeBean();
 	}
-	
+
 	public void initShowtimeBean() {
 		System.out.println("Selected movie - " + selectedMovie.getId());
 		showtimeBean = new ShowtimeBean(selectedMovie, cinema);
 	}
-	
+
 	public List<Movie> getList() {
 		return list;
 	}
@@ -66,5 +68,9 @@ public class MovieBean {
 
 	public void setShowtimeBean(ShowtimeBean showtimeBean) {
 		this.showtimeBean = showtimeBean;
+	}
+
+	public boolean isMovieSelectionVisible() {
+		return Utils.getInstance().isMovieSelectionVisible();
 	}
 }

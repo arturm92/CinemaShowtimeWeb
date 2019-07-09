@@ -20,7 +20,7 @@ public class Movie extends BaseModel {
 	@JsonProperty("genres")
 	private List<Genre> genre;
 	@JsonProperty("poster_image")
-	private String posterImages;
+	private String posterImage;
 	@JsonProperty("scene_images")
 	private List<String> sceneImages;
 	private List<Trailer> trailers;
@@ -28,7 +28,7 @@ public class Movie extends BaseModel {
 	private List<Person> cast;
 	private List<Person> crew;
 	private String website;
-	
+
 	public String getSlug() {
 		return slug;
 	}
@@ -53,14 +53,6 @@ public class Movie extends BaseModel {
 		this.poster = poster;
 	}
 
-	public String getName() {
-		return getTitle();
-	}
-
-	public Object getInfo() {
-		return getPoster();
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -69,12 +61,12 @@ public class Movie extends BaseModel {
 		this.description = description;
 	}
 
-	public String getPosterImages() {
-		return posterImages;
+	public String getPosterImage() {
+		return posterImage;
 	}
 
-	public void setPosterImages(String posterImages) {
-		this.posterImages = posterImages;
+	public void setPosterImages(String posterImage) {
+		this.posterImage = posterImage;
 	}
 
 	public List<String> getSceneImages() {
@@ -132,8 +124,24 @@ public class Movie extends BaseModel {
 	public void setWebsite(String website) {
 		this.website = website;
 	}
-	
+
 	public String getTrailerURL() {
 		return trailers.get(0).getTrailerFiles().get(0).getUrl().replace("watch?v=", "v/");
+	}
+
+	public String getImdbRating() {
+		Rating imdbRating = ratings.getImdbRating();
+		if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
+			return " IMDB : " + imdbRating.getValue() + " / " + imdbRating.getVoteCount();
+		}
+		return null;
+	}
+
+	public String getTmdbRating() {
+		Rating tmdbRating = ratings.getTmdbRating();
+		if (tmdbRating != null && !tmdbRating.getVoteCount().equals("0")) {
+			return " TMDB : " + tmdbRating.getValue() + " / " + tmdbRating.getVoteCount();
+		}
+		return null;
 	}
 }

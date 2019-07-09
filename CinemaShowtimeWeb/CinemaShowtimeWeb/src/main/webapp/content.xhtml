@@ -7,41 +7,34 @@
 	<h:body>
 		<h:panelGrid id="mainContent" columns="1" columnClasses="topAligned">
 
-			<h:form>
-				<p:autoComplete id="cityAutoComplete"
-					value="#{controllerBean.cityBean.selectedCity}"
-					completeMethod="#{controllerBean.cityBean.getCitiesList}"
-					var="item" itemValue="#{item}" itemLabel="#{item.name}"
-					converter="cityConverter" dropdown="true" inputStyle="width:100%;">
-					<p:ajax event="itemSelect"
-						listener="#{controllerBean.cityBean.select}"
-						update="mainContent,cinemasInCityPanelGroup" />
-				</p:autoComplete>
-			</h:form>
-
-			<!-- <h:panelGroup id="selectedCityDetailPanelGroup">
-					<h:inputText id="selectedCityName"
-						value="${controllerBean.cityBean.selectedCity.name}" />
-
-					<ui:include src="city/cityDetail.xhtml">
-						<ui:param name="prefix" value="city" />
-						<ui:param name="selectedCity"
-							value="${controllerBean.cityBean.selectedCity}" />
-					</ui:include>
-				</h:panelGroup> -->
+			<h:panelGroup id="cityPanelGroup"
+				rendered="#{controllerBean.cityBean.citySelectionVisible}">
+				<ui:include src="cities.xhtml">
+					<ui:param name="bean"
+						value="#{controllerBean.cityBean}" />
+				</ui:include>
+			</h:panelGroup>
 
 			<h:panelGroup id="cinemasInCityPanelGroup"
-				rendered="#{controllerBean.cityBean.cinemaVisible}">
+				rendered="#{controllerBean.cityBean.cinemaBean.cinemaSelectionVisible}">
 				<ui:include src="cinemas.xhtml">
 					<ui:param name="bean" value="#{controllerBean.cityBean.cinemaBean}" />
 				</ui:include>
 			</h:panelGroup>
 
-			<h:panelGroup id="moviesInCiemaPanelGroup"
-				rendered="#{controllerBean.cityBean.cinemaBean.movieVisible}">
+			<h:panelGroup id="moviesInCinemaPanelGroup"
+				rendered="#{controllerBean.cityBean.cinemaBean.movieBean.movieSelectionVisible}">
 				<ui:include src="movies.xhtml">
 					<ui:param name="bean"
 						value="#{controllerBean.cityBean.cinemaBean.movieBean}" />
+				</ui:include>
+			</h:panelGroup>
+
+			<h:panelGroup id="showtimesInCinemaPanelGroup"
+				rendered="#{controllerBean.cityBean.cinemaBean.movieBean.showtimeBean.showtimeSelectionVisible}">
+				<ui:include src="showtimes.xhtml">
+					<ui:param name="bean"
+						value="#{controllerBean.cityBean.cinemaBean.movieBean.showtimeBean}" />
 				</ui:include>
 			</h:panelGroup>
 

@@ -15,7 +15,6 @@ public class CityBean {
 	private Cities cities;
 	private City selectedCity;
 	private CinemaBean cinemaBean;
-	private boolean cinemaVisible = false;
 
 	public CityBean() {
 		initCities();
@@ -25,6 +24,7 @@ public class CityBean {
 	public void initCities() {
 		this.cities = ApiHelper.getCitiesFromApi();
 		Utils.getInstance().setCities(cities);
+		Utils.getInstance().setCitySelectionVisible(true);
 	}
 	
 	public Cities getCities() {
@@ -49,12 +49,12 @@ public class CityBean {
 	}
 
 	public void select(SelectEvent event) {
+		Utils.getInstance().setCitySelectionVisible(false);
 		initCinemaBean();
 	}
 
 	public void initCinemaBean() {
 		System.out.println("City id - " + selectedCity.getId());
-		cinemaVisible = true;
 		cinemaBean = new CinemaBean(selectedCity);
 	}
 
@@ -73,9 +73,9 @@ public class CityBean {
 	public void setCinemaBean(CinemaBean cinemaBean) {
 		this.cinemaBean = cinemaBean;
 	}
-
-	public boolean isCinemaVisible() {
-		return cinemaVisible;
+	
+	public boolean isCitySelectionVisible() {
+		return Utils.getInstance().isCitySelectionVisible();
 	}
 
 }

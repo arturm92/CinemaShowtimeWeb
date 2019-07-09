@@ -99,7 +99,7 @@ public class ApiHelper {
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String params = "?cinema_id=" + cinema.getId();
-			// params += "&lang=" + Consts.LANGUAGE;
+			params += "&fields=id,poster_image.flat,scene_images.flat,trailers,ratings";
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {

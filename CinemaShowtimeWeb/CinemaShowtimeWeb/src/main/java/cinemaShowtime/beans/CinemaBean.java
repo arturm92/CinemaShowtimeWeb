@@ -8,6 +8,7 @@ import cinemaShowtime.ApiHelper;
 import model.json.Cinema;
 import model.json.City;
 import model.json.complex.Cinemas;
+import util.Utils;
 
 public class CinemaBean {
 
@@ -15,7 +16,6 @@ public class CinemaBean {
 	private City city;
 	public List<Cinema> list;
 	private Cinema selectedCinema;
-	private boolean movieVisible = false;
 	private MovieBean movieBean;
 
 	public CinemaBean(City city) {
@@ -24,6 +24,7 @@ public class CinemaBean {
 	}
 
 	public void initCinemas(City city) {
+		Utils.getInstance().setCinemaSelectionVisible(true);
 		this.city = city;
 		this.cinemas = ApiHelper.getAllCinemasInCity(city);
 		this.list = cinemas.getList();
@@ -31,6 +32,7 @@ public class CinemaBean {
 	}
 
 	public void select(SelectEvent selectEvent) {
+		Utils.getInstance().setCinemaSelectionVisible(false);
 		initMovieBean();
 	}
 
@@ -51,7 +53,7 @@ public class CinemaBean {
 	}
 
 	public void initMovieBean() {
-		this.movieVisible = true;
+		Utils.getInstance().setMovieSelectionVisible(true);
 		movieBean = new MovieBean(selectedCinema);
 	}
 
@@ -63,8 +65,8 @@ public class CinemaBean {
 		this.movieBean = movieBean;
 	}
 
-	public boolean isMovieVisible() {
-		return movieVisible;
+	public boolean isCinemaSelectionVisible() {
+		return Utils.getInstance().isCinemaSelectionVisible();
 	}
 
 }

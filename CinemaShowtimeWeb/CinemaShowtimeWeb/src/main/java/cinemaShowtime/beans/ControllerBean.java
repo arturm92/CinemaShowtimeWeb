@@ -8,7 +8,8 @@ import javax.faces.bean.ViewScoped;
 public class ControllerBean {
 
 	private CityBean cityBean;
-
+	
+	
 	public ControllerBean() {
 		cityBean = new CityBean();
 		System.out.println("ControllerBean started!");

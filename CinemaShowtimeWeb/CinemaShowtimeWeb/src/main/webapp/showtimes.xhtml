@@ -6,10 +6,16 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form id="showtimesForm">
+			<p:steps activeIndex="3" readonly="true">
+				<p:menuitem value="Wybierz miasto" />
+				<p:menuitem value="Wybierz kino" />
+				<p:menuitem value="Wybierz film" />
+				<p:menuitem value="Wybierz seans" />
+			</p:steps>
 
 			<h:panelGrid columns="2" cellpadding="10">
-				<p:media value="#{bean.movie.trailerURL}" width="420" height="315"
-					player="flash" styleClass="multimedia" />
+				<p:media value="#{bean.movie.trailerURL}" width="420" player="flash"
+					styleClass="multimedia" />
 				<h:outputText value="#{bean.movie.description}" />
 			</h:panelGrid>
 

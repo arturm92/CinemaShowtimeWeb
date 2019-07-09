@@ -1,3 +1,25 @@
+.ui-steps {
+	padding-left: 13%;
+	padding-right: 13%;
+	padding-bottom: 3%;
+}
+
+.ui-steps-item .ui-menuitem-link {
+	height: 40px;
+}
+
+.ui-steps-item .ui-menuitem-link .ui-steps-number {
+	background-color: #000;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 30px;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 5px;
+	position: relative;
+	top: -3px;
+}
+
 #header {
 	background: url("#{resource['img/header.jpg']}");
 	background-position: 42% 0%;
@@ -21,9 +43,17 @@
 	padding-left: 19%;
 	padding-right: 19%;
 	filter: invert(1);
+	width: 100%;
+	text-align: center;
+}
+
+.fa-star-o {
+	color: yellow;
+	filter: invert(1);
 }
 
 .multimedia {
+	height: 350px;
 	filter: invert(1);
 }
 

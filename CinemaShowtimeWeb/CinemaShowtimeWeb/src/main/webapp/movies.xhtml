@@ -6,6 +6,13 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form id="moviesForm">
+			<p:steps activeIndex="2" readonly="true">
+				<p:menuitem value="Wybierz miasto" />
+				<p:menuitem value="Wybierz kino" />
+				<p:menuitem value="Wybierz film" />
+				<p:menuitem value="Wybierz seans" />
+			</p:steps>
+
 
 			<p:dataTable id="moviesDataTable" var="item" value="#{bean.list}"
 				selectionMode="single" selection="#{bean.selectedMovie}"
@@ -13,21 +20,33 @@
 				sortOrder="ascending">
 
 				<p:ajax event="rowSelect" listener="#{bean.select}"
-					update="mainContent,moviesForm" process="moviesDataTable"
-					oncomplete="PF('showtimesDialog').show()" />
+					update="mainContent,showtimesInCinemaPanelGroup" process="moviesDataTable" />
 
-				<p:column>
+				<p:column style="font-size: larger;">
 					<h:outputText value="#{item.title}" />
+					<br />
+					<br />
+					<h:outputText value="Ocena w serwisie / Liczba ocen" />
+					<br />
+					<h:panelGroup rendered="#{item.imdbRating != null}">
+						<i class="fa fa-fw fa-star-o"></i>
+						<h:outputText value="#{item.imdbRating}" />
+						<br />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{item.tmdbRating != null}">
+						<i class="fa fa-fw fa-star-o"></i>
+						<h:outputText value="#{item.tmdbRating}" />
+					</h:panelGroup>
 				</p:column>
 
 				<p:column>
-					<p:graphicImage value="#{item.poster}" styleClass="multimedia"/>
+					<p:graphicImage value="#{item.posterImage}" styleClass="multimedia" />
 				</p:column>
 
 			</p:dataTable>
 
-			<p:dialog id="showtimesDialog" widgetVar="showtimesDialog"
-				resizable="false" width="80%" showEffect="explode"
+<!-- 			<p:dialog id="showtimesDialog" widgetVar="showtimesDialog"
+				draggable="false" resizable="false" width="80%" showEffect="explode"
 				hideEffect="explode" positionType="absolute" position="top"
 				style="margin-top: 100px;">
 
@@ -35,7 +54,7 @@
 					<ui:param name="bean" value="#{bean.showtimeBean}" />
 				</ui:include>
 
-			</p:dialog>
+			</p:dialog> -->
 
 		</h:form>
 	</h:body>
