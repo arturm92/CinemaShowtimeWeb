@@ -6,12 +6,15 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form id="citiesForm">
-			<p:steps readonly="true">
+
+			<p:steps activeIndex="0" readonly="false">
 				<p:menuitem value="Wybierz miasto" />
 				<p:menuitem value="Wybierz kino" />
 				<p:menuitem value="Wybierz film" />
 				<p:menuitem value="Wybierz seans" />
 			</p:steps>
+
+
 			<p:autoComplete id="cityAutoComplete" value="#{bean.selectedCity}"
 				completeMethod="#{bean.getCitiesList}" var="item"
 				itemValue="#{item}" itemLabel="#{item.name}"

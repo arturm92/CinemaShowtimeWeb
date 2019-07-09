@@ -5,10 +5,10 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
-		<h:form id="cinemasForm">
+		<h:form id="cinemasForm"> 
 
-			<p:steps activeIndex="1" readonly="true">
-				<p:menuitem value="Wybierz miasto" />
+			<p:steps activeIndex="1" readonly="false">
+				<p:menuitem value="Wybierz miasto" actionListener="#{bean.firstStepClicked}" update="mainContent"/>
 				<p:menuitem value="Wybierz kino" />
 				<p:menuitem value="Wybierz film" />
 				<p:menuitem value="Wybierz seans" />

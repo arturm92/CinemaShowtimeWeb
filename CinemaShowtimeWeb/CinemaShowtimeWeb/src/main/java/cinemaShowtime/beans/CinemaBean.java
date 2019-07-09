@@ -68,5 +68,9 @@ public class CinemaBean {
 	public boolean isCinemaSelectionVisible() {
 		return Utils.getInstance().isCinemaSelectionVisible();
 	}
+	
+	public void firstStepClicked() {
+		Utils.getInstance().goToFirstStep();
+	}
 
 }

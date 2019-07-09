@@ -73,4 +73,12 @@ public class MovieBean {
 	public boolean isMovieSelectionVisible() {
 		return Utils.getInstance().isMovieSelectionVisible();
 	}
+	
+	public void firstStepClicked() {
+		Utils.getInstance().goToFirstStep();
+	}
+	
+	public void secondStepClicked() {
+		Utils.getInstance().goToSecondStep();
+	}
 }

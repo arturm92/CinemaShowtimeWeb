@@ -6,13 +6,13 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form id="moviesForm">
-			<p:steps activeIndex="2" readonly="true">
-				<p:menuitem value="Wybierz miasto" />
-				<p:menuitem value="Wybierz kino" />
+
+			<p:steps activeIndex="2" readonly="false">
+				<p:menuitem value="Wybierz miasto" actionListener="#{bean.firstStepClicked}" update="mainContent"/>
+				<p:menuitem value="Wybierz kino" actionListener="#{bean.secondStepClicked}" update="mainContent"/>
 				<p:menuitem value="Wybierz film" />
 				<p:menuitem value="Wybierz seans" />
 			</p:steps>
-
 
 			<p:dataTable id="moviesDataTable" var="item" value="#{bean.list}"
 				selectionMode="single" selection="#{bean.selectedMovie}"
@@ -20,7 +20,8 @@
 				sortOrder="ascending">
 
 				<p:ajax event="rowSelect" listener="#{bean.select}"
-					update="mainContent,showtimesInCinemaPanelGroup" process="moviesDataTable" />
+					update="mainContent,showtimesInCinemaPanelGroup"
+					process="moviesDataTable" />
 
 				<p:column style="font-size: larger;">
 					<h:outputText value="#{item.title}" />
@@ -45,7 +46,7 @@
 
 			</p:dataTable>
 
-<!-- 			<p:dialog id="showtimesDialog" widgetVar="showtimesDialog"
+			<!-- 			<p:dialog id="showtimesDialog" widgetVar="showtimesDialog"
 				draggable="false" resizable="false" width="80%" showEffect="explode"
 				hideEffect="explode" positionType="absolute" position="top"
 				style="margin-top: 100px;">

@@ -35,8 +35,20 @@ public class ShowtimeBean {
 	public Movie getMovie() {
 		return movie;
 	}
-	
+
 	public boolean isShowtimeSelectionVisible() {
 		return Utils.getInstance().isShowtimeSelectionVisible();
+	}
+
+	public void firstStepClicked() {
+		Utils.getInstance().goToFirstStep();
+	}
+
+	public void secondStepClicked() {
+		Utils.getInstance().goToSecondStep();
+	}
+
+	public void thirdStepClicked() {
+		Utils.getInstance().goToThirdStep();
 	}
 }

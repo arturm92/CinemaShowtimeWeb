@@ -6,10 +6,11 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form id="showtimesForm">
-			<p:steps activeIndex="3" readonly="true">
-				<p:menuitem value="Wybierz miasto" />
-				<p:menuitem value="Wybierz kino" />
-				<p:menuitem value="Wybierz film" />
+		
+			<p:steps activeIndex="3" readonly="false" >
+				<p:menuitem value="Wybierz miasto" actionListener="#{bean.firstStepClicked}" update="mainContent"/>
+				<p:menuitem value="Wybierz kino" actionListener="#{bean.secondStepClicked}" update="mainContent"/>
+				<p:menuitem value="Wybierz film" actionListener="#{bean.thirdStepClicked}" update="mainContent"/>
 				<p:menuitem value="Wybierz seans" />
 			</p:steps>
 

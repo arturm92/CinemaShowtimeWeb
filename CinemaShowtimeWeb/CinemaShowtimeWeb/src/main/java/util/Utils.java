@@ -34,6 +34,26 @@ public class Utils {
 	public void setCitySelectionVisible(boolean citySelectionVisible) {
 		this.citySelectionVisible = citySelectionVisible;
 	}
+	
+	public void goToFirstStep() {
+		setCitySelectionVisible(true);
+		setCinemaSelectionVisible(false);
+		setMovieSelectionVisible(false);
+		setShowtimeSelectionVisible(false);
+	}
+	public void goToSecondStep() {
+		setCitySelectionVisible(false);
+		setCinemaSelectionVisible(true);
+		setMovieSelectionVisible(false);
+		setShowtimeSelectionVisible(false);
+	}
+	
+	public void goToThirdStep() {
+		setCitySelectionVisible(false);
+		setCinemaSelectionVisible(false);
+		setMovieSelectionVisible(true);
+		setShowtimeSelectionVisible(false);
+	}
 
 	public boolean isCinemaSelectionVisible() {
 		return cinemaSelectionVisible;
@@ -42,7 +62,7 @@ public class Utils {
 	public void setCinemaSelectionVisible(boolean cinemaSelectionVisible) {
 		this.cinemaSelectionVisible = cinemaSelectionVisible;
 	}
-
+	
 	public boolean isMovieSelectionVisible() {
 		return movieSelectionVisible;
 	}
