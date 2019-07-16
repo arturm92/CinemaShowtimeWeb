@@ -1,11 +1,9 @@
-.ui-steps {
-	padding-left: 13%;
-	padding-right: 13%;
-	padding-bottom: 3%;
+body .ui-autocomplete .ui-autocomplete-dropdown {
+	position: absolute;
 }
 
-.ui-steps-item .ui-menuitem-link {
-	height: 40px;
+.ui-steps {
+	padding-left: 20%;
 }
 
 .ui-steps-item .ui-menuitem-link .ui-steps-number {
@@ -21,46 +19,45 @@
 }
 
 #header {
-	background: url("#{resource['img/header.jpg']}");
+	margin-top: -30px;
+	background-color: Black;
+	/* 	background: url("#{resource['img/header.jpg']}");
 	background-position: 42% 0%;
-	height: 50px;
+	height: 50px; */
 }
 
 #content {
-	background: url("#{resource['img/content.jpg']}");
-	background-position: 47% 0%;
-	min-height: 500px;
+	margin-top: -30px;
+	background-color: Black;
 }
 
-#footer {
-	background: url("#{resource['img/footer.jpg']}");
-	background-position: 47% 0%;
-	margin-top: -22px;
-	height: 300px;
+/*  #footer {
+	margin-top: -30px;
+	background-color: Black;
 }
-
+ */
 #mainContent {
 	padding-left: 19%;
 	padding-right: 19%;
-	filter: invert(1);
 	width: 100%;
 	text-align: center;
 }
 
 .fa-star-o {
 	color: yellow;
-	filter: invert(1);
+}
+
+.imageInHeader {
+	height: 200px;
 }
 
 .image {
 	height: 350px;
-	filter: invert(1);
 }
 
 .video {
 	width: 700px;
 	height: 500px;
-	filter: invert(1);
 }
 
 .dataTable {

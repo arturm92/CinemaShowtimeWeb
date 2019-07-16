@@ -34,18 +34,11 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 	public void updateMoviesDetails() {
 		for (Movie movie : list) {
 			Movie movieDescripstion = ApiHelper.getMovieDescription(movie.getId());
-			//Movie movieMultimedia = ApiHelper.getMovieMultimedia(movie.getId());
 			mergeMovieDetails(movie,movieDescripstion,null);
 		}
 	}
 
 	private void mergeMovieDetails(Movie movie, Movie movieDescripstion, Movie movieMultimedia) {
-/*		if (movie.getId().compareTo(movieMultimedia.getId()) == 0) {
-			movie.setPosterImages(movieMultimedia.getPosterImages());
-			movie.setSceneImages(movieMultimedia.getSceneImages());
-			movie.setTrailers(movieMultimedia.getTrailers());
-			movie.setRatings(movieMultimedia.getRatings());
-		}*/
 		if (movie.getId().compareTo(movieDescripstion.getId()) == 0) {
 			movie.setDescription(movieDescripstion.getDescription());
 			movie.setTitle(movieDescripstion.getTitle());

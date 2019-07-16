@@ -16,7 +16,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import model.json.Cinema;
 import model.json.City;
@@ -135,7 +134,7 @@ public class ApiHelper {
 	public static Movie getMovieMultimedia(Long movieId) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true); 
+			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
 			String params = "/" + movieId;
 			params += "?fields=id,poster_image.flat,scene_images.flat,trailers,ratings";
 			params += "&lang=" + Consts.MULTIMEDIA_LANGUAGE;
@@ -160,6 +159,26 @@ public class ApiHelper {
 			params += "&lang=" + Consts.LANGUAGE;
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, Movie.class);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Movies getNewestMovies() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?fields=id,title,poster_image.flat,ratings";
+			params += "&release_date_from=2019-05-01";
+			params += "&countries=PL";
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

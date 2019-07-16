@@ -2,7 +2,29 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
 	<h:body>
+		<h:form>
+
+			<div>
+				<p:ring value="#{controllerBean.headerMovies}" var="item">
+					<p:graphicImage value="#{item.posterImage}"
+						styleClass="imageInHeader" />
+				</p:ring>
+			</div>
+			<div style="padding-top: 110px;">
+				<p:menubar>
+					<p:menuitem value="Wyszukiwarka seansów" url="#"
+						icon="pi pi-angle-double-left" />
+					<p:menuitem value="Katalog filmów" url="#"
+						icon="pi pi-angle-double-right" />
+
+					<f:facet name="options">
+						<p:commandButton type="button" value="Zaloguj" icon="pi pi-home" />
+					</f:facet>
+				</p:menubar>
+			</div>
+		</h:form>
 	</h:body>
 </ui:composition>
