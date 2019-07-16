@@ -6,22 +6,27 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form>
-
 			<div>
 				<p:ring value="#{controllerBean.headerMovies}" var="item">
-					<p:graphicImage value="#{item.posterImage}"
-						styleClass="imageInHeader" />
+					<h:commandLink action="#{controllerBean.clickHeaderMovie}">
+						<p:graphicImage value="#{item.posterImage}"
+							styleClass="imageInHeader" />
+						<f:param name="movieId" value="#{item.id}" />
+					</h:commandLink>
 				</p:ring>
 			</div>
 			<div style="padding-top: 110px;">
 				<p:menubar>
-					<p:menuitem value="Wyszukiwarka seansów" url="#"
-						icon="pi pi-angle-double-left" />
-					<p:menuitem value="Katalog filmów" url="#"
-						icon="pi pi-angle-double-right" />
+
+					<p:menuitem url="/CinemaShowtimeWeb/index.xhtml" icon="pi pi-home" />
+
+					<p:menuitem value="Wyszukiwarka seansów"
+						url="/CinemaShowtimeWeb/showtimes/index.xhtml" icon="pi pi-search" />
+					<p:menuitem value="Katalog filmów"
+						url="/CinemaShowtimeWeb/movies/index.xhtml" icon="pi pi-list" />
 
 					<f:facet name="options">
-						<p:commandButton type="button" value="Zaloguj" icon="pi pi-home" />
+						<p:commandButton type="button" value="Zaloguj" icon="pi pi-users" />
 					</f:facet>
 				</p:menubar>
 			</div>

@@ -11,13 +11,17 @@
 	<h:body>
 		<div id="header">
 			<ui:insert name="header">
-				<ui:include src="modules/header.xhtml" />
+				<ui:include src="../modules/header.xhtml" />
 			</ui:insert>
 		</div>
-		<div id="content"></div>
+		<div id="content">
+			<ui:insert name="content">
+				<ui:include src="content.xhtml" />
+			</ui:insert>
+		</div>
 		<div id="footer">
 			<ui:insert name="footer">
-				<ui:include src="modules/footer.xhtml" />
+				<ui:include src="../modules/footer.xhtml" />
 			</ui:insert>
 		</div>
 	</h:body>

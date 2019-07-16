@@ -21,14 +21,12 @@ body .ui-autocomplete .ui-autocomplete-dropdown {
 #header {
 	margin-top: -30px;
 	background-color: Black;
-	/* 	background: url("#{resource['img/header.jpg']}");
-	background-position: 42% 0%;
-	height: 50px; */
 }
 
 #content {
 	margin-top: -30px;
 	background-color: Black;
+	min-height: 400px;
 }
 
 /*  #footer {

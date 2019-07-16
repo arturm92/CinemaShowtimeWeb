@@ -10,21 +10,21 @@
 
 			<h:panelGroup id="cityPanelGroup"
 				rendered="#{controllerBean.cityBean.citySelectionVisible}">
-				<ui:include src="cities.xhtml">
+				<ui:include src="citySelection.xhtml">
 					<ui:param name="bean" value="#{controllerBean.cityBean}" />
 				</ui:include>
 			</h:panelGroup>
 
 			<h:panelGroup id="cinemasInCityPanelGroup"
 				rendered="#{controllerBean.cityBean.cinemaBean.cinemaSelectionVisible}">
-				<ui:include src="cinemas.xhtml">
+				<ui:include src="cinemaSelection.xhtml">
 					<ui:param name="bean" value="#{controllerBean.cityBean.cinemaBean}" />
 				</ui:include>
 			</h:panelGroup>
 
 			<h:panelGroup id="moviesInCinemaPanelGroup"
 				rendered="#{controllerBean.cityBean.cinemaBean.movieBean.movieSelectionVisible}">
-				<ui:include src="movies.xhtml">
+				<ui:include src="movieSelection.xhtml">
 					<ui:param name="bean"
 						value="#{controllerBean.cityBean.cinemaBean.movieBean}" />
 				</ui:include>
@@ -32,7 +32,7 @@
 
 			<h:panelGroup id="showtimesInCinemaPanelGroup"
 				rendered="#{controllerBean.cityBean.cinemaBean.movieBean.showtimeBean.showtimeSelectionVisible}">
-				<ui:include src="showtimes.xhtml">
+				<ui:include src="showtimeSelection.xhtml">
 					<ui:param name="bean"
 						value="#{controllerBean.cityBean.cinemaBean.movieBean.showtimeBean}" />
 				</ui:include>

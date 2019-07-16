@@ -1,10 +1,11 @@
 package cinemaShowtime.beans;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 import cinemaShowtime.ApiHelper;
 import model.json.movie.Movie;
@@ -32,6 +33,12 @@ public class ControllerBean {
 
 	public List<Movie> getHeaderMovies() {
 		return headerMovies;
+	}
+	
+	public void clickHeaderMovie() {
+	    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+	    String movieId = ec.getRequestParameterMap().get("movieId");
+		System.out.println("Header movie clicked!" + movieId);
 	}
 
 }
