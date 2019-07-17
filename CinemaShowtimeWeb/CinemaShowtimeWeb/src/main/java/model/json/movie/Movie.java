@@ -136,11 +136,11 @@ public class Movie extends BaseModel {
 	public String getRating() {
 		if (getImdbRating() != null) {
 			return getImdbRating();
-		}else {
+		} else {
 			return getTmdbRating();
 		}
 	}
-	
+
 	public String getImdbRating() {
 		Rating imdbRating = ratings.getImdbRating();
 		if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
@@ -156,11 +156,27 @@ public class Movie extends BaseModel {
 		}
 		return null;
 	}
-	
+
 	public String getGenreInfo() {
-		String ret = "";
+		String ret = getTitle() + ": ";
 		for (Genre elem : genre) {
 			ret += "[" + elem.getName() + "] ";
+		}
+		return ret;
+	}
+
+	public String getCrewText() {
+		String ret = "";
+		for (Person person : crew) {
+			ret += person.getJob() + " : " + person.getName() + "\n";
+		}
+		return ret;
+	}
+	
+	public String getCastText() {
+		String ret = "";
+		for (Person person : cast) {
+			ret += person.getCharacter() + " : " + person.getName() + "\n";
 		}
 		return ret;
 	}

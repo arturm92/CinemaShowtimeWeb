@@ -168,6 +168,17 @@ public class ApiHelper {
 		}
 		return null;
 	}
+	
+	public static void mergeMovieDetails(Movie movie, Movie movieDescripstion, Movie movieMultimedia) {
+		if (movie.getId().compareTo(movieDescripstion.getId()) == 0) {
+			movie.setDescription(movieDescripstion.getDescription());
+			movie.setTitle(movieDescripstion.getTitle());
+			movie.setGenre(movieDescripstion.getGenre());
+			movie.setCast(movieDescripstion.getCast());
+			movie.setCrew(movieDescripstion.getCrew());
+			movie.setWebsite(movieDescripstion.getWebsite());
+		}
+	}
 
 	public static Movies getNewestMovies() {
 		try {

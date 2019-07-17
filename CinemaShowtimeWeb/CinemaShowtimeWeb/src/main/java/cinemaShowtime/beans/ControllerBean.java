@@ -1,9 +1,12 @@
 package cinemaShowtime.beans;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -11,10 +14,11 @@ import cinemaShowtime.ApiHelper;
 import model.json.movie.Movie;
 
 @ManagedBean(name = "controllerBean", eager = true)
-@ViewScoped
+@SessionScoped
 public class ControllerBean {
 
 	private CityBean cityBean;
+	private MovieDetailBean movieDetailBean;
 	private List<Movie> headerMovies;
 
 	public ControllerBean() {
@@ -34,11 +38,46 @@ public class ControllerBean {
 	public List<Movie> getHeaderMovies() {
 		return headerMovies;
 	}
-	
+
 	public void clickHeaderMovie() {
-	    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-	    String movieId = ec.getRequestParameterMap().get("movieId");
-		System.out.println("Header movie clicked!" + movieId);
+		try {
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			String movieId = ec.getRequestParameterMap().get("movieId");
+			movieDetailBean = new MovieDetailBean(movieId);
+			updateHeaderMovieList(movieId);
+			ec.redirect("/CinemaShowtimeWeb/movies/movieDetail/index.xhtml");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void updateHeaderMovieList(String movieId) {
+		List<Movie> newHeaderMovies = new ArrayList<Movie>();
+		List<Movie> tmp = new ArrayList<Movie>();
+		boolean copy = false;
+		for (Movie movie : headerMovies) {
+			if (copy) {
+				newHeaderMovies.add(movie);
+			}else {
+				if (movie.getId().compareTo(Long.valueOf(movieId)) == 0) {
+					newHeaderMovies.add(movie);
+					copy = true;
+				}else {
+					tmp.add(movie);
+				}
+			}
+		}
+		newHeaderMovies.addAll(tmp);
+		headerMovies = newHeaderMovies;
+	}
+
+	public MovieDetailBean getMovieDetailBean() {
+		return movieDetailBean;
+	}
+
+	public void setMovieDetailBean(MovieDetailBean movieDetailBean) {
+		this.movieDetailBean = movieDetailBean;
 	}
 
 }

@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<h:form id="movieDetailForm">
+			<h:panelGroup>
+				<p:accordionPanel multiple="true">
+					<p:tab title="Trailer">
+						<h:panelGrid cellpadding="10"
+							style="width:100%; text-align: center;">
+							<p:media value="#{bean.movie.trailerURL}" player="flash"
+								styleClass="video" />
+						</h:panelGrid>
+					</p:tab>
+					<p:tab title="Opis filmu">
+						<h:panelGrid cellpadding="10" style="color:white;">
+							<h:outputText value="#{bean.movie.genreInfo}" />
+							<h:panelGroup rendered="#{bean.movie.rating != null}">
+								<i class="fa fa-fw fa-star-o"></i>
+								<h:outputText value="#{bean.movie.rating}" />
+							</h:panelGroup>
+							<br />
+							<h:outputText value="#{bean.movie.description}" />
+						</h:panelGrid>
+					</p:tab>
+					<p:tab title="Obsada">
+						<h:panelGrid cellpadding="10">
+							<h:outputText value="#{bean.movie.crewText}"
+								style="color:white; white-space: pre-line;" />
+							<p:separator></p:separator>
+							<h:outputText value="#{bean.movie.castText}"
+								style="color:white; white-space: pre-line;" />
+						</h:panelGrid>
+					</p:tab>
+					<p:tab title="Seceny z filmu">
+						<h:panelGrid cellpadding="10" style="margin-left: 25%;">
+							<p:galleria value="#{bean.movie.sceneImages}" var="image"
+								panelWidth="600" panelHeight="313">
+								<p:graphicImage value="#{image}" styleClass="image" />
+							</p:galleria>
+						</h:panelGrid>
+					</p:tab>
+				</p:accordionPanel>
+			</h:panelGroup>
+		</h:form>
+	</h:body>
+</ui:composition>
