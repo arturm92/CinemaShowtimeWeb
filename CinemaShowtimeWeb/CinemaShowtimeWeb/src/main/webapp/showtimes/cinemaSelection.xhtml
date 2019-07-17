@@ -18,7 +18,7 @@
 			<p:dataTable id="cinemaDataTable" var="item" value="#{bean.list}"
 				selectionMode="single" selection="#{bean.selectedCinema}"
 				rowKey="#{item.id}" rowStyleClass="dataTable" sortBy="#{item.name}"
-				sortOrder="ascending">
+				sortOrder="ascending" styleClass="noHeader">
 
 				<p:ajax event="rowSelect" listener="#{bean.select}"
 					update="mainContent,moviesInCinemaPanelGroup"

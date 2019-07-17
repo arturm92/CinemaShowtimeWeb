@@ -39,7 +39,10 @@ public class Movie extends BaseModel {
 	}
 
 	public String getTitle() {
-		return title;
+		if (title != null) {
+			return title.toUpperCase();
+		}
+		return null;
 	}
 
 	public void setTitle(String title) {
@@ -158,7 +161,7 @@ public class Movie extends BaseModel {
 	}
 
 	public String getGenreInfo() {
-		String ret = getTitle() + ": ";
+		String ret = "";
 		for (Genre elem : genre) {
 			ret += "[" + elem.getName() + "] ";
 		}
