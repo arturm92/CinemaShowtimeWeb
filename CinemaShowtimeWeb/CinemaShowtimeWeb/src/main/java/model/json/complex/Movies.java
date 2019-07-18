@@ -38,5 +38,15 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 		}
 	}
 
+	public Movie findMovie(Long movieId) {
+		for (Movie movie : list) {
+			if (movie.getId().compareTo(movieId) == 0) {
+				return movie;
+			}
+		}
+		System.out.println("Movie not found!");
+		return null;
+	}
+
 
 }

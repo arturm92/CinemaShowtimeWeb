@@ -17,7 +17,6 @@ import model.json.movie.Movie;
 public class ControllerBean {
 
 	private CityBean cityBean;
-	private MovieDetailBean movieDetailBean;
 	private List<Movie> headerMovies;
 
 	public ControllerBean() {
@@ -42,7 +41,7 @@ public class ControllerBean {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");
-			movieDetailBean = new MovieDetailBean(movieId);
+			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
 			updateHeaderMovieList(movieId);
 			ec.redirect("/CinemaShowtimeWeb/movies/movieDetail/index.xhtml");
 		} catch (IOException e) {
@@ -70,13 +69,9 @@ public class ControllerBean {
 		newHeaderMovies.addAll(tmp);
 		headerMovies = newHeaderMovies;
 	}
-
+	
 	public MovieDetailBean getMovieDetailBean() {
-		return movieDetailBean;
-	}
-
-	public void setMovieDetailBean(MovieDetailBean movieDetailBean) {
-		this.movieDetailBean = movieDetailBean;
+		return MovieDetailBean.getInstance();
 	}
 
 }

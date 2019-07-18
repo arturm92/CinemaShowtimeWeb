@@ -1,6 +1,10 @@
 package cinemaShowtime.beans;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 import org.primefaces.event.SelectEvent;
 
@@ -14,9 +18,10 @@ public class MovieBean {
 
 	private Movies movies;
 	private Cinema cinema;
-	public List<Movie> list;
 	private Movie selectedMovie;
 	private ShowtimeBean showtimeBean;
+	private MovieDetailBean movieDetailBean;
+	private boolean selectRowFromTable = true;
 
 	public MovieBean(Cinema cinema) {
 		initMovies(cinema);
@@ -28,13 +33,31 @@ public class MovieBean {
 		this.cinema = cinema;
 		this.movies = ApiHelper.getAllMoviesInCinema(cinema);
 		movies.updateMoviesDetails();
-		this.list = movies.getList();
 
 	}
 
 	public void select(SelectEvent selectEvent) {
-		Utils.getInstance().setMovieSelectionVisible(false);
-		initShowtimeBean();
+			Utils.getInstance().setMovieSelectionVisible(false);
+			initShowtimeBean();
+	}
+
+	public void select() {
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			String movieId = ec.getRequestParameterMap().get("movieId");
+			selectedMovie = movies.findMovie(Long.valueOf(movieId));
+			Utils.getInstance().setMovieSelectionVisible(false);
+			initShowtimeBean();
+	}
+
+	public void showMovieDetail() {
+		try {
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			String movieId = ec.getRequestParameterMap().get("movieId");
+			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
+			ec.redirect("/CinemaShowtimeWeb/movies/movieDetail/index.xhtml");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void initShowtimeBean() {
@@ -43,11 +66,7 @@ public class MovieBean {
 	}
 
 	public List<Movie> getList() {
-		return list;
-	}
-
-	public void setList(List<Movie> list) {
-		this.list = list;
+		return movies.getList();
 	}
 
 	public Movie getSelectedMovie() {
@@ -73,12 +92,16 @@ public class MovieBean {
 	public boolean isMovieSelectionVisible() {
 		return Utils.getInstance().isMovieSelectionVisible();
 	}
-	
+
 	public void firstStepClicked() {
 		Utils.getInstance().goToFirstStep();
 	}
-	
+
 	public void secondStepClicked() {
 		Utils.getInstance().goToSecondStep();
+	}
+
+	public MovieDetailBean getMovieDetailBean() {
+		return movieDetailBean;
 	}
 }
