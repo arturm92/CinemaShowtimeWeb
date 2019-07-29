@@ -1,5 +1,6 @@
 package model.json.complex;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,7 +35,7 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 	public void updateMoviesDetails() {
 		for (Movie movie : list) {
 			Movie movieDescripstion = ApiHelper.getMovieDescription(movie.getId());
-			ApiHelper.mergeMovieDetails(movie,movieDescripstion,null);
+			ApiHelper.mergeMovieDetails(movie, movieDescripstion, null);
 		}
 	}
 
@@ -48,5 +49,13 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 		return null;
 	}
 
-
+	public List<Movie> getMoviesWithPoster() {
+		List<Movie> movieWithPosterList = new ArrayList<Movie>();
+		for (Movie movie : list) {
+			if(movie.getPosterImage() != null) {
+				movieWithPosterList.add(movie);
+			}
+		}
+		return movieWithPosterList;
+	}
 }

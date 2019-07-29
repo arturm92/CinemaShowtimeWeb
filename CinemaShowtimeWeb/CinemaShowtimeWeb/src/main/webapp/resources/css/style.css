@@ -51,7 +51,8 @@ body .ui-autocomplete .ui-autocomplete-dropdown {
 
 .image {
 	height: 275px;
-	width: 183px;
+	margin-left: 55px;
+	margin-top: 25px;
 }
 
 .video {

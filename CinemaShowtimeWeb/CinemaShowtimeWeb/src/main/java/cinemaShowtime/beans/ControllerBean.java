@@ -18,23 +18,13 @@ public class ControllerBean {
 
 	private CityBean cityBean;
 	private List<Movie> headerMovies;
+	private MovieCatalogueBean movieCatalogueBean;
 
 	public ControllerBean() {
 		cityBean = new CityBean();
-		this.headerMovies = ApiHelper.getNewestMovies().getList();
+		movieCatalogueBean = new MovieCatalogueBean();
+		headerMovies = ApiHelper.getNewestMovies().getMoviesWithPoster();
 		System.out.println("ControllerBean started!");
-	}
-
-	public CityBean getCityBean() {
-		return cityBean;
-	}
-
-	public void setCityBean(CityBean cityBean) {
-		this.cityBean = cityBean;
-	}
-
-	public List<Movie> getHeaderMovies() {
-		return headerMovies;
 	}
 
 	public void clickHeaderMovie() {
@@ -70,8 +60,20 @@ public class ControllerBean {
 		headerMovies = newHeaderMovies;
 	}
 	
+	public CityBean getCityBean() {
+		return cityBean;
+	}
+
+	public List<Movie> getHeaderMovies() {
+		return headerMovies;
+	}
+	
 	public MovieDetailBean getMovieDetailBean() {
 		return MovieDetailBean.getInstance();
+	}
+
+	public MovieCatalogueBean getMovieCatalogueBean() {
+		return movieCatalogueBean;
 	}
 
 }

@@ -6,7 +6,7 @@ public class Consts {
 	public static final String MULTIMEDIA_LANGUAGE = "en";
 	
 	public static final String BASE_URL = "https://api.internationalshowtimes.com/v4/";
-	public static final String API_KEY = "2qUjDXiwtOiNzcivBgHBmQnk3vOTqIeh";
+	public static final String API_KEY = "LZG67yUDsYG85s84tHkU8lZ0YMvAeccu";
 	
 	public static final String SHOWTIMES = BASE_URL + "showtimes";
 	public static final String CINEMAS = BASE_URL + "cinemas";

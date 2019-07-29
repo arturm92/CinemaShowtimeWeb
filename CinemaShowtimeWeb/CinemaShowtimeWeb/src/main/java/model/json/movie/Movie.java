@@ -13,9 +13,6 @@ public class Movie extends BaseModel {
 
 	private String slug;
 	private String title;
-	@JsonProperty("poster_image_thumbnail")
-	private String poster;
-
 	@JsonProperty("synopsis")
 	private String description;
 	@JsonProperty("genres")
@@ -47,14 +44,6 @@ public class Movie extends BaseModel {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getPoster() {
-		return poster;
-	}
-
-	public void setPoster(String poster) {
-		this.poster = poster;
 	}
 
 	public String getDescription() {
