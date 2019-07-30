@@ -49,6 +49,11 @@ body .ui-autocomplete .ui-autocomplete-dropdown {
 	height: 200px;
 }
 
+.imageInCatalogue {
+	height: 275px;
+	width: 195px;
+}
+
 .image {
 	height: 275px;
 	margin-left: 55px;

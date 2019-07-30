@@ -25,6 +25,7 @@ import model.json.complex.Movies;
 import model.json.complex.Showtimes;
 import model.json.movie.Movie;
 import util.Consts;
+import util.DateFormater;
 
 public class ApiHelper {
 
@@ -168,7 +169,7 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 	public static void mergeMovieDetails(Movie movie, Movie movieDescripstion, Movie movieMultimedia) {
 		if (movie.getId().compareTo(movieDescripstion.getId()) == 0) {
 			movie.setDescription(movieDescripstion.getDescription());
@@ -182,11 +183,14 @@ public class ApiHelper {
 
 	public static Movies getNewestMovies() {
 		try {
+			DateFormater df = new DateFormater();
+			String date = df.recalculateDateByMonth(-3);
+
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
-			String params = "?fields=id,title,poster_image.flat,ratings";
-			params += "&release_date_from=2019-05-01";
+			String params = "?fields=id,title,poster_image.flat";
+			params += "&release_date_from=" + date;
 			params += "&countries=PL";
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
@@ -200,4 +204,42 @@ public class ApiHelper {
 		return null;
 	}
 
+	public static Movies getMoviesCatalogue() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?fields=id,title,poster_image.flat,original_title";
+			params += "&lang=" + Consts.LANGUAGE;
+			params += "&countries=PL";
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Movies getMoviesPoster() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?fields=id,poster_image.flat";
+			params += "&countries=PL";
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

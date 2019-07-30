@@ -40,5 +40,13 @@ public class DateFormater {
 		}
 		return null;
 	}
+	
+	public String recalculateDateByMonth(int amount) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.MONTH, amount);
+		SimpleDateFormat sdf = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
+		return sdf.format(c.getTime());
+	}
 
 }

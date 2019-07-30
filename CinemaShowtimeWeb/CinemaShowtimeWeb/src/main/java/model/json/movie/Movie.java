@@ -7,12 +7,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import model.json.base.BaseModel;
+import util.Consts;
 
 @JsonRootName(value = "movie")
 public class Movie extends BaseModel {
 
 	private String slug;
 	private String title;
+	@JsonProperty("original_title")
+	private String originalTitle;
 	@JsonProperty("synopsis")
 	private String description;
 	@JsonProperty("genres")
@@ -38,8 +41,9 @@ public class Movie extends BaseModel {
 	public String getTitle() {
 		if (title != null) {
 			return title.toUpperCase();
+		} else {
+			return originalTitle.toUpperCase();
 		}
-		return null;
 	}
 
 	public void setTitle(String title) {
@@ -164,12 +168,20 @@ public class Movie extends BaseModel {
 		}
 		return ret;
 	}
-	
+
 	public String getCastText() {
 		String ret = "";
 		for (Person person : cast) {
 			ret += person.getCharacter() + " : " + person.getName() + "\n";
 		}
 		return ret;
+	}
+
+	public String getOriginalTitle() {
+		return originalTitle;
+	}
+
+	public void setOriginalTitle(String originalTitle) {
+		this.originalTitle = originalTitle;
 	}
 }

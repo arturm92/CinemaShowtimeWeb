@@ -43,35 +43,29 @@
 				gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 
 				<p:dataViewGridItem>
-					<p:panel header="#{car.id}" style="text-align:center">
-						<h:panelGrid columns="1" style="width:100%">
-							<p:graphicImage name="#{item.posterImage}" styleClass="image" />
+					<p:panel header="#{item.title}">
+						<h:panelGrid columns="1" style="width:100%; text-align:center">
+							<p:graphicImage value="#{item.posterImage}"
+								styleClass="imageInCatalogue" />
 
-							<h:outputText value="#{item.title}" />
+							<h:outputText value="#{item.id}" />
 
 						</h:panelGrid>
 					</p:panel>
 				</p:dataViewGridItem>
 
 				<p:dataViewListItem>
-					<h:panelGrid columns="3" style="width:100%"
-						columnClasses="logo,detail">
-						<p:graphicImage value="#{item.posterImage}" styleClass="image" />
+					<p:panel header="#{item.title}" style="margin-left: 20%;margin-right: 20%;">
+						<h:panelGrid columns="1" style="width:100%;text-align:center"
+							columnClasses="logo,detail">
 
-						<p:outputPanel>
-							<h:panelGrid columns="2" cellpadding="5">
-								<h:outputText value="#{item.title}" style="font-weight: bold" />
-							</h:panelGrid>
-						</p:outputPanel>
+							<p:graphicImage value="#{item.posterImage}"
+								styleClass="imageInCatalogue" />
 
-						<!-- <p:commandLink update=":form:carDetail"
-							oncomplete="PF('carDialog').show()" title="View Detail">
-							<h:outputText styleClass="ui-icon pi pi-search"
-								style="margin:0 auto;" />
-							<f:setPropertyActionListener value="#{car}"
-								target="#{dataGridView.selectedCar}" />
-						</p:commandLink> -->
-					</h:panelGrid>
+							<h:outputText value="#{item.id}" />
+
+						</h:panelGrid>
+					</p:panel>
 				</p:dataViewListItem>
 			</p:dataView>
 		</h:form>

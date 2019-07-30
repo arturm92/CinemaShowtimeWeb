@@ -1,6 +1,7 @@
 package model.json.complex;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,6 +14,7 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 
 	@JsonProperty("movies")
 	private List<Movie> list;
+	private HashMap<Long, Movie> movieMap;
 
 	@Override
 	public List<Movie> getList() {
@@ -49,7 +51,7 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 		return null;
 	}
 
-	public List<Movie> getMoviesWithPoster() {
+	public List<Movie> getMoviesWithPosterList() {
 		List<Movie> movieWithPosterList = new ArrayList<Movie>();
 		for (Movie movie : list) {
 			if(movie.getPosterImage() != null) {
@@ -58,4 +60,16 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 		}
 		return movieWithPosterList;
 	}
+	
+	public HashMap<Long, Movie> getMovieMap() {
+		return movieMap;
+	}
+
+	public void fillMovieMap() {
+		movieMap = new HashMap<>();
+		for (Movie movie : list) {
+			movieMap.put(movie.getId(), movie);
+		}
+	}
+	
 }

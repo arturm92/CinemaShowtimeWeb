@@ -21,10 +21,14 @@ public class ControllerBean {
 	private MovieCatalogueBean movieCatalogueBean;
 
 	public ControllerBean() {
+		long startTime = System.currentTimeMillis();
+
 		cityBean = new CityBean();
 		movieCatalogueBean = new MovieCatalogueBean();
-		headerMovies = ApiHelper.getNewestMovies().getMoviesWithPoster();
-		System.out.println("ControllerBean started!");
+		headerMovies = ApiHelper.getNewestMovies().getMoviesWithPosterList();
+
+		long stopTime = System.currentTimeMillis();
+		System.out.println("Page start in " + ((stopTime - startTime) / 1000) + "second");
 	}
 
 	public void clickHeaderMovie() {
@@ -47,11 +51,11 @@ public class ControllerBean {
 		for (Movie movie : headerMovies) {
 			if (copy) {
 				newHeaderMovies.add(movie);
-			}else {
+			} else {
 				if (movie.getId().compareTo(Long.valueOf(movieId)) == 0) {
 					newHeaderMovies.add(movie);
 					copy = true;
-				}else {
+				} else {
 					tmp.add(movie);
 				}
 			}
@@ -59,7 +63,7 @@ public class ControllerBean {
 		newHeaderMovies.addAll(tmp);
 		headerMovies = newHeaderMovies;
 	}
-	
+
 	public CityBean getCityBean() {
 		return cityBean;
 	}
@@ -67,7 +71,7 @@ public class ControllerBean {
 	public List<Movie> getHeaderMovies() {
 		return headerMovies;
 	}
-	
+
 	public MovieDetailBean getMovieDetailBean() {
 		return MovieDetailBean.getInstance();
 	}
