@@ -26,7 +26,7 @@ public class HeaderBean {
 		System.out.println("FirstPage start in " + ((stopTime - startTime) / 1000) + "second");
 	}
 
-	public void clickHeaderMovie() {
+	public void clickMovie() {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");

@@ -8,7 +8,7 @@
 		<h:form>
 			<div>
 				<p:ring value="#{headerBean.headerMovies}" var="item">
-					<h:commandLink action="#{headerBean.clickHeaderMovie}">
+					<h:commandLink action="#{headerBean.clickMovie}">
 						<p:graphicImage value="#{item.posterImage}"
 							styleClass="imageInHeader" />
 						<f:param name="movieId" value="#{item.id}" />

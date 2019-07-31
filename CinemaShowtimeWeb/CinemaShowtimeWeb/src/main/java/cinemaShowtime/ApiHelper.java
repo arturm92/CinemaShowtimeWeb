@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -21,8 +22,10 @@ import model.json.Cinema;
 import model.json.City;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
+import model.json.complex.Genres;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
+import model.json.movie.Genre;
 import model.json.movie.Movie;
 import util.Consts;
 import util.DateFormater;
@@ -231,6 +234,50 @@ public class ApiHelper {
 			};
 			String params = "?fields=id,poster_image.flat";
 			params += "&countries=PL";
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Genres getGenres() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Genres> map = new TypeReference<Genres>() {
+			};
+			String params = "?lang=pl";
+			String json = getDataFromApi(Consts.GENRES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Movies getMoviesCatalogueByGenre(List<String> selectedGenres) {
+		try {
+			String genre_ids = "";
+			for (String id : selectedGenres) {
+				genre_ids += id + ",";
+			}
+			
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?fields=id,title,poster_image.flat,original_title";
+			params += "&lang=" + Consts.LANGUAGE;
+			params += "&countries=PL";
+			params += "&genre_ids=" + genre_ids;
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {

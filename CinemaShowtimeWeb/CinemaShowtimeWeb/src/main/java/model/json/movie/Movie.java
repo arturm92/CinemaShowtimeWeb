@@ -42,8 +42,11 @@ public class Movie extends BaseModel {
 		if (title != null) {
 			return title.toUpperCase();
 		} else {
-			return originalTitle.toUpperCase();
+			if (originalTitle != null) {
+				return originalTitle.toUpperCase();	
+			}
 		}
+		return null;
 	}
 
 	public void setTitle(String title) {
