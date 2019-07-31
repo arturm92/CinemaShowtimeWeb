@@ -25,18 +25,6 @@
 					update="mainContent,showtimesInCinemaPanelGroup"
 					process="moviesDataTable" />
 
-				<!-- 	<p:column style="font-size: larger;">
-					<h:outputText value="#{item.title}" />
-					<br />
-					<h:outputText value="#{item.genreInfo}" />
-					<br />
-					<h:panelGroup rendered="#{item.rating != null}">
-						<i class="fa fa-fw fa-star-o"></i>
-						<h:outputText value="#{item.rating}" />
-						<br />
-					</h:panelGroup>
-				</p:column>
- -->
 				<p:column>
 					<h:commandLink action="#{bean.select}">
 						<f:param name="movieId" value="#{item.id}" />
@@ -78,20 +66,8 @@
 						</p:commandButton>
 					</h:panelGroup>
 				</p:column>
-
 			</p:dataTable>
-
-			<!-- 			<p:dialog id="showtimesDialog" widgetVar="showtimesDialog"
-				draggable="false" resizable="false" width="80%" showEffect="explode"
-				hideEffect="explode" positionType="absolute" position="top"
-				style="margin-top: 100px;">
-
-				<ui:include src="showtimes.xhtml">
-					<ui:param name="bean" value="#{bean.showtimeBean}" />
-				</ui:include>
-
-			</p:dialog> -->
-
+			
 		</h:form>
 	</h:body>
 </ui:composition>

@@ -141,6 +141,7 @@ public class Movie extends BaseModel {
 	}
 
 	public String getImdbRating() {
+		//blad przy grojec
 		Rating imdbRating = ratings.getImdbRating();
 		if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
 			return " IMDB : " + imdbRating.getValue() + " / " + imdbRating.getVoteCount() + " ocen";

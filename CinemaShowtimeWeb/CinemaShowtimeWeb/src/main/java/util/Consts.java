@@ -15,8 +15,10 @@ public class Consts {
 	public static final String CITIES  = BASE_URL + "cities";
 	public static final String GENRES = BASE_URL + "genres";
 	
-	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+	public static final String TIMEZONE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+	public static final String TIME_DATE_FORMAT = "dd-MM-yyyy HH:mm";
 	public static final String SIMPLE_DATE_FORMAT = "yyyy-MM-dd";
+	public static final String TIME_FORMAT = "HH:mm";
 	
 	public static final String DEFAULT_POSTER = "/resources/img/default_poster.jpg";
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import cinemaShowtime.ApiHelper;
 import model.json.Cinema;
 import model.json.Showtime;
+import model.json.ShowtimeDay;
 import model.json.complex.Showtimes;
 import model.json.movie.Movie;
 import util.Utils;
@@ -15,7 +16,7 @@ public class ShowtimeBean {
 	private Cinema cinema;
 	private Showtimes showtimes;
 	private List<Showtime> list;
-
+	
 	public ShowtimeBean(Movie movie, Cinema cinema) {
 		this.movie = movie;
 		this.cinema = cinema;
@@ -26,6 +27,19 @@ public class ShowtimeBean {
 		this.showtimes = ApiHelper.getMovieShowtimesInCinema(movie, cinema);
 		this.list = showtimes.getList();
 		Utils.getInstance().setShowtimeSelectionVisible(true);
+		
+		/*List<ShowtimeDay> showtimeDayList = showtimes.getNormalizeList();
+		for (ShowtimeDay sd : showtimeDayList) {
+			System.out.println(sd.getDate());
+			for (String h : sd.getHours()) {
+				System.out.println(h);
+			}
+		}*/
+		
+	}
+	
+	public List<ShowtimeDay> getShowtimeDayList(){
+		return showtimes.getNormalizeList();
 	}
 
 	public List<Showtime> getList() {

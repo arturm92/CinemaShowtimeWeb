@@ -17,10 +17,19 @@
 				<p:menuitem value="Wybierz seans" />
 			</p:steps>
 
-			<p:dataTable id="showtimesDataTable" var="item" value="#{bean.list}">
-				<p:column headerText="Początek seansu">
-					<h:outputText value="#{item.formattedDate}" />
+
+			<p:dataTable id="showtimesDayDataTable" var="item"
+				value="#{bean.showtimeDayList}" styleClass="noHeader">
+				<p:column>
+					<h:outputText value="#{item.date}" styleClass="showtimeDay" />
+
+					<p:dataGrid id="showtimesHourDataTable" var="hour"
+						value="#{item.hours}" columns="9" layout="grid">
+						<h:outputText value="#{hour}" styleClass="showtimeHour" />
+					</p:dataGrid>
+
 				</p:column>
+				
 			</p:dataTable>
 
 		</h:form>

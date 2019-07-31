@@ -1,3 +1,23 @@
+body .ui-datatable .ui-datatable-data > tr.ui-datatable-even {
+	border: none;
+	background-color: black;
+}
+
+body .ui-datatable .ui-datatable-data > tr {
+	border: none;
+	background-color: black;
+}
+
+body .ui-datagrid .ui-datagrid-content {
+	border: none;
+	background-color: black;
+}
+
+.ui-g {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
 body .ui-autocomplete .ui-autocomplete-dropdown {
 	position: absolute;
 }
@@ -80,4 +100,17 @@ body .ui-autocomplete .ui-autocomplete-dropdown {
 
 .noHeader thead {
 	display: none;
+}
+
+.showtimeHour {
+	border: 2px solid #ffb300;
+	text-align: center;
+	font-size: 30px;
+	padding: 10px;
+}
+
+.showtimeDay {
+	text-align: center;
+	font-size: 30px;
+	padding: 10px;
 }
