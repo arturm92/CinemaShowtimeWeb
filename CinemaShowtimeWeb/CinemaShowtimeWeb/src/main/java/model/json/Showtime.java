@@ -97,8 +97,7 @@ public class Showtime {
 	
 	public String getFormattedDate() {
 		DateFormater df = new DateFormater();
-		return df.formatDate(getStartAt()); 
+		return df.formatDateWithTimezone(getStartAt()); 
 	}
-	
 	
 }

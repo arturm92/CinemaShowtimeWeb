@@ -21,7 +21,7 @@ public class DateFormater {
 		}
 	};
 
-	public String formatDate(String inputDate) {
+	public String formatDateWithTimezone(String inputDate) {
 		try {
 			DateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 			Date date = inputDateFormat.parse(inputDate);
@@ -40,7 +40,12 @@ public class DateFormater {
 		}
 		return null;
 	}
-	
+
+	public String formatDateShort(Date inputDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
+		return sdf.format(inputDate);
+	}
+
 	public String recalculateDateByMonth(int amount) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(new Date());

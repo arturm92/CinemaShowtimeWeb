@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -226,7 +227,7 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 	public static Movies getMoviesPoster() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -245,7 +246,7 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 	public static Genres getGenres() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -264,20 +265,27 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getMoviesCatalogueByGenre(List<String> selectedGenres) {
+	public static Movies getMoviesCatalogueFiltered(List<String> selectedGenres, Date releaseDate) {
 		try {
-			String genre_ids = "";
-			for (String id : selectedGenres) {
-				genre_ids += id + ",";
-			}
-			
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String params = "?fields=id,title,poster_image.flat,original_title";
 			params += "&lang=" + Consts.LANGUAGE;
 			params += "&countries=PL";
-			params += "&genre_ids=" + genre_ids;
+			if (releaseDate != null) {
+				DateFormater df = new DateFormater();
+				String date = df.formatDateShort(releaseDate);
+				params += "&release_date_from=" + date;
+			}
+			if (!selectedGenres.isEmpty()) {
+				String genre_ids = "";
+				for (String id : selectedGenres) {
+					genre_ids += id + ",";
+				}
+
+				params += "&genre_ids=" + genre_ids;
+			}
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {

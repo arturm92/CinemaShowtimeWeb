@@ -56,6 +56,10 @@ body .ui-autocomplete .ui-autocomplete-dropdown {
 
 .image {
 	height: 275px;
+}
+
+.imageInGallery {
+	height: 275px;
 	margin-left: 55px;
 	margin-top: 25px;
 }

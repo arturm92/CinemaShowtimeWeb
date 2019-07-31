@@ -43,7 +43,7 @@ public class MovieCatalogueBean {
 	}
 	
 	public void filter() {
-		movieList = ApiHelper.getMoviesCatalogueByGenre(selectedGenreIds).getList();
+		movieList = ApiHelper.getMoviesCatalogueFiltered(selectedGenreIds, releaseDate).getList();
 		addPosterToMovie();
 		System.out.println("Filtruje");
 	}
