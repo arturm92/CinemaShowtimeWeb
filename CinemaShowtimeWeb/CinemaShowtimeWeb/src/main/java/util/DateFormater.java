@@ -84,5 +84,17 @@ public class DateFormater {
 		return null;
 	}
 
-
+	public String getDay(String inputDate) {
+		try {
+			DateFormat inputDateFormat = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
+			Date date = inputDateFormat.parse(inputDate);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			return daysMapping.get(calendar.get(Calendar.DAY_OF_WEEK));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

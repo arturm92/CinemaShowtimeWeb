@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import cinemaShowtime.ApiHelper;
 import model.json.base.BaseComplexModel;
 import model.json.movie.Movie;
 
@@ -32,13 +31,6 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 			System.out.println("MovieId: " + movie.getId() + " title: " + movie.getTitle());
 		}
 
-	}
-
-	public void updateMoviesDetails() {
-		for (Movie movie : list) {
-			Movie movieDescripstion = ApiHelper.getMovieDescription(movie.getId());
-			ApiHelper.mergeMovieDetails(movie, movieDescripstion, null);
-		}
 	}
 
 	public Movie findMovie(Long movieId) {

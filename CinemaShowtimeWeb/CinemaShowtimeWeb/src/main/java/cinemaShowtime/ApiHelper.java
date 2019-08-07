@@ -26,7 +26,6 @@ import model.json.complex.Cities;
 import model.json.complex.Genres;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
-import model.json.movie.Genre;
 import model.json.movie.Movie;
 import util.Consts;
 import util.DateFormater;
@@ -115,6 +114,26 @@ public class ApiHelper {
 		}
 		return null;
 	}
+	
+	public static Movies getAllMoviesDescriptionInCinema(Cinema cinema) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?cinema_id=" + cinema.getId();
+			params += "&fields=id,title,original_title,synopsis,website,cast,crew,genres";
+			params += "&lang=" + Consts.LANGUAGE;
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public static Showtimes getMovieShowtimesInCinema(Movie movie, Cinema cinema) {
 		try {
@@ -160,7 +179,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
 			String params = "/" + movieId;
-			params += "?fields=id,title,synopsis,website,cast,crew,genres";
+			params += "?fields=id,title,original_title,synopsis,website,cast,crew,genres";
 			params += "&lang=" + Consts.LANGUAGE;
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, Movie.class);

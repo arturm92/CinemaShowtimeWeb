@@ -54,20 +54,24 @@
 									<div class="ui-grid-row">
 										<div class="ui-grid-col-15" style="font-size: 15px;">#{item.description}</div>
 									</div>
+									<br /> <br />
+									<div class="ui-grid-row">
+										<div class="ui-grid-col-12"></div>
+										<div class="ui-grid-col-3" style="font-size: 15px;">
+											<p:commandButton value="Szczegóły filmu"
+												action="#{bean.showMovieDetail}"
+												icon="fa fa-fw fa-question-circle">
+												<f:param name="movieId" value="#{item.id}" />
+											</p:commandButton>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</h:commandLink>
-					<h:panelGroup>
-						<p:commandButton value="Szczegóły filmu"
-							action="#{bean.showMovieDetail}"
-							icon="fa fa-fw fa-question-circle">
-							<f:param name="movieId" value="#{item.id}" />
-						</p:commandButton>
-					</h:panelGroup>
 				</p:column>
 			</p:dataTable>
-			
+
 		</h:form>
 	</h:body>
 </ui:composition>

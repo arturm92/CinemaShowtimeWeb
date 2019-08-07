@@ -65,6 +65,9 @@ public class Movie extends BaseModel {
 	}
 
 	public String getPosterImage() {
+		if (posterImage == null) {
+			return Consts.DEFAULT_POSTER;
+		}
 		return posterImage;
 	}
 

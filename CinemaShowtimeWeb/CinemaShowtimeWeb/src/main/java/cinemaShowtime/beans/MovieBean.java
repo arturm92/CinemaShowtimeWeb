@@ -21,7 +21,6 @@ public class MovieBean {
 	private Movie selectedMovie;
 	private ShowtimeBean showtimeBean;
 	private MovieDetailBean movieDetailBean;
-	private boolean selectRowFromTable = true;
 
 	public MovieBean(Cinema cinema) {
 		initMovies(cinema);
@@ -31,22 +30,31 @@ public class MovieBean {
 
 	public void initMovies(Cinema cinema) {
 		this.cinema = cinema;
+
+		long startTime = System.currentTimeMillis();
 		this.movies = ApiHelper.getAllMoviesInCinema(cinema);
-		movies.updateMoviesDetails();
+		long stopTime = System.currentTimeMillis();
+		System.out.println("movies download " + ((stopTime - startTime) / 1000) + " second");
+
+		Movies moviesDescription = ApiHelper.getAllMoviesDescriptionInCinema(cinema);
+		mergeMovieDetails(movies, moviesDescription);
+		
+		long stopTime2 = System.currentTimeMillis();
+		System.out.println("movies description download " + ((stopTime2 - stopTime) / 1000) + " second");
 
 	}
 
 	public void select(SelectEvent selectEvent) {
-			Utils.getInstance().setMovieSelectionVisible(false);
-			initShowtimeBean();
+		Utils.getInstance().setMovieSelectionVisible(false);
+		initShowtimeBean();
 	}
 
 	public void select() {
-			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-			String movieId = ec.getRequestParameterMap().get("movieId");
-			selectedMovie = movies.findMovie(Long.valueOf(movieId));
-			Utils.getInstance().setMovieSelectionVisible(false);
-			initShowtimeBean();
+		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+		String movieId = ec.getRequestParameterMap().get("movieId");
+		selectedMovie = movies.findMovie(Long.valueOf(movieId));
+		Utils.getInstance().setMovieSelectionVisible(false);
+		initShowtimeBean();
 	}
 
 	public void showMovieDetail() {
@@ -63,6 +71,20 @@ public class MovieBean {
 	public void initShowtimeBean() {
 		System.out.println("Selected movie - " + selectedMovie.getId());
 		showtimeBean = new ShowtimeBean(selectedMovie, cinema);
+	}
+
+	public void mergeMovieDetails(Movies movies, Movies moviesDescription) {
+		moviesDescription.fillMovieMap();
+		for (Movie movie : movies.getList()) {
+			Movie movieDescripstion = moviesDescription.getMovieMap().get(movie.getId());
+			movie.setDescription(movieDescripstion.getDescription());
+			movie.setTitle(movieDescripstion.getTitle());
+			movie.setOriginalTitle(movieDescripstion.getOriginalTitle());
+			movie.setGenre(movieDescripstion.getGenre());
+			movie.setCast(movieDescripstion.getCast());
+			movie.setCrew(movieDescripstion.getCrew());
+			movie.setWebsite(movieDescripstion.getWebsite());
+		}
 	}
 
 	public List<Movie> getList() {
