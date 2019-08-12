@@ -46,7 +46,7 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 	public List<Movie> getMoviesWithPosterList() {
 		List<Movie> movieWithPosterList = new ArrayList<Movie>();
 		for (Movie movie : list) {
-			if(movie.getPosterImage() != null) {
+			if(movie.getPosterImage() != null && !movie.getPosterImage().equals("/resources/img/default_poster.jpg") ) {
 				movieWithPosterList.add(movie);
 			}
 		}

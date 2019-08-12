@@ -16,6 +16,8 @@ public class Cinema extends BaseModel {
 	private String bookingType;
 	@JsonProperty("chain_id")
 	private Long chainId;
+	@JsonProperty("city_id")
+	private Long cityId;
 
 	public String getTelephone() {
 		return telephone;
@@ -63,6 +65,14 @@ public class Cinema extends BaseModel {
 
 	public void setBooking_type(String booking_type) {
 		this.bookingType = booking_type;
+	}
+
+	public Long getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(Long cityId) {
+		this.cityId = cityId;
 	}
 
 }

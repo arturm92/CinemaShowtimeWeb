@@ -19,10 +19,21 @@
 				completeMethod="#{bean.getCitiesList}" var="item"
 				itemValue="#{item}" itemLabel="#{item.name}"
 				converter="cityConverter" dropdown="true" inputStyle="width:100%;"
-				style="width:80%;">
+				style="width:80%;margin-bottom:30px;">
 				<p:ajax event="itemSelect" listener="#{bean.select}"
 					update="mainContent,cinemasInCityPanelGroup" />
 			</p:autoComplete>
+
+			<h:panelGrid id="quickCitySelectionPanelGrid" columns="4"
+				styleClass="fullWidth">
+				<c:forEach var="city" items="#{bean.citiesQuickList}">
+					<p:commandButton value="#{city.name}" action="#{bean.quickSelect}"
+						style="width:255px;font-size:25px;" update="mainContent,cinemasInCityPanelGroup">
+						<f:setPropertyActionListener value="#{city}"
+							target="#{bean.selectedCity}" />
+					</p:commandButton>
+				</c:forEach>
+			</h:panelGrid>
 		</h:form>
 	</h:body>
 </ui:composition>
