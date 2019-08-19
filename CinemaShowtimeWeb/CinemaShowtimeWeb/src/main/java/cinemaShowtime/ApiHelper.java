@@ -114,7 +114,7 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 	public static Movies getAllMoviesDescriptionInCinema(Cinema cinema) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -214,7 +214,7 @@ public class ApiHelper {
 			};
 			String params = "?fields=id,title,poster_image.flat";
 			params += "&release_date_from=" + date;
-			params += "&countries=PL";
+			params += "&countries=" + Consts.COUNTRIES;
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -234,7 +234,7 @@ public class ApiHelper {
 			};
 			String params = "?fields=id,title,poster_image.flat,original_title";
 			params += "&lang=" + Consts.LANGUAGE;
-			params += "&countries=PL";
+			params += "&countries=" + Consts.COUNTRIES;
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -247,13 +247,53 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getMoviesPoster() {
+	public static Movies getMoviesRanking() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?fields=id,title,original_title,poster_image.flat,ratings";
+			params += "&lang=" + Consts.LANGUAGE;
+			params += "&countries=" + Consts.COUNTRIES;
+			params += "&limit=100";
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Movies getMoviesPosterEngishVersion() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String params = "?fields=id,poster_image.flat";
-			params += "&countries=PL";
+			params += "&countries=" + Consts.COUNTRIES;
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Movies getMoviesPosterXXX() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?fields=id,poster_image.flat";
+			params += "&countries=EN";
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -291,7 +331,7 @@ public class ApiHelper {
 			};
 			String params = "?fields=id,title,poster_image.flat,original_title";
 			params += "&lang=" + Consts.LANGUAGE;
-			params += "&countries=PL";
+			params += "&countries=" + Consts.COUNTRIES;
 			if (releaseDate != null) {
 				DateFormater df = new DateFormater();
 				String date = df.formatDateShort(releaseDate);

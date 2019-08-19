@@ -1,6 +1,7 @@
 
 package model.json.movie;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +11,7 @@ import model.json.base.BaseModel;
 import util.Consts;
 
 @JsonRootName(value = "movie")
-public class Movie extends BaseModel {
+public class Movie extends BaseModel implements Comparable<Movie> {
 
 	private String slug;
 	private String title;
@@ -43,7 +44,7 @@ public class Movie extends BaseModel {
 			return title.toUpperCase();
 		} else {
 			if (originalTitle != null) {
-				return originalTitle.toUpperCase();	
+				return originalTitle.toUpperCase();
 			}
 		}
 		return null;
@@ -144,26 +145,44 @@ public class Movie extends BaseModel {
 	}
 
 	public String getImdbRating() {
-		//blad przy grojec
-		Rating imdbRating = ratings.getImdbRating();
-		if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
-			return " IMDB : " + imdbRating.getValue() + " / " + imdbRating.getVoteCount() + " ocen";
+		if (ratings != null) {
+			Rating imdbRating = ratings.getImdbRating();
+			if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
+				return " IMDB : " + imdbRating.getValue() + " / " + imdbRating.getVoteCount() + " ocen";
+			}
 		}
 		return null;
 	}
 
 	public String getTmdbRating() {
-		Rating tmdbRating = ratings.getTmdbRating();
-		if (tmdbRating != null && !tmdbRating.getVoteCount().equals("0")) {
-			return " TMDB : " + tmdbRating.getValue() + " / " + tmdbRating.getVoteCount() + " ocen";
+		if (ratings != null) {
+			Rating tmdbRating = ratings.getTmdbRating();
+			if (tmdbRating != null && !tmdbRating.getVoteCount().equals("0")) {
+				return " TMDB : " + tmdbRating.getValue() + " / " + tmdbRating.getVoteCount() + " ocen";
+			}
 		}
 		return null;
 	}
 
+	public BigDecimal getRatingValue() {
+		if (ratings != null) {
+			Rating imdbRating = ratings.getImdbRating();
+			if (imdbRating != null) {
+				return new BigDecimal(imdbRating.getValue());
+			}
+			Rating tmdbRating = ratings.getTmdbRating();
+			if (tmdbRating != null)
+				return new BigDecimal(tmdbRating.getValue());
+		}
+		return BigDecimal.ZERO;
+	}
+
 	public String getGenreInfo() {
 		String ret = "";
-		for (Genre elem : genre) {
-			ret += "[" + elem.getName() + "] ";
+		if (genre != null) {
+			for (Genre elem : genre) {
+				ret += "[" + elem.getName() + "] ";
+			}
 		}
 		return ret;
 	}
@@ -190,5 +209,10 @@ public class Movie extends BaseModel {
 
 	public void setOriginalTitle(String originalTitle) {
 		this.originalTitle = originalTitle;
+	}
+
+	@Override
+	public int compareTo(Movie o) {
+		return this.getRatingValue().compareTo(o.getRatingValue());
 	}
 }

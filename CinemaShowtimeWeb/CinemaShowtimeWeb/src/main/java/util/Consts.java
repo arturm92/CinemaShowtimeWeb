@@ -4,6 +4,7 @@ public class Consts {
 	
 	public static final String LANGUAGE = "pl";
 	public static final String MULTIMEDIA_LANGUAGE = "en";
+	public static final String COUNTRIES = "PL";
 	
 	public static final String BASE_URL = "https://api.internationalshowtimes.com/v4/";
 	public static final String API_KEY = "LZG67yUDsYG85s84tHkU8lZ0YMvAeccu";

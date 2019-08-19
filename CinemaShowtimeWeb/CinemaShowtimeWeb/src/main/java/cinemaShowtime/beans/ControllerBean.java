@@ -9,13 +9,15 @@ public class ControllerBean {
 
 	private CityBean cityBean;
 	private MovieCatalogueBean movieCatalogueBean;
+	private MovieRankingBean movieRankingBean;
 
 	public ControllerBean() {
 		long startTime = System.currentTimeMillis();
 
 		cityBean = new CityBean();
 		movieCatalogueBean = new MovieCatalogueBean();
-
+		movieRankingBean = new MovieRankingBean();
+		
 		long stopTime = System.currentTimeMillis();
 		System.out.println("MainPage start in " + ((stopTime - startTime) / 1000) + "second");
 	}
@@ -31,5 +33,10 @@ public class ControllerBean {
 	public MovieCatalogueBean getMovieCatalogueBean() {
 		return movieCatalogueBean;
 	}
+	
+	public MovieRankingBean getMovieRankingBean() {
+		return movieRankingBean;
+	}
+
 
 }

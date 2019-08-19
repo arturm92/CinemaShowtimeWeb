@@ -23,7 +23,7 @@ public class MovieCatalogueBean {
 
 	public MovieCatalogueBean() {
 		movieList = ApiHelper.getMoviesCatalogue().getList();
-		moviePosters = ApiHelper.getMoviesPoster();
+		moviePosters = ApiHelper.getMoviesPosterEngishVersion();
 		moviePosters.fillMovieMap();
 		addPosterToMovie();
 		genres = ApiHelper.getGenres().removeNullGenres().getList();
@@ -31,7 +31,7 @@ public class MovieCatalogueBean {
 
 	private void addPosterToMovie() {
 		for (Movie movie : movieList) {
-			if (movie.getPosterImage() == null) {
+			if (movie.getPosterImage() == null  || movie.getPosterImage().equals(Consts.DEFAULT_POSTER)) {
 				String moviePoster = moviePosters.getMovieMap().get(movie.getId()).getPosterImage();
 				if (moviePoster == null) {
 					moviePoster =  Consts.DEFAULT_POSTER;
@@ -53,7 +53,7 @@ public class MovieCatalogueBean {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");
 			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
-			ec.redirect("/CinemaShowtimeWeb/movies/movieDetail/index.xhtml");
+			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

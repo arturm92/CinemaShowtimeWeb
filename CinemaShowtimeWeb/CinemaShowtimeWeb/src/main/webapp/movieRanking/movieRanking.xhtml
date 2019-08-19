@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<h:form>
+			<p:dataTable id="moviesRankingDataTable" var="item"
+				value="#{bean.rankingList}" selectionMode="single"
+				selection="#{bean.selectedMovie}" rowKey="#{item.id}"
+				sortBy="#{item.name}" sortOrder="ascending" styleClass="noHeader">
+
+				<p:ajax event="rowSelect" listener="#{bean.select}"
+					process="moviesRankingDataTable" />
+
+				<p:column>
+					<div class="ui-grid ui-grid-responsive" style="color: white;">
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-3">
+								<p:graphicImage value="#{item.posterImage}" styleClass="image" />
+							</div>
+							<div class="ui-grid ui-grid-responsive" style="width: 100%">
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-9" style="font-size: 25px;">#{item.title}</div>
+									<div class="ui-grid-col-6" style="text-align: right;">
+										<h:panelGroup rendered="#{item.rating != null}">
+											<i class="fa fa-fw fa-star-o"></i>
+											<h:outputText value="#{item.rating}" />
+											<br />
+										</h:panelGroup>
+									</div>
+								</div>
+								<br />
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-12" style="font-size: 20px;">#{item.genreInfo}</div>
+									<div class="ui-grid-col-3" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+	</h:body>
+</ui:composition>

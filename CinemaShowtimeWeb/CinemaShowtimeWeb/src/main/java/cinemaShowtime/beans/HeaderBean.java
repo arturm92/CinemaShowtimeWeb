@@ -32,7 +32,7 @@ public class HeaderBean {
 			String movieId = ec.getRequestParameterMap().get("movieId");
 			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
 			updateHeaderMovieList(movieId);
-			ec.redirect("/CinemaShowtimeWeb/movies/movieDetail/index.xhtml");
+			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
