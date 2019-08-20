@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -163,6 +162,7 @@ public class ApiHelper {
 			String params = "/" + movieId;
 			params += "?fields=id,poster_image.flat,scene_images.flat,trailers,ratings";
 			params += "&lang=" + Consts.MULTIMEDIA_LANGUAGE;
+			params += "&countries=" + Consts.COUNTRIES;
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, Movie.class);
 		} catch (JsonParseException e) {
@@ -180,8 +180,9 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
 			String params = "/" + movieId;
-			params += "?fields=id,title,original_title,synopsis,website,cast,crew,genres";
+			params += "?fields=id,title,original_title,synopsis,website,cast,crew,genres,release_dates,age_limits";
 			params += "&lang=" + Consts.LANGUAGE;
+			params += "&countries=" + Consts.COUNTRIES;
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, Movie.class);
 		} catch (JsonParseException e) {
@@ -194,22 +195,10 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static void mergeMovieDetails(Movie movie, Movie movieDescripstion, Movie movieMultimedia) {
-		if (movie.getId().compareTo(movieDescripstion.getId()) == 0) {
-			movie.setDescription(movieDescripstion.getDescription());
-			movie.setTitle(movieDescripstion.getTitle());
-			movie.setGenre(movieDescripstion.getGenre());
-			movie.setCast(movieDescripstion.getCast());
-			movie.setCrew(movieDescripstion.getCrew());
-			movie.setWebsite(movieDescripstion.getWebsite());
-		}
-	}
-
 	public static Movies getNewestMovies() {
 		try {
 			DateFormater df = new DateFormater();
 			String date = df.recalculateDateByMonth(-3);
-
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
@@ -257,8 +246,8 @@ public class ApiHelper {
 			params += "&lang=" + Consts.LANGUAGE;
 			params += "&countries=" + Consts.COUNTRIES;
 			if (yearsList != null) {
-				params += "&release_date_from=" + getMinYear(yearsList) + "-01-01";
-				params += "&release_date_to=" + getMaxYear(yearsList) + "-12-01";
+				params += "&release_date_from=" + MovieHelper.getMinYear(yearsList) + "-01-01";
+				params += "&release_date_to=" + MovieHelper.getMaxYear(yearsList) + "-12-31";
 			}
 			if (!isRuntime) {
 				params += "&include_outdated=true";
@@ -275,28 +264,6 @@ public class ApiHelper {
 		return null;
 	}
 
-	private static BigDecimal getMinYear(List<String> yearsList) {
-		BigDecimal min = new BigDecimal(yearsList.get(0));
-		for (String year : yearsList) {
-			BigDecimal tmp = new BigDecimal(year);
-			if (tmp.compareTo(min) < 0) {
-				min = tmp;
-			}
-		}
-		return min;
-	}
-
-	private static BigDecimal getMaxYear(List<String> yearsList) {
-		BigDecimal max = new BigDecimal(yearsList.get(0));
-		for (String year : yearsList) {
-			BigDecimal tmp = new BigDecimal(year);
-			if (tmp.compareTo(max) > 0) {
-				max = tmp;
-			}
-		}
-		return max;
-	}
-
 	public static Movies getMoviesPosterEngishVersion(boolean isRuntime, List<String> yearsList) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -305,8 +272,8 @@ public class ApiHelper {
 			String params = "?fields=id,poster_image.flat";
 			params += "&countries=" + Consts.COUNTRIES;
 			if (yearsList != null) {
-				params += "&release_date_from=" + getMinYear(yearsList) + "-01-01";
-				params += "&release_date_to=" + getMaxYear(yearsList) + "-12-01";
+				params += "&release_date_from=" + MovieHelper.getMinYear(yearsList) + "-01-01";
+				params += "&release_date_to=" + MovieHelper.getMaxYear(yearsList) + "-12-31";
 			}
 			if (!isRuntime) {
 				params += "&include_outdated=true";

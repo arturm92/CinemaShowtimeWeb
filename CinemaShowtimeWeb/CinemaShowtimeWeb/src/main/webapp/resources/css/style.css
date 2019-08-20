@@ -8,6 +8,10 @@
 	margin-right: 10px
 }
 
+body .ui-fieldset {
+	background-color: black;
+}
+
 body .ui-paginator {
 	border: none;
 	background-color: black;

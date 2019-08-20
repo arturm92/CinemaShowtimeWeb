@@ -1,6 +1,7 @@
 package cinemaShowtime.beans;
 
 import cinemaShowtime.ApiHelper;
+import cinemaShowtime.MovieHelper;
 import model.json.movie.Movie;
 
 
@@ -19,7 +20,7 @@ public class MovieDetailBean {
 	public void initMovieDetailBean(String movieId) {
 		movie = ApiHelper.getMovieMultimedia(Long.valueOf(movieId));
 		Movie movieDescripstion = ApiHelper.getMovieDescription(movie.getId());
-		ApiHelper.mergeMovieDetails(movie,movieDescripstion,null);
+		MovieHelper.mergeMovieDetails(movie,movieDescripstion);
 	}
 
 	public Movie getMovie() {

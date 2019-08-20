@@ -55,37 +55,40 @@
 					process="moviesRankingDataTable" />
 
 				<p:column>
-					<div class="ui-grid ui-grid-responsive"
-						style="color: white; font-size: 30px; margin-left: 10%;">
-						<div class="ui-grid-row">
-							<div class="ui-grid-col-2"
-								style="font-size: 40px; padding-top: 10%;">
-								<h:outputText value="#{item.numberInList}" />
-							</div>
-							<div class="ui-grid-col-3">
-								<p:graphicImage value="#{item.posterImage}" styleClass="image" />
-							</div>
-							<div class="ui-grid ui-grid-responsive"
-								style="width: 100%; padding-left: 10%; padding-top: 7%;">
-								<div class="ui-grid-row">
-									<div class="ui-grid-col-9">
-										<h:outputText value="#{item.title}" />
-									</div>
-
+					<h:commandLink action="#{bean.clickMovie}">
+						<div class="ui-grid ui-grid-responsive"
+							style="color: white; font-size: 30px; margin-left: 10%;">
+							<div class="ui-grid-row">
+								<div class="ui-grid-col-2"
+									style="font-size: 40px; padding-top: 10%;">
+									<h:outputText value="#{item.numberInList}" />
 								</div>
-								<br />
-								<div class="ui-grid-row">
-									<div class="ui-grid-col-9">
-										<h:panelGroup rendered="#{item.rating != null}">
-											<i class="fa fa-fw fa-star-o"></i>
-											<h:outputText value="#{item.rating}" />
-											<br />
-										</h:panelGroup>
+								<div class="ui-grid-col-3">
+									<p:graphicImage value="#{item.posterImage}" styleClass="image" />
+								</div>
+								<div class="ui-grid ui-grid-responsive"
+									style="width: 100%; padding-left: 10%; padding-top: 7%;">
+									<div class="ui-grid-row">
+										<div class="ui-grid-col-9">
+											<h:outputText value="#{item.title}" />
+										</div>
+
+									</div>
+									<br />
+									<div class="ui-grid-row">
+										<div class="ui-grid-col-9">
+											<h:panelGroup rendered="#{item.rating != null}">
+												<i class="fa fa-fw fa-star-o"></i>
+												<h:outputText value="#{item.rating}" />
+												<br />
+											</h:panelGroup>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+						<f:param name="movieId" value="#{item.id}" />
+					</h:commandLink>
 				</p:column>
 			</p:dataTable>
 

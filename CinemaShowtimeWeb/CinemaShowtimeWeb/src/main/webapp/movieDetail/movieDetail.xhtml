@@ -5,25 +5,65 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
-		<h:form id="movieDetailForm">
+		<h:form id="movieDetailForm" style="padding-top:5%;">
 			<h:panelGroup>
-				<p:accordionPanel multiple="true">
+				<p:fieldset legend="#{bean.movie.title}"
+					style="margin-bottom:20px;font-size:20px;text-align:left;">
+					<div class="ui-grid ui-grid-responsive" style="color: white;">
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-3">
+								<p:graphicImage value="#{bean.movie.posterImage}"
+									styleClass="image" />
+							</div>
+							<div class="ui-grid ui-grid-responsive" style="width: 100%">
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-9" style="font-size: 25px;">
+										<h:outputText value="#{bean.movie.originalTitle}" />
+									</div>
+									<div class="ui-grid-col-6" style="text-align: right;">
+										<h:panelGroup rendered="#{bean.movie.rating != null}">
+											<i class="fa fa-fw fa-star-o"></i>
+											<h:outputText value="#{bean.movie.rating}" />
+											<br />
+										</h:panelGroup>
+									</div>
+								</div>
+								<br />
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-15">
+										<h:outputText value="#{bean.movie.genreInfo}" />
+									</div>
+								</div>
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-15">
+										<h:outputText value="#{bean.movie.releaseDateInPoland}" />
+									</div>
+								</div>
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-15">
+										<h:panelGroup>
+											<h:outputText value="Od lat: #{bean.movie.simpleAgeLimit}" />
+											<i class="fa fa-fw fa-arrow-up"></i>
+										</h:panelGroup>
+									</div>
+								</div>
+								<br />
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-15">
+										<h:outputText value="#{bean.movie.description}" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:fieldset>
+
+				<p:accordionPanel multiple="true" style="text-align: left;">
 					<p:tab title="Trailer">
 						<h:panelGrid cellpadding="10"
 							style="width:100%; text-align: center;">
 							<p:media value="#{bean.movie.trailerURL}" player="flash"
 								styleClass="video" />
-						</h:panelGrid>
-					</p:tab>
-					<p:tab title="Opis filmu">
-						<h:panelGrid cellpadding="10" style="color:white;">
-							<h:outputText value="#{bean.movie.genreInfo}" />
-							<h:panelGroup rendered="#{bean.movie.rating != null}">
-								<i class="fa fa-fw fa-star-o"></i>
-								<h:outputText value="#{bean.movie.rating}" />
-							</h:panelGroup>
-							<br />
-							<h:outputText value="#{bean.movie.description}" />
 						</h:panelGrid>
 					</p:tab>
 					<p:tab title="Obsada">
@@ -36,7 +76,7 @@
 						</h:panelGrid>
 					</p:tab>
 					<p:tab title="Seceny z filmu">
-						<h:panelGrid cellpadding="10" style="margin-left: 25%;">
+						<h:panelGrid cellpadding="10" style="padding-left: 20%;">
 							<p:galleria value="#{bean.movie.sceneImages}" var="image"
 								panelWidth="600" panelHeight="313">
 								<p:graphicImage value="#{image}" styleClass="imageInGallery" />
@@ -44,6 +84,7 @@
 						</h:panelGrid>
 					</p:tab>
 				</p:accordionPanel>
+
 			</h:panelGroup>
 		</h:form>
 	</h:body>

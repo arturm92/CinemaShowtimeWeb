@@ -2,6 +2,8 @@
 package model.json.movie;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,6 +33,10 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 	private List<Person> cast;
 	private List<Person> crew;
 	private String website;
+	@JsonProperty("release_dates")
+	private LinkedHashMap<String, Object> releaseDate;
+	@JsonProperty("age_limits")
+	private LinkedHashMap<String, Object> ageLimit;
 
 	public int getNumberInList() {
 		return numberInList;
@@ -198,16 +204,20 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 
 	public String getCrewText() {
 		String ret = "";
-		for (Person person : crew) {
-			ret += person.getJob() + " : " + person.getName() + "\n";
+		if (crew != null) {
+			for (Person person : crew) {
+				ret += person.getJob() + " : " + person.getName() + "\n";
+			}
 		}
 		return ret;
 	}
 
 	public String getCastText() {
 		String ret = "";
-		for (Person person : cast) {
-			ret += person.getCharacter() + " : " + person.getName() + "\n";
+		if (cast != null) {
+			for (Person person : cast) {
+				ret += person.getCharacter() + " : " + person.getName() + "\n";
+			}
 		}
 		return ret;
 	}
@@ -218,6 +228,39 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 
 	public void setOriginalTitle(String originalTitle) {
 		this.originalTitle = originalTitle;
+	}
+
+	public LinkedHashMap<String, Object> getReleaseDate() {
+		return releaseDate;
+	}
+
+	public void setReleaseDate(LinkedHashMap<String, Object> releaseDate) {
+		this.releaseDate = releaseDate;
+	}
+
+	public String getReleaseDateInPoland() {
+		List<Object> date = (ArrayList<Object>) releaseDate.get("PL");
+		LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) date.get(0);
+		return "Premiera w Polsce: " + map.get("date");
+	}
+
+	public LinkedHashMap<String, Object> getAgeLimit() {
+		return ageLimit;
+	}
+
+	public void setAgeLimit(LinkedHashMap<String, Object> ageLimit) {
+		this.ageLimit = ageLimit;
+	}
+
+	public Object getSimpleAgeLimit() {
+		Object val = ageLimit.get("PL");
+		if (val == null) {
+			val = ageLimit.get("DE");
+			if (val == null) {
+				val = ageLimit.get("GB");
+			}
+		}
+		return val;
 	}
 
 	@Override
