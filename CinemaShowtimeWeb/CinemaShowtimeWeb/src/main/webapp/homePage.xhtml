@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<h:form>
+			<p:dataGrid var="item" value="#{bean.homePageMovieList}" layout="grid" columns="3">
+
+				<h:commandLink action="#{bean.clickMovie}">
+					<p:panel>
+						<h:panelGrid style="width:100%;text-align:center">
+							<h:panelGroup>
+								<div style="min-height: 60px;">
+									<h:outputText value="#{item.title}"
+										style="color:white;font-size:20px;text-algin:center;" />
+								</div>
+							</h:panelGroup>
+							<p:graphicImage value="#{item.posterImage}"
+								styleClass="imageInCatalogue" />
+						</h:panelGrid>
+					</p:panel>
+					<f:param name="movieId" value="#{item.id}" />
+				</h:commandLink>
+
+			</p:dataGrid>
+		</h:form>
+	</h:body>
+</ui:composition>

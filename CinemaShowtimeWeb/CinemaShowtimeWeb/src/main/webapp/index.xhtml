@@ -10,13 +10,19 @@
 	</h:head>
 	<h:body>
 		<div id="header">
-			<ui:insert name="header">
+			<ui:insert>
 				<ui:include src="modules/header.xhtml" />
 			</ui:insert>
 		</div>
-		<div id="content"></div>
+		<div id="content">
+			<ui:insert>
+				<ui:include src="homePage.xhtml">
+					<ui:param name="bean" value="#{controllerBean.movieRankingBean}" />
+				</ui:include>
+			</ui:insert>
+		</div>
 		<div id="footer">
-			<ui:insert name="footer">
+			<ui:insert>
 				<ui:include src="modules/footer.xhtml" />
 			</ui:insert>
 		</div>

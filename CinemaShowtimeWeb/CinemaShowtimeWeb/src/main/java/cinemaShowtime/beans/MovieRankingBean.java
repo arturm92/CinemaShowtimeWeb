@@ -24,6 +24,7 @@ public class MovieRankingBean {
 	private Movies rankingMovies;
 	private Movies moviePosters;
 	private List<Movie> displayRankingList;
+	private List<Movie> homePageMovieList;
 
 	private String filterMode;
 	private boolean runtimeMovies = true;
@@ -67,6 +68,21 @@ public class MovieRankingBean {
 
 		displayRankingList = rankingMovies.getList();
 		filterChanged = false;
+		
+		homePageMovieList = new ArrayList<Movie>();
+		homePageMovieList.addAll(displayRankingList.subList(0, 3));
+	}
+	
+	public void clickMovie() {
+		try {
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			String movieId = ec.getRequestParameterMap().get("movieId");
+			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
+			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private void addNumberToEachMovie() {
@@ -235,6 +251,11 @@ public class MovieRankingBean {
 			updateFilterFlag(true);
 		}
 		this.runtimeMovies = runtimeMovies;
+	}
+
+	public List<Movie> getHomePageMovieList() {
+		
+		return homePageMovieList;
 	}
 
 }
