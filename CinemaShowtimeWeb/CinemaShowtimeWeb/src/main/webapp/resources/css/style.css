@@ -8,7 +8,39 @@
 	margin-right: 10px
 }
 
-body .ui-datatable .ui-datatable-data>tr.ui-datatable-even {
+body .ui-paginator {
+	border: none;
+	background-color: black;
+}
+
+body .ui-dataview .ui-dataview-header {
+	border: none;
+	background-color: black;
+}
+
+body .ui-dataview .ui-dataview-content {
+	border: none;
+	background-color: black;
+}
+
+body .ui-panel .ui-panel-content {
+	border: none;
+	background-color: black;
+}
+
+body .ui-panel .ui-panel-titlebar {
+	border: none;
+	background-color: black;
+}
+
+body .ui-accordion .ui-accordion-content {
+	border: none;
+	border-bottom: 1px solid #191919;
+	background-color: black;
+}
+
+body .ui-datatable
+	.ui-datatable-data>tr.ui-datatable-even {
 	border: none;
 	background-color: black;
 }
@@ -30,6 +62,13 @@ body .ui-datagrid .ui-datagrid-content {
 
 body .ui-autocomplete .ui-autocomplete-dropdown {
 	position: absolute;
+}
+
+body .ui-autocomplete {
+	width: 97%;
+	margin-bottom: 30px;
+	padding-left: 5%;
+	padding-right: 5%;
 }
 
 .ui-steps {
@@ -57,14 +96,6 @@ body .ui-autocomplete .ui-autocomplete-dropdown {
 	margin-top: -20px;
 	background-color: Black;
 	min-height: 400px;
-}
-
-/*  #footer {
-	margin-top: -30px;
-	background-color: Black;
-}
- */
-#mainContent {
 	padding-left: 10%;
 	padding-right: 10%;
 	width: 100%;
@@ -102,7 +133,6 @@ body .ui-autocomplete .ui-autocomplete-dropdown {
 
 .dataTable {
 	width: 100%;
-	text-align: center;
 }
 
 .topAligned {

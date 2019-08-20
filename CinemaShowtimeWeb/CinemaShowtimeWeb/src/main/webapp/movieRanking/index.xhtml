@@ -15,11 +15,9 @@
 			</ui:insert>
 		</div>
 		<div id="content">
-			<ui:insert name="content">
-				<ui:include src="movieRanking.xhtml">
-					<ui:param name="bean" value="#{controllerBean.movieRankingBean}" />
-				</ui:include>
-			</ui:insert>
+			<ui:include src="movieRanking.xhtml">
+				<ui:param name="bean" value="#{controllerBean.movieRankingBean}" />
+			</ui:include>
 		</div>
 		<div id="footer">
 			<ui:insert name="footer">

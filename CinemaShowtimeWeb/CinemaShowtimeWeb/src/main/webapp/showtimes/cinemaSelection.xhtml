@@ -5,10 +5,11 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
-		<h:form id="cinemasForm"> 
+		<h:form id="cinemasForm">
 
 			<p:steps activeIndex="1" readonly="false">
-				<p:menuitem value="Wybierz miasto" actionListener="#{bean.firstStepClicked}" update="mainContent"/>
+				<p:menuitem value="Wybierz miasto"
+					actionListener="#{bean.firstStepClicked}" update="mainContent" />
 				<p:menuitem value="Wybierz kino" />
 				<p:menuitem value="Wybierz film" />
 				<p:menuitem value="Wybierz seans" />
@@ -17,7 +18,7 @@
 
 			<p:dataTable id="cinemaDataTable" var="item" value="#{bean.list}"
 				selectionMode="single" selection="#{bean.selectedCinema}"
-				rowKey="#{item.id}" rowStyleClass="dataTable" sortBy="#{item.name}"
+				rowKey="#{item.id}" sortBy="#{item.name}"
 				sortOrder="ascending" styleClass="noHeader">
 
 				<p:ajax event="rowSelect" listener="#{bean.select}"
@@ -25,7 +26,7 @@
 					process="cinemaDataTable" />
 
 				<p:column>
-					<h:outputText value="#{item.name}" />
+					<h:outputText value="#{item.name}" style="padding-left:40%;" />
 				</p:column>
 
 			</p:dataTable>

@@ -23,7 +23,7 @@ public class MovieCatalogueBean {
 
 	public MovieCatalogueBean() {
 		movieList = ApiHelper.getMoviesCatalogue().getList();
-		moviePosters = ApiHelper.getMoviesPosterEngishVersion();
+		moviePosters = ApiHelper.getMoviesPosterEngishVersion(true,null);
 		moviePosters.fillMovieMap();
 		addPosterToMovie();
 		genres = ApiHelper.getGenres().removeNullGenres().getList();

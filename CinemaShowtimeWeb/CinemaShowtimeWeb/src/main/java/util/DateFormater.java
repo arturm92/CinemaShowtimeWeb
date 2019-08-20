@@ -97,4 +97,15 @@ public class DateFormater {
 		return null;
 	}
 	
+	public String convertSimpleDateToTimezone(Date date) {
+		DateFormat inputDateFormat = new SimpleDateFormat(Consts.TIMEZONE_DATE_FORMAT);
+		return inputDateFormat.format(date);
+	}
+	
+	public int getCurrentYear() {
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar.get(Calendar.YEAR);
+	}
 }

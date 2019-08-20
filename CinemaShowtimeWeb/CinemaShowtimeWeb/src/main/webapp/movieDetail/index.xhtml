@@ -11,19 +11,17 @@
 	<h:body>
 		<div id="header">
 			<ui:insert name="header">
-				<ui:include src="../../modules/header.xhtml" />
+				<ui:include src="../modules/header.xhtml" />
 			</ui:insert>
 		</div>
 		<div id="content">
-			<ui:insert>
-				<ui:include src="movieDetail.xhtml">
-					<ui:param name="bean" value="#{controllerBean.movieDetailBean}" />
-				</ui:include>
-			</ui:insert>
+			<ui:include src="movieDetail.xhtml">
+				<ui:param name="bean" value="#{controllerBean.movieDetailBean}" />
+			</ui:include>
 		</div>
 		<div id="footer">
 			<ui:insert name="footer">
-				<ui:include src="../../modules/footer.xhtml" />
+				<ui:include src="../modules/footer.xhtml" />
 			</ui:insert>
 		</div>
 	</h:body>

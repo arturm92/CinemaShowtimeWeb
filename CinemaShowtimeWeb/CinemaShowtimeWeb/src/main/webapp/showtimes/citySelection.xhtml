@@ -18,8 +18,7 @@
 			<p:autoComplete id="cityAutoComplete" value="#{bean.selectedCity}"
 				completeMethod="#{bean.getCitiesList}" var="item"
 				itemValue="#{item}" itemLabel="#{item.name}"
-				converter="cityConverter" dropdown="true" inputStyle="width:100%;"
-				style="width:80%;margin-bottom:30px;">
+				converter="cityConverter" dropdown="true" inputStyle="width:100%;">
 				<p:ajax event="itemSelect" listener="#{bean.select}"
 					update="mainContent,cinemasInCityPanelGroup" />
 			</p:autoComplete>
@@ -28,7 +27,8 @@
 				styleClass="fullWidth">
 				<c:forEach var="city" items="#{bean.citiesQuickList}">
 					<p:commandButton value="#{city.name}" action="#{bean.quickSelect}"
-						style="width:255px;font-size:25px;" update="mainContent,cinemasInCityPanelGroup">
+						style="width:255px;font-size:25px;"
+						update="mainContent,cinemasInCityPanelGroup">
 						<f:setPropertyActionListener value="#{city}"
 							target="#{bean.selectedCity}" />
 					</p:commandButton>

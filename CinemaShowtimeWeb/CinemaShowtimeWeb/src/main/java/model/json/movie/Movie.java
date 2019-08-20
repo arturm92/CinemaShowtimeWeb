@@ -13,6 +13,7 @@ import util.Consts;
 @JsonRootName(value = "movie")
 public class Movie extends BaseModel implements Comparable<Movie> {
 
+	private int numberInList;
 	private String slug;
 	private String title;
 	@JsonProperty("original_title")
@@ -30,6 +31,14 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 	private List<Person> cast;
 	private List<Person> crew;
 	private String website;
+
+	public int getNumberInList() {
+		return numberInList;
+	}
+
+	public void setNumberInList(int numberInList) {
+		this.numberInList = numberInList;
+	}
 
 	public String getSlug() {
 		return slug;
@@ -148,20 +157,20 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 		if (ratings != null) {
 			Rating imdbRating = ratings.getImdbRating();
 			if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
-				return " IMDB : " + imdbRating.getValue() + " / " + imdbRating.getVoteCount() + " ocen";
+				return imdbRating.getValue() + " / " + imdbRating.getVoteCount() + " ocen";
 			}
 		}
-		return null;
+		return "brak ocen";
 	}
 
 	public String getTmdbRating() {
 		if (ratings != null) {
 			Rating tmdbRating = ratings.getTmdbRating();
 			if (tmdbRating != null && !tmdbRating.getVoteCount().equals("0")) {
-				return " TMDB : " + tmdbRating.getValue() + " / " + tmdbRating.getVoteCount() + " ocen";
+				return tmdbRating.getValue() + " / " + tmdbRating.getVoteCount() + " ocen";
 			}
 		}
-		return null;
+		return "brak ocen";
 	}
 
 	public BigDecimal getRatingValue() {

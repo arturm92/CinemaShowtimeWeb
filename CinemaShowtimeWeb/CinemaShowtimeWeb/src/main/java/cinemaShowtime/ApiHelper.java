@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -232,7 +233,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
-			String params = "?fields=id,title,poster_image.flat,original_title";
+			String params = "?fields=id,title,original_title,poster_image.flat";
 			params += "&lang=" + Consts.LANGUAGE;
 			params += "&countries=" + Consts.COUNTRIES;
 			String json = getDataFromApi(Consts.MOVIES + params);
@@ -247,7 +248,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getMoviesRanking() {
+	public static Movies getMoviesRanking(boolean isRuntime, List<String> yearsList) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
@@ -255,7 +256,13 @@ public class ApiHelper {
 			String params = "?fields=id,title,original_title,poster_image.flat,ratings";
 			params += "&lang=" + Consts.LANGUAGE;
 			params += "&countries=" + Consts.COUNTRIES;
-			params += "&limit=100";
+			if (yearsList != null) {
+				params += "&release_date_from=" + getMinYear(yearsList) + "-01-01";
+				params += "&release_date_to=" + getMaxYear(yearsList) + "-12-01";
+			}
+			if (!isRuntime) {
+				params += "&include_outdated=true";
+			}
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -268,13 +275,42 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getMoviesPosterEngishVersion() {
+	private static BigDecimal getMinYear(List<String> yearsList) {
+		BigDecimal min = new BigDecimal(yearsList.get(0));
+		for (String year : yearsList) {
+			BigDecimal tmp = new BigDecimal(year);
+			if (tmp.compareTo(min) < 0) {
+				min = tmp;
+			}
+		}
+		return min;
+	}
+
+	private static BigDecimal getMaxYear(List<String> yearsList) {
+		BigDecimal max = new BigDecimal(yearsList.get(0));
+		for (String year : yearsList) {
+			BigDecimal tmp = new BigDecimal(year);
+			if (tmp.compareTo(max) > 0) {
+				max = tmp;
+			}
+		}
+		return max;
+	}
+
+	public static Movies getMoviesPosterEngishVersion(boolean isRuntime, List<String> yearsList) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String params = "?fields=id,poster_image.flat";
 			params += "&countries=" + Consts.COUNTRIES;
+			if (yearsList != null) {
+				params += "&release_date_from=" + getMinYear(yearsList) + "-01-01";
+				params += "&release_date_to=" + getMaxYear(yearsList) + "-12-01";
+			}
+			if (!isRuntime) {
+				params += "&include_outdated=true";
+			}
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
