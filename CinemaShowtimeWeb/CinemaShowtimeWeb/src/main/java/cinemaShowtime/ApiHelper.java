@@ -244,7 +244,7 @@ public class ApiHelper {
 			};
 			String params = "?fields=id,title,poster_image.flat,original_title";
 			params += filter.prepareParameters();
-			
+
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -262,10 +262,9 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
-			String params = "?fields=id,title,original_title,poster_image.flat,release_dates";
-			
+			String params = "?fields=id,title,original_title,poster_image.flat,release_dates,ratings,genres,crew";
 			params += filter.prepareParameters();
-			
+
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -277,16 +276,16 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 	public static Movies getMoviesPosterEngishVersion(Filter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String params = "?fields=id,poster_image.flat";
-			
+
 			params += filter.prepareParameters();
-			
+
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -298,16 +297,16 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 	public static Movies getMoviesRanking(Filter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String params = "?fields=id,title,original_title,poster_image.flat,ratings";
-			
+
 			params += filter.prepareParameters();
-			
+
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -319,5 +318,5 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 }

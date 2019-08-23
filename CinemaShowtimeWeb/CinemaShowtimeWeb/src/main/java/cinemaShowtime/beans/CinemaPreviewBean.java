@@ -61,21 +61,6 @@ public class CinemaPreviewBean {
 		return filter;
 	}
 	
-	private void addPosterToMovie() {
-		//System.out.println("*********");
-		for (Movie movie : cinemaPreviewMoviesList) {
-			if (movie.getPosterImage() == null || movie.getPosterImage().equals(Consts.DEFAULT_POSTER)) {
-				//System.out.println(movie.getTitle() + " | " + movie.getId());
-				String moviePoster = moviePosters.getMovieMap().get(movie.getId()).getPosterImage();
-				if (moviePoster == null) {
-					moviePoster = Consts.DEFAULT_POSTER;
-				}
-				movie.setPosterImages(moviePoster);
-			}
-		}
-		//System.out.println("*********");
-	}
-	
 	public void filter() {
 		prepareCinemaPreviewMoviesList();
 	}

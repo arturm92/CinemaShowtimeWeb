@@ -11,7 +11,7 @@ public class ControllerBean {
 	private MovieCatalogueBean movieCatalogueBean;
 	private MovieRankingBean movieRankingBean;
 	private CinemaPreviewBean cinemaPreviewBean;
-	
+	private CinemaPremiereBean cinemaPremiereBean;
 	
 	public ControllerBean() {
 		long startTime = System.currentTimeMillis();
@@ -20,6 +20,7 @@ public class ControllerBean {
 		movieCatalogueBean = new MovieCatalogueBean();
 		movieRankingBean = new MovieRankingBean();
 		cinemaPreviewBean = new CinemaPreviewBean();
+		setCinemaPremiereBean(new CinemaPremiereBean());
 		
 		long stopTime = System.currentTimeMillis();
 		System.out.println("MainPage start in " + ((stopTime - startTime) / 1000) + "second");
@@ -43,6 +44,14 @@ public class ControllerBean {
 	
 	public CinemaPreviewBean getCinemaPreviewBean() {
 		return cinemaPreviewBean;
+	}
+
+	public CinemaPremiereBean getCinemaPremiereBean() {
+		return cinemaPremiereBean;
+	}
+
+	public void setCinemaPremiereBean(CinemaPremiereBean cinemaPremiereBean) {
+		this.cinemaPremiereBean = cinemaPremiereBean;
 	}
 
 }

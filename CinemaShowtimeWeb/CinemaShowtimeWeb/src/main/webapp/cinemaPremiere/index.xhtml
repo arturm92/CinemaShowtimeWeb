@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<title>ShowtimesApplication</title>
+		<h:outputStylesheet name="style.css" library="css" />
+	</h:head>
+	<h:body>
+		<div id="header">
+			<ui:insert name="header">
+				<ui:include src="../modules/header.xhtml" />
+			</ui:insert>
+		</div>
+		<div id="content">
+			<ui:include src="cinemaPremiere.xhtml">
+				<ui:param name="bean" value="#{controllerBean.cinemaPremiereBean}" />
+			</ui:include>
+		</div>
+		<div id="footer">
+			<ui:insert name="footer">
+				<ui:include src="../modules/footer.xhtml" />
+			</ui:insert>
+		</div>
+	</h:body>
+</ui:composition>

@@ -108,4 +108,14 @@ public class DateFormater {
 		calendar.setTime(date);
 		return calendar.get(Calendar.YEAR);
 	}
+	
+	public Date parseString(String date) {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
+			return sdf.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

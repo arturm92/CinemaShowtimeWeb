@@ -3,16 +3,20 @@ package model.json.movie;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import model.json.base.BaseModel;
-import util.Consts;
+import util.DateFormater;
 
 @JsonRootName(value = "movie")
+@JsonIgnoreProperties({ "poster_image_thumbnail", "runtime" })
+
 public class Movie extends BaseModel implements Comparable<Movie> {
 
 	private int numberInList;
@@ -37,6 +41,8 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 	private LinkedHashMap<String, Object> releaseDate;
 	@JsonProperty("age_limits")
 	private LinkedHashMap<String, Object> ageLimit;
+	@JsonProperty("original_language")
+	private String originalLanguage;
 
 	public int getNumberInList() {
 		return numberInList;
@@ -196,7 +202,7 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 	}
 
 	public String getGenreInfo() {
-		String ret = "";
+		String ret = "gatunek: ";
 		if (genre != null) {
 			for (Genre elem : genre) {
 				ret += "[" + elem.getName() + "] ";
@@ -225,6 +231,19 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 		return ret;
 	}
 
+	public String getFirstDirector() {
+		String ret = "";
+		if (crew != null) {
+			for (Person person : crew) {
+				if (person.getJob().equals("reżyser")) {
+					ret += person.getJob() + " : " + person.getName() + "\n";
+					return ret;
+				}
+			}
+		}
+		return ret;
+	}
+
 	public String getOriginalTitle() {
 		if (originalTitle != null) {
 			return originalTitle.toUpperCase();
@@ -244,22 +263,30 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 		this.releaseDate = releaseDate;
 	}
 
-	public String getReleaseDatePoland() {
+	public String getReleaseDateFormatted() {
+		LinkedHashMap<String, String> map;
 		List<Object> date = (ArrayList<Object>) releaseDate.get("PL");
 		if (date != null) {
-			LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) date.get(0);
-			return "Premiera w Polsce: " + map.get("date");
+			map = (LinkedHashMap<String, String>) date.get(0);
+			return "premiera w Polsce: " + map.get("date");
+		} else {
+			date = (ArrayList<Object>) releaseDate.get("US");
+			map = (LinkedHashMap<String, String>) date.get(0);
+			return "premiera na świecie: " + map.get("date");
 		}
-		return null;
 	}
 
-	public String getReleaseDateGlobal() {
-		List<Object> date = (ArrayList<Object>) releaseDate.get("US");
+	public Date getReleaseDateInDateType() {
+		LinkedHashMap<String, String> map;
+		List<Object> date = (ArrayList<Object>) releaseDate.get("PL");
 		if (date != null) {
-			LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) date.get(0);
-			return "Premiera na świecie: " + map.get("date");
+			map = (LinkedHashMap<String, String>) date.get(0);
+		} else {
+			date = (ArrayList<Object>) releaseDate.get("US");
+			map = (LinkedHashMap<String, String>) date.get(0);
 		}
-		return null;
+		DateFormater df = new DateFormater();
+		return df.parseString(map.get("date"));
 	}
 
 	public LinkedHashMap<String, Object> getAgeLimit() {
@@ -282,6 +309,14 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 			return val;
 		}
 		return null;
+	}
+
+	public String getOriginalLanguage() {
+		return originalLanguage;
+	}
+
+	public void setOriginalLanguage(String originalLanguage) {
+		this.originalLanguage = originalLanguage;
 	}
 
 	@Override
