@@ -34,6 +34,8 @@ public class ApiHelper {
 
 	public static String getDataFromApi(String url) {
 		try {
+			System.out.println("QUERY: " + url);
+
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpGet request = new HttpGet(url);
 			request.addHeader("X-API-Key", Consts.API_KEY);
@@ -198,105 +200,13 @@ public class ApiHelper {
 	public static Movies getNewestMovies() {
 		try {
 			DateFormater df = new DateFormater();
-			String date = df.recalculateDateByMonth(-3);
+			String date = df.recalculateDateByMonth(-4);
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String params = "?fields=id,title,poster_image.flat";
 			params += "&release_date_from=" + date;
 			params += "&countries=" + Consts.COUNTRIES;
-			String json = getDataFromApi(Consts.MOVIES + params);
-			return mapper.readValue(json, map);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public static Movies getMoviesCatalogue() {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			TypeReference<Movies> map = new TypeReference<Movies>() {
-			};
-			String params = "?fields=id,title,original_title,poster_image.flat";
-			params += "&lang=" + Consts.LANGUAGE;
-			params += "&countries=" + Consts.COUNTRIES;
-			String json = getDataFromApi(Consts.MOVIES + params);
-			return mapper.readValue(json, map);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public static Movies getMoviesRanking(boolean isRuntime, List<String> yearsList) {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			TypeReference<Movies> map = new TypeReference<Movies>() {
-			};
-			String params = "?fields=id,title,original_title,poster_image.flat,ratings";
-			params += "&lang=" + Consts.LANGUAGE;
-			params += "&countries=" + Consts.COUNTRIES;
-			if (yearsList != null) {
-				params += "&release_date_from=" + MovieHelper.getMinYear(yearsList) + "-01-01";
-				params += "&release_date_to=" + MovieHelper.getMaxYear(yearsList) + "-12-31";
-			}
-			if (!isRuntime) {
-				params += "&include_outdated=true";
-			}
-			String json = getDataFromApi(Consts.MOVIES + params);
-			return mapper.readValue(json, map);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public static Movies getMoviesPosterEngishVersion(boolean isRuntime, List<String> yearsList) {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			TypeReference<Movies> map = new TypeReference<Movies>() {
-			};
-			String params = "?fields=id,poster_image.flat";
-			params += "&countries=" + Consts.COUNTRIES;
-			if (yearsList != null) {
-				params += "&release_date_from=" + MovieHelper.getMinYear(yearsList) + "-01-01";
-				params += "&release_date_to=" + MovieHelper.getMaxYear(yearsList) + "-12-31";
-			}
-			if (!isRuntime) {
-				params += "&include_outdated=true";
-			}
-			String json = getDataFromApi(Consts.MOVIES + params);
-			return mapper.readValue(json, map);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public static Movies getMoviesPosterXXX() {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			TypeReference<Movies> map = new TypeReference<Movies>() {
-			};
-			String params = "?fields=id,poster_image.flat";
-			params += "&countries=EN";
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -327,27 +237,14 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getMoviesCatalogueFiltered(List<String> selectedGenres, Date releaseDate) {
+	public static Movies getMoviesCatalogue(Filter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String params = "?fields=id,title,poster_image.flat,original_title";
-			params += "&lang=" + Consts.LANGUAGE;
-			params += "&countries=" + Consts.COUNTRIES;
-			if (releaseDate != null) {
-				DateFormater df = new DateFormater();
-				String date = df.formatDateShort(releaseDate);
-				params += "&release_date_from=" + date;
-			}
-			if (!selectedGenres.isEmpty()) {
-				String genre_ids = "";
-				for (String id : selectedGenres) {
-					genre_ids += id + ",";
-				}
-
-				params += "&genre_ids=" + genre_ids;
-			}
+			params += filter.prepareParameters();
+			
 			String json = getDataFromApi(Consts.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
@@ -359,4 +256,68 @@ public class ApiHelper {
 		}
 		return null;
 	}
+
+	public static Movies getCinemaPreviewMovies(Filter filter) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?fields=id,title,original_title,poster_image.flat,release_dates";
+			
+			params += filter.prepareParameters();
+			
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Movies getMoviesPosterEngishVersion(Filter filter) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?fields=id,poster_image.flat";
+			
+			params += filter.prepareParameters();
+			
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Movies getMoviesRanking(Filter filter) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference<Movies> map = new TypeReference<Movies>() {
+			};
+			String params = "?fields=id,title,original_title,poster_image.flat,ratings";
+			
+			params += filter.prepareParameters();
+			
+			String json = getDataFromApi(Consts.MOVIES + params);
+			return mapper.readValue(json, map);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

@@ -1,7 +1,5 @@
 package model.json;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import util.DateFormater;

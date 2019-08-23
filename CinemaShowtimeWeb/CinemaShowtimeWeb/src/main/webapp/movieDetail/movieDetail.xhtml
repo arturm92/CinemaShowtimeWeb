@@ -21,7 +21,7 @@
 										<h:outputText value="#{bean.movie.originalTitle}" />
 									</div>
 									<div class="ui-grid-col-6" style="text-align: right;">
-										<h:panelGroup rendered="#{bean.movie.rating != null}">
+										<h:panelGroup>
 											<i class="fa fa-fw fa-star-o"></i>
 											<h:outputText value="#{bean.movie.rating}" />
 											<br />
@@ -36,12 +36,12 @@
 								</div>
 								<div class="ui-grid-row">
 									<div class="ui-grid-col-15">
-										<h:outputText value="#{bean.movie.releaseDateInPoland}" />
+										<h:outputText value="#{bean.movie.releaseDatePoland}" />
 									</div>
 								</div>
 								<div class="ui-grid-row">
 									<div class="ui-grid-col-15">
-										<h:panelGroup>
+										<h:panelGroup rendered="#{bean.movie.ageLimit != null}">
 											<h:outputText value="Od lat: #{bean.movie.simpleAgeLimit}" />
 											<i class="fa fa-fw fa-arrow-up"></i>
 										</h:panelGroup>
@@ -59,7 +59,7 @@
 				</p:fieldset>
 
 				<p:accordionPanel multiple="true" style="text-align: left;">
-					<p:tab title="Trailer">
+					<p:tab title="Trailer" rendered="#{bean.movie.trailers != null}">
 						<h:panelGrid cellpadding="10"
 							style="width:100%; text-align: center;">
 							<p:media value="#{bean.movie.trailerURL}" player="flash"

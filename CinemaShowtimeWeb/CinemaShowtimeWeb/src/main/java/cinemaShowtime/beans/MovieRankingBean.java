@@ -14,6 +14,8 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.ApiHelper;
+import cinemaShowtime.Filter;
+import cinemaShowtime.MovieHelper;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
 import util.Consts;
@@ -21,6 +23,7 @@ import util.Consts;
 public class MovieRankingBean {
 
 	private Movie selectedMovie;
+
 	private Movies rankingMovies;
 	private Movies moviePosters;
 	private List<Movie> displayRankingList;
@@ -55,24 +58,43 @@ public class MovieRankingBean {
 		filteredYearsList.add(filterYearsList.get(pos));
 	}
 
-	private void prepareDisplayRankingList() {
-		rankingMovies = ApiHelper.getMoviesRanking(runtimeMovies, filteredYearsList);
+	private Filter prepareFilter() {
+		Filter filter = new Filter();
 
-		moviePosters = ApiHelper.getMoviesPosterEngishVersion(runtimeMovies, filteredYearsList);
+		filter.addParam(Filter.INCLUDE_OUTDATED, String.valueOf(!runtimeMovies));
+
+		String dateFrom = MovieHelper.getMinYear(filteredYearsList) + "-01-01";
+		String dateTo = MovieHelper.getMaxYear(filteredYearsList) + "-12-31";
+
+		filter.addParam(Filter.RELEASE_DATE_FROM, dateFrom);
+		filter.addParam(Filter.RELEASE_DATE_TO, dateTo);
+
+		filter.addParam(Filter.LANG, Consts.LANGUAGE);
+		filter.addParam(Filter.COUNTRIES, Consts.COUNTRIES);
+		return filter;
+	}
+
+	private void prepareDisplayRankingList() {
+		Filter filter = prepareFilter();
+
+		rankingMovies = ApiHelper.getMoviesRanking(filter);
+
+		filter.deleteParam(Filter.LANG);
+		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
-		addPosterToMovie();
+		MovieHelper.addPosterToMovie(rankingMovies, moviePosters);
 
 		rankingMovies.setList(rankingMovies.getMoviesWithPosterList());
 		Collections.sort(rankingMovies.getList(), Collections.reverseOrder());
 		addNumberToEachMovie();
 
-		displayRankingList = rankingMovies.getList();
+		displayRankingList = rankingMovies.getList().subList(0, getMax(50));
 		filterChanged = false;
-		
+
 		homePageMovieList = new ArrayList<Movie>();
 		homePageMovieList.addAll(displayRankingList.subList(0, 3));
 	}
-	
+
 	public void clickMovie() {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
@@ -92,23 +114,8 @@ public class MovieRankingBean {
 			number++;
 		}
 	}
-
-	private void addPosterToMovie() {
-		System.out.println("*********");
-		for (Movie movie : rankingMovies.getList()) {
-			if (movie.getPosterImage() == null || movie.getPosterImage().equals(Consts.DEFAULT_POSTER)) {
-				System.out.println(movie.getTitle() + " | " + movie.getId());
-				String moviePoster = moviePosters.getMovieMap().get(movie.getId()).getPosterImage();
-				if (moviePoster == null) {
-					moviePoster = Consts.DEFAULT_POSTER;
-				}
-				movie.setPosterImages(moviePoster);
-			}
-		}
-		System.out.println("*********");
-	}
-
-	public void filterRankingList() {
+	
+	public void filter() {
 		if (filterChanged && chcekFilterParameter()) {
 			prepareDisplayRankingList();
 		}
@@ -160,22 +167,6 @@ public class MovieRankingBean {
 		} else {
 			return mode;
 		}
-	}
-
-	private void printMoviesRating(List<Movie> movieList) {
-		System.out.println("***************");
-		for (Movie movie : movieList) {
-			System.out.println(movie.getTitle() + " " + movie.getRatingValue());
-		}
-		System.out.println("***************");
-	}
-
-	private void printMoives(List<Movie> movieList) {
-		System.out.println("***************");
-		for (Movie movie : movieList) {
-			System.out.println(movie.getId() + " | " + movie.getTitle() + " | " + movie.getPosterImage());
-		}
-		System.out.println("***************");
 	}
 
 	public void select(SelectEvent selectEvent) {
@@ -254,7 +245,6 @@ public class MovieRankingBean {
 	}
 
 	public List<Movie> getHomePageMovieList() {
-		
 		return homePageMovieList;
 	}
 

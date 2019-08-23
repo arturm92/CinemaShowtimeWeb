@@ -81,9 +81,9 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 	}
 
 	public String getPosterImage() {
-		if (posterImage == null) {
-			return Consts.DEFAULT_POSTER;
-		}
+		/*
+		 * if (posterImage == null) { return Consts.DEFAULT_POSTER; }
+		 */
 		return posterImage;
 	}
 
@@ -148,7 +148,10 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 	}
 
 	public String getTrailerURL() {
-		return trailers.get(0).getTrailerFiles().get(0).getUrl().replace("watch?v=", "v/");
+		if (trailers != null) {
+			return trailers.get(0).getTrailerFiles().get(0).getUrl().replace("watch?v=", "v/");
+		}
+		return null;
 	}
 
 	public String getRating() {
@@ -223,7 +226,10 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 	}
 
 	public String getOriginalTitle() {
-		return originalTitle;
+		if (originalTitle != null) {
+			return originalTitle.toUpperCase();
+		}
+		return null;
 	}
 
 	public void setOriginalTitle(String originalTitle) {
@@ -238,10 +244,22 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 		this.releaseDate = releaseDate;
 	}
 
-	public String getReleaseDateInPoland() {
+	public String getReleaseDatePoland() {
 		List<Object> date = (ArrayList<Object>) releaseDate.get("PL");
-		LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) date.get(0);
-		return "Premiera w Polsce: " + map.get("date");
+		if (date != null) {
+			LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) date.get(0);
+			return "Premiera w Polsce: " + map.get("date");
+		}
+		return null;
+	}
+
+	public String getReleaseDateGlobal() {
+		List<Object> date = (ArrayList<Object>) releaseDate.get("US");
+		if (date != null) {
+			LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) date.get(0);
+			return "Premiera na świecie: " + map.get("date");
+		}
+		return null;
 	}
 
 	public LinkedHashMap<String, Object> getAgeLimit() {
@@ -253,14 +271,17 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 	}
 
 	public Object getSimpleAgeLimit() {
-		Object val = ageLimit.get("PL");
-		if (val == null) {
-			val = ageLimit.get("DE");
+		if (ageLimit != null) {
+			Object val = ageLimit.get("PL");
 			if (val == null) {
-				val = ageLimit.get("GB");
+				val = ageLimit.get("DE");
+				if (val == null) {
+					val = ageLimit.get("GB");
+				}
 			}
+			return val;
 		}
-		return val;
+		return null;
 	}
 
 	@Override
