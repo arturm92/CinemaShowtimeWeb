@@ -11,8 +11,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import model.json.base.BaseModel;
 
 @JsonRootName(value = "movie")
-@JsonIgnoreProperties({ "poster_image_thumbnail", "runtime" })
-
 public class Movie extends BaseModel {
 
 	private int numberInList;

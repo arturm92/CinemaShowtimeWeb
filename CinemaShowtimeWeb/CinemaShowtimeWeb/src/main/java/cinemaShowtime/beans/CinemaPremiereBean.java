@@ -56,7 +56,6 @@ public class CinemaPremiereBean {
 		Date dateFrom = df.parseString(df.recalculateDateByMonth(-1));
 		List<MovieFormatted> veryfiedList = new ArrayList<MovieFormatted>();
 		for (MovieFormatted movie : cinemaPremiereMovies.getList()) {
-			System.out.println(movie.getTitle() + " " + movie.getOriginalTitle());
 			if (movie.getReleaseDateInDateType().compareTo(dateFrom) > 0) {
 				veryfiedList.add(movie);
 			}

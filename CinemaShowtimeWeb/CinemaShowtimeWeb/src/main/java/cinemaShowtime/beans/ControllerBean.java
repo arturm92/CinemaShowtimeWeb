@@ -12,7 +12,8 @@ public class ControllerBean {
 	private MovieRankingBean movieRankingBean;
 	private CinemaPreviewBean cinemaPreviewBean;
 	private CinemaPremiereBean cinemaPremiereBean;
-	
+	private HomePageBean homePageBean;
+
 	public ControllerBean() {
 		long startTime = System.currentTimeMillis();
 
@@ -20,8 +21,9 @@ public class ControllerBean {
 		movieCatalogueBean = new MovieCatalogueBean();
 		movieRankingBean = new MovieRankingBean();
 		cinemaPreviewBean = new CinemaPreviewBean();
-		setCinemaPremiereBean(new CinemaPremiereBean());
-		
+		cinemaPremiereBean = new CinemaPremiereBean();
+		homePageBean = new HomePageBean();
+
 		long stopTime = System.currentTimeMillis();
 		System.out.println("MainPage start in " + ((stopTime - startTime) / 1000) + "second");
 	}
@@ -37,11 +39,11 @@ public class ControllerBean {
 	public MovieCatalogueBean getMovieCatalogueBean() {
 		return movieCatalogueBean;
 	}
-	
+
 	public MovieRankingBean getMovieRankingBean() {
 		return movieRankingBean;
 	}
-	
+
 	public CinemaPreviewBean getCinemaPreviewBean() {
 		return cinemaPreviewBean;
 	}
@@ -52,6 +54,14 @@ public class ControllerBean {
 
 	public void setCinemaPremiereBean(CinemaPremiereBean cinemaPremiereBean) {
 		this.cinemaPremiereBean = cinemaPremiereBean;
+	}
+
+	public HomePageBean getHomePageBean() {
+		return homePageBean;
+	}
+
+	public void setHomePageBean(HomePageBean homePageBean) {
+		this.homePageBean = homePageBean;
 	}
 
 }

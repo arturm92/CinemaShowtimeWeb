@@ -11,10 +11,8 @@ import util.Consts;
 public class MovieHelper {
 
 	public static void addPosterToMovie(Movies movies, Movies moviePosters) {
-		// System.out.println("*********");
 		for (Movie movie : movies.getList()) {
 			if (movie.getPosterImage() == null || movie.getPosterImage().equals(Consts.DEFAULT_POSTER)) {
-				// System.out.println(movie.getTitle() + " | " + movie.getId());
 				String moviePoster = moviePosters.getMovieMap().get(movie.getId()).getPosterImage();
 				if (moviePoster == null) {
 					moviePoster = Consts.DEFAULT_POSTER;
@@ -22,7 +20,6 @@ public class MovieHelper {
 				movie.setPosterImages(moviePoster);
 			}
 		}
-		// System.out.println("*********");
 	}
 
 	public static void mergeMovieDetails(Movie movie, Movie movieDescripstion) {

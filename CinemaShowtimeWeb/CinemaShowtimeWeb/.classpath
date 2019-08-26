@@ -20,4 +20,5 @@
   <classpathentry kind="var" path="M2_REPO/com/sun/faces/jsf-impl/2.1.8/jsf-impl-2.1.8.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/primefaces/primefaces/7.0/primefaces-7.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/primefaces/themes/all-themes/1.0.10/all-themes-1.0.10.jar"/>
+  <classpathentry kind="var" path="M2_REPO/io/ipgeolocation/ipgeolocation/1.0.5/ipgeolocation-1.0.5.jar"/>
 </classpath>
