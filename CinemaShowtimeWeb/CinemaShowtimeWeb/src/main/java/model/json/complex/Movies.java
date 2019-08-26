@@ -8,20 +8,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import model.json.base.BaseComplexModel;
 import model.json.movie.Movie;
+import model.json.movie.MovieFormatted;
 
-public class Movies extends BaseComplexModel implements JsonList<Movie> {
+public class Movies extends BaseComplexModel implements JsonList<MovieFormatted> {
 
 	@JsonProperty("movies")
-	private List<Movie> list;
-	private HashMap<Long, Movie> movieMap;
+	private List<MovieFormatted> list;
+	private HashMap<Long, MovieFormatted> movieMap;
 
 	@Override
-	public List<Movie> getList() {
+	public List<MovieFormatted> getList() {
 		return list;
 	}
 
 	@Override
-	public void setList(List<Movie> list) {
+	public void setList(List<MovieFormatted> list) {
 		this.list = list;
 	}
 
@@ -43,9 +44,9 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 		return null;
 	}
 
-	public List<Movie> getMoviesWithPosterList() {
-		List<Movie> movieWithPosterList = new ArrayList<Movie>();
-		for (Movie movie : list) {
+	public List<MovieFormatted> getMoviesWithPosterList() {
+		List<MovieFormatted> movieWithPosterList = new ArrayList<MovieFormatted>();
+		for (MovieFormatted movie : list) {
 			if(movie.getPosterImage() != null && !movie.getPosterImage().equals("/resources/img/default_poster.jpg") ) {
 				movieWithPosterList.add(movie);
 			}
@@ -53,13 +54,13 @@ public class Movies extends BaseComplexModel implements JsonList<Movie> {
 		return movieWithPosterList;
 	}
 	
-	public HashMap<Long, Movie> getMovieMap() {
+	public HashMap<Long, MovieFormatted> getMovieMap() {
 		return movieMap;
 	}
 
 	public void fillMovieMap() {
 		movieMap = new HashMap<>();
-		for (Movie movie : list) {
+		for (MovieFormatted movie : list) {
 			movieMap.put(movie.getId(), movie);
 		}
 	}

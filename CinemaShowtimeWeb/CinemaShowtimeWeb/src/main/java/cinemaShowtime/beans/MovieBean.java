@@ -12,6 +12,7 @@ import cinemaShowtime.ApiHelper;
 import model.json.Cinema;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
+import model.json.movie.MovieFormatted;
 import util.Utils;
 
 public class MovieBean {
@@ -23,25 +24,20 @@ public class MovieBean {
 	private MovieDetailBean movieDetailBean;
 
 	public MovieBean(Cinema cinema) {
+		long startTime = System.currentTimeMillis();
+
 		initMovies(cinema);
-		System.out.println("Selected cinema -" + cinema.getId());
-		System.out.println("MovieBean started!");
+		
+		long stopTime = System.currentTimeMillis();
+		System.out.println("MovieBean started in " + ((stopTime - startTime) / 1000) + " second");
+		
 	}
 
 	public void initMovies(Cinema cinema) {
 		this.cinema = cinema;
-
-		long startTime = System.currentTimeMillis();
 		this.movies = ApiHelper.getAllMoviesInCinema(cinema);
-		long stopTime = System.currentTimeMillis();
-		System.out.println("movies download " + ((stopTime - startTime) / 1000) + " second");
-
 		Movies moviesDescription = ApiHelper.getAllMoviesDescriptionInCinema(cinema);
 		mergeMovieDetails(movies, moviesDescription);
-		
-		long stopTime2 = System.currentTimeMillis();
-		System.out.println("movies description download " + ((stopTime2 - stopTime) / 1000) + " second");
-
 	}
 
 	public void select(SelectEvent selectEvent) {
@@ -87,7 +83,7 @@ public class MovieBean {
 		}
 	}
 
-	public List<Movie> getList() {
+	public List<MovieFormatted> getList() {
 		return movies.getList();
 	}
 

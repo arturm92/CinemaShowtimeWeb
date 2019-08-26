@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -15,13 +14,14 @@ import cinemaShowtime.ApiHelper;
 import cinemaShowtime.Filter;
 import cinemaShowtime.MovieHelper;
 import model.json.complex.Movies;
-import model.json.movie.Movie;
+import model.json.movie.MovieFormatted;
+import model.json.movie.comparator.MovieReleaseDateComparartor;
 import util.Consts;
 import util.DateFormater;
 
 public class CinemaPremiereBean {
 
-	private List<Movie> cinemaPremiereMoviesList;
+	private List<MovieFormatted> cinemaPremiereMoviesList;
 	private Movies cinemaPremiereMovies;
 	private Movies moviePosters;
 	private String filterMode;
@@ -38,18 +38,14 @@ public class CinemaPremiereBean {
 
 	private void prepareCinemaPremiereMoviesList() {
 		Filter filter = prepareFilter();
-		cinemaPremiereMovies = ApiHelper.getCinemaPreviewMovies(filter);
+		cinemaPremiereMovies = ApiHelper.getMovies(filter);
 
 		filter.deleteParam(Filter.LANG);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(cinemaPremiereMovies, moviePosters);
 
-		Collections.sort(cinemaPremiereMovies.getList(), new Comparator<Movie>() {
-			public int compare(Movie o1, Movie o2) {
-				return o1.getReleaseDateInDateType().compareTo(o2.getReleaseDateInDateType());
-			}
-		});
+		Collections.sort(cinemaPremiereMovies.getList(), new MovieReleaseDateComparartor());
 
 		verifyList();
 		setCinemaPremiereMoviesList(cinemaPremiereMovies.getMoviesWithPosterList());
@@ -58,8 +54,8 @@ public class CinemaPremiereBean {
 	private void verifyList() {
 		DateFormater df = new DateFormater();
 		Date dateFrom = df.parseString(df.recalculateDateByMonth(-1));
-		List<Movie> veryfiedList = new ArrayList<Movie>();
-		for (Movie movie : cinemaPremiereMovies.getList()) {
+		List<MovieFormatted> veryfiedList = new ArrayList<MovieFormatted>();
+		for (MovieFormatted movie : cinemaPremiereMovies.getList()) {
 			System.out.println(movie.getTitle() + " " + movie.getOriginalTitle());
 			if (movie.getReleaseDateInDateType().compareTo(dateFrom) > 0) {
 				veryfiedList.add(movie);
@@ -109,11 +105,11 @@ public class CinemaPremiereBean {
 		this.filterMode = filterMode;
 	}
 
-	public List<Movie> getCinemaPremiereMoviesList() {
+	public List<MovieFormatted> getCinemaPremiereMoviesList() {
 		return cinemaPremiereMoviesList;
 	}
 
-	public void setCinemaPremiereMoviesList(List<Movie> cinemaPremiereMoviesList) {
+	public void setCinemaPremiereMoviesList(List<MovieFormatted> cinemaPremiereMoviesList) {
 		this.cinemaPremiereMoviesList = cinemaPremiereMoviesList;
 	}
 }

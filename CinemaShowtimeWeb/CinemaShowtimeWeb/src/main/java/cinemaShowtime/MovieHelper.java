@@ -5,6 +5,7 @@ import java.util.List;
 
 import model.json.complex.Movies;
 import model.json.movie.Movie;
+import model.json.movie.MovieFormatted;
 import util.Consts;
 
 public class MovieHelper {
@@ -61,17 +62,17 @@ public class MovieHelper {
 	}
 	
 	
-	public static void printMoviesRating(List<Movie> movieList) {
+	public static void printMoviesRating(List<MovieFormatted> movieList) {
 		System.out.println("***************");
-		for (Movie movie : movieList) {
+		for (MovieFormatted movie : movieList) {
 			System.out.println(movie.getTitle() + " " + movie.getRatingValue());
 		}
 		System.out.println("***************");
 	}
 
-	public static void printMoives(List<Movie> movieList) {
+	public static void printMoives(List<MovieFormatted> movieList) {
 		System.out.println("***************");
-		for (Movie movie : movieList) {
+		for (MovieFormatted movie : movieList) {
 			System.out.println(movie.getId() + " | " + movie.getTitle() + " | " + movie.getPosterImage());
 		}
 		System.out.println("***************");

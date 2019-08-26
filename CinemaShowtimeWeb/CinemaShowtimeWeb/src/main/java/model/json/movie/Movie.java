@@ -1,9 +1,6 @@
 
 package model.json.movie;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -12,12 +9,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import model.json.base.BaseModel;
-import util.DateFormater;
 
 @JsonRootName(value = "movie")
 @JsonIgnoreProperties({ "poster_image_thumbnail", "runtime" })
 
-public class Movie extends BaseModel implements Comparable<Movie> {
+public class Movie extends BaseModel {
 
 	private int numberInList;
 	private String slug;
@@ -153,97 +149,6 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 		this.website = website;
 	}
 
-	public String getTrailerURL() {
-		if (trailers != null) {
-			return trailers.get(0).getTrailerFiles().get(0).getUrl().replace("watch?v=", "v/");
-		}
-		return null;
-	}
-
-	public String getRating() {
-		if (getImdbRating() != null) {
-			return getImdbRating();
-		} else {
-			return getTmdbRating();
-		}
-	}
-
-	public String getImdbRating() {
-		if (ratings != null) {
-			Rating imdbRating = ratings.getImdbRating();
-			if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
-				return imdbRating.getValue() + " / " + imdbRating.getVoteCount() + " ocen";
-			}
-		}
-		return "brak ocen";
-	}
-
-	public String getTmdbRating() {
-		if (ratings != null) {
-			Rating tmdbRating = ratings.getTmdbRating();
-			if (tmdbRating != null && !tmdbRating.getVoteCount().equals("0")) {
-				return tmdbRating.getValue() + " / " + tmdbRating.getVoteCount() + " ocen";
-			}
-		}
-		return "brak ocen";
-	}
-
-	public BigDecimal getRatingValue() {
-		if (ratings != null) {
-			Rating imdbRating = ratings.getImdbRating();
-			if (imdbRating != null) {
-				return new BigDecimal(imdbRating.getValue());
-			}
-			Rating tmdbRating = ratings.getTmdbRating();
-			if (tmdbRating != null)
-				return new BigDecimal(tmdbRating.getValue());
-		}
-		return BigDecimal.ZERO;
-	}
-
-	public String getGenreInfo() {
-		String ret = "gatunek: ";
-		if (genre != null) {
-			for (Genre elem : genre) {
-				ret += "[" + elem.getName() + "] ";
-			}
-		}
-		return ret;
-	}
-
-	public String getCrewText() {
-		String ret = "";
-		if (crew != null) {
-			for (Person person : crew) {
-				ret += person.getJob() + " : " + person.getName() + "\n";
-			}
-		}
-		return ret;
-	}
-
-	public String getCastText() {
-		String ret = "";
-		if (cast != null) {
-			for (Person person : cast) {
-				ret += person.getCharacter() + " : " + person.getName() + "\n";
-			}
-		}
-		return ret;
-	}
-
-	public String getFirstDirector() {
-		String ret = "";
-		if (crew != null) {
-			for (Person person : crew) {
-				if (person.getJob().equals("reżyser")) {
-					ret += person.getJob() + " : " + person.getName() + "\n";
-					return ret;
-				}
-			}
-		}
-		return ret;
-	}
-
 	public String getOriginalTitle() {
 		if (originalTitle != null) {
 			return originalTitle.toUpperCase();
@@ -263,52 +168,12 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 		this.releaseDate = releaseDate;
 	}
 
-	public String getReleaseDateFormatted() {
-		LinkedHashMap<String, String> map;
-		List<Object> date = (ArrayList<Object>) releaseDate.get("PL");
-		if (date != null) {
-			map = (LinkedHashMap<String, String>) date.get(0);
-			return "premiera w Polsce: " + map.get("date");
-		} else {
-			date = (ArrayList<Object>) releaseDate.get("US");
-			map = (LinkedHashMap<String, String>) date.get(0);
-			return "premiera na świecie: " + map.get("date");
-		}
-	}
-
-	public Date getReleaseDateInDateType() {
-		LinkedHashMap<String, String> map;
-		List<Object> date = (ArrayList<Object>) releaseDate.get("PL");
-		if (date != null) {
-			map = (LinkedHashMap<String, String>) date.get(0);
-		} else {
-			date = (ArrayList<Object>) releaseDate.get("US");
-			map = (LinkedHashMap<String, String>) date.get(0);
-		}
-		DateFormater df = new DateFormater();
-		return df.parseString(map.get("date"));
-	}
-
 	public LinkedHashMap<String, Object> getAgeLimit() {
 		return ageLimit;
 	}
 
 	public void setAgeLimit(LinkedHashMap<String, Object> ageLimit) {
 		this.ageLimit = ageLimit;
-	}
-
-	public Object getSimpleAgeLimit() {
-		if (ageLimit != null) {
-			Object val = ageLimit.get("PL");
-			if (val == null) {
-				val = ageLimit.get("DE");
-				if (val == null) {
-					val = ageLimit.get("GB");
-				}
-			}
-			return val;
-		}
-		return null;
 	}
 
 	public String getOriginalLanguage() {
@@ -319,8 +184,4 @@ public class Movie extends BaseModel implements Comparable<Movie> {
 		this.originalLanguage = originalLanguage;
 	}
 
-	@Override
-	public int compareTo(Movie o) {
-		return this.getRatingValue().compareTo(o.getRatingValue());
-	}
 }

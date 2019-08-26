@@ -1,6 +1,5 @@
 package cinemaShowtime;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +29,7 @@ public class Filter {
 		filterParameter.remove(key);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public String prepareParameters() {
 		String parameters = "";
 		for (Map.Entry me : filterParameter.entrySet()) {

@@ -34,54 +34,9 @@
 
 				<p:column>
 					<h:commandLink action="#{bean.clickMovie}">
-						<div class="ui-grid ui-grid-responsive"
-							style="color: white;">
-							<div class="ui-grid-row">
-								<div class="ui-grid-col-3">
-									<p:graphicImage value="#{item.posterImage}" styleClass="image" />
-								</div>
-								<div class="ui-grid ui-grid-responsive"
-									style="width: 100%; padding-left: 2%;padding-top: 2%;">
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-15" style="width: 100%;">
-											<h:outputText value="#{item.title}" style="font-size: 32px;" />
-											<h:panelGroup rendered="#{item.title != item.originalTitle}">
-												<br />
-												<h:outputText value="#{item.originalTitle}"
-													style="font-size: 18px;" />
-											</h:panelGroup>
-										</div>
-										<div class="ui-grid-col-6"
-											style="font-size: 20px; text-align: right;">
-											<h:panelGroup rendered="#{item.rating != null}">
-												<i class="fa fa-fw fa-star-o"></i>
-												<h:outputText value="#{item.rating}" />
-												<br />
-											</h:panelGroup>
-										</div>
-									</div>
-									<br />
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-15" style="font-size: 18px;">
-											<h:outputText value="#{item.genreInfo}" />
-										</div>
-									</div>
-									<br />
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-15" style="font-size: 18px;">
-											<h:outputText value="#{item.crewText}"
-												style="color:white; white-space: pre-line;" />
-										</div>
-									</div>
-									<br />
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-15" style="font-size: 18px;">
-											<h:outputText value="#{item.releaseDateFormatted}" />
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+						<ui:include src="../modules/movieDisplayContent.xhtml">
+							<ui:param name="item" value="#{item}" />
+						</ui:include>
 						<f:param name="movieId" value="#{item.id}" />
 					</h:commandLink>
 				</p:column>

@@ -18,6 +18,8 @@ import cinemaShowtime.Filter;
 import cinemaShowtime.MovieHelper;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
+import model.json.movie.MovieFormatted;
+import model.json.movie.comparator.MovieRatingComparator;
 import util.Consts;
 
 public class MovieRankingBean {
@@ -26,8 +28,8 @@ public class MovieRankingBean {
 
 	private Movies rankingMovies;
 	private Movies moviePosters;
-	private List<Movie> displayRankingList;
-	private List<Movie> homePageMovieList;
+	private List<MovieFormatted> displayRankingList;
+	private List<MovieFormatted> homePageMovieList;
 
 	private String filterMode;
 	private boolean runtimeMovies = true;
@@ -77,7 +79,7 @@ public class MovieRankingBean {
 	private void prepareDisplayRankingList() {
 		Filter filter = prepareFilter();
 
-		rankingMovies = ApiHelper.getMoviesRanking(filter);
+		rankingMovies = ApiHelper.getMovies(filter);
 
 		filter.deleteParam(Filter.LANG);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
@@ -85,13 +87,13 @@ public class MovieRankingBean {
 		MovieHelper.addPosterToMovie(rankingMovies, moviePosters);
 
 		rankingMovies.setList(rankingMovies.getMoviesWithPosterList());
-		Collections.sort(rankingMovies.getList(), Collections.reverseOrder());
+		Collections.sort(rankingMovies.getList(), Collections.reverseOrder(new MovieRatingComparator()));
 		addNumberToEachMovie();
 
 		displayRankingList = rankingMovies.getList().subList(0, getMax(50));
 		filterChanged = false;
 
-		homePageMovieList = new ArrayList<Movie>();
+		homePageMovieList = new ArrayList<MovieFormatted>();
 		homePageMovieList.addAll(displayRankingList.subList(0, 3));
 	}
 
@@ -179,7 +181,7 @@ public class MovieRankingBean {
 		}
 	}
 
-	public List<Movie> getDisplayRankingList() {
+	public List<MovieFormatted> getDisplayRankingList() {
 		return displayRankingList;
 	}
 
@@ -244,7 +246,7 @@ public class MovieRankingBean {
 		this.runtimeMovies = runtimeMovies;
 	}
 
-	public List<Movie> getHomePageMovieList() {
+	public List<MovieFormatted> getHomePageMovieList() {
 		return homePageMovieList;
 	}
 

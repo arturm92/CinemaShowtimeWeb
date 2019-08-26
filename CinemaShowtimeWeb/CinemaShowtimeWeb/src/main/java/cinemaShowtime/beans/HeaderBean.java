@@ -10,12 +10,13 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import cinemaShowtime.ApiHelper;
-import model.json.movie.Movie;
+import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "headerBean", eager = true)
 @SessionScoped
 public class HeaderBean {
-	private List<Movie> headerMovies;
+	
+	private List<MovieFormatted> headerMovies;
 
 	public HeaderBean() {
 		long startTime = System.currentTimeMillis();
@@ -40,10 +41,10 @@ public class HeaderBean {
 	}
 
 	private void updateHeaderMovieList(String movieId) {
-		List<Movie> newHeaderMovies = new ArrayList<Movie>();
-		List<Movie> tmp = new ArrayList<Movie>();
+		List<MovieFormatted> newHeaderMovies = new ArrayList<MovieFormatted>();
+		List<MovieFormatted> tmp = new ArrayList<MovieFormatted>();
 		boolean copy = false;
-		for (Movie movie : headerMovies) {
+		for (MovieFormatted movie : headerMovies) {
 			if (copy) {
 				newHeaderMovies.add(movie);
 			} else {
@@ -59,7 +60,7 @@ public class HeaderBean {
 		headerMovies = newHeaderMovies;
 	}
 
-	public List<Movie> getHeaderMovies() {
+	public List<MovieFormatted> getHeaderMovies() {
 		return headerMovies;
 	}
 }

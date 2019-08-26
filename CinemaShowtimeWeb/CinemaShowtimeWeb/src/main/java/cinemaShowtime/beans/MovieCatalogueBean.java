@@ -13,7 +13,7 @@ import cinemaShowtime.Filter;
 import cinemaShowtime.MovieHelper;
 import model.json.complex.Movies;
 import model.json.movie.Genre;
-import model.json.movie.Movie;
+import model.json.movie.MovieFormatted;
 import util.Consts;
 import util.DateFormater;
 
@@ -74,7 +74,7 @@ public class MovieCatalogueBean {
 		}
 	}
 	
-	public List<Movie> getMovieList() {
+	public List<MovieFormatted> getMovieList() {
 		return movies.getList();
 	}
 

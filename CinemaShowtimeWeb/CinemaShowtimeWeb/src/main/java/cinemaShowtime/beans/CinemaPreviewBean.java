@@ -12,13 +12,13 @@ import cinemaShowtime.ApiHelper;
 import cinemaShowtime.Filter;
 import cinemaShowtime.MovieHelper;
 import model.json.complex.Movies;
-import model.json.movie.Movie;
+import model.json.movie.MovieFormatted;
 import util.Consts;
 import util.DateFormater;
 
 public class CinemaPreviewBean {
 	
-	private List<Movie> cinemaPreviewMoviesList;
+	private List<MovieFormatted> cinemaPreviewMoviesList;
 	private Movies cinemaPreviewMovies;
 	private Movies moviePosters;
 	private String filterMode;
@@ -36,7 +36,7 @@ public class CinemaPreviewBean {
 
 	private void prepareCinemaPreviewMoviesList() {
 		Filter filter = prepareFilter();
-		cinemaPreviewMovies = ApiHelper.getCinemaPreviewMovies(filter);
+		cinemaPreviewMovies = ApiHelper.getMovies(filter);
 		
 		filter.deleteParam(Filter.LANG);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
@@ -77,7 +77,7 @@ public class CinemaPreviewBean {
 
 	}
 	
-	public List<Movie> getCinemaPreviewMoviesList() {
+	public List<MovieFormatted> getCinemaPreviewMoviesList() {
 		return cinemaPreviewMoviesList;
 	}
 

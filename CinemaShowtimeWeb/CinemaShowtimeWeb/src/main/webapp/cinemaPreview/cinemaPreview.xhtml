@@ -17,9 +17,8 @@
 					</div>
 					<div class="ui-grid-row">
 						<div class="ui-grid-col-3">
-							<p:commandButton value="Filtruj"
-								action="#{bean.filter}" icon="pi pi-search"
-								ajax="false">
+							<p:commandButton value="Filtruj" action="#{bean.filter}"
+								icon="pi pi-search" ajax="false">
 							</p:commandButton>
 						</div>
 					</div>
@@ -35,35 +34,9 @@
 
 				<p:column>
 					<h:commandLink action="#{bean.clickMovie}">
-						<div class="ui-grid ui-grid-responsive"
-							style="color: white; font-size: 30px; margin-left: 10%;">
-							<div class="ui-grid-row">
-								<div class="ui-grid-col-3">
-									<p:graphicImage value="#{item.posterImage}" styleClass="image" />
-								</div>
-								<div class="ui-grid ui-grid-responsive"
-									style="width: 100%; padding-left: 10%; padding-top: 7%;">
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-9">
-											<h:outputText value="#{item.title}" />
-											<h:panelGroup rendered="#{item.title != item.originalTitle}">
-												<p:spacer width="1" height="22"
-													styleClass="verticalSeparator" />
-												<h:outputText value="#{item.originalTitle}" />
-											</h:panelGroup>
-										</div>
-									</div>
-									<br />
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-15" style="font-size: 20px;">
-											<h:outputText value="#{item.releaseDatePoland}" />
-											<br />
-											<h:outputText value="#{item.releaseDateGlobal}" />
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+						<ui:include src="../modules/movieDisplayContent.xhtml">
+							<ui:param name="item" value="#{item}" />
+						</ui:include>
 						<f:param name="movieId" value="#{item.id}" />
 					</h:commandLink>
 				</p:column>
