@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import model.json.Cinema;
 import model.json.base.BaseComplexModel;
+import model.json.cinema.Cinema;
 
 public class Cinemas extends BaseComplexModel implements JsonList<Cinema> {
 

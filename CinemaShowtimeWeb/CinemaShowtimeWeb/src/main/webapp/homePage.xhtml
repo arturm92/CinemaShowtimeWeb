@@ -5,26 +5,80 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
-		<h:form>
-			<p:dataGrid var="item" value="#{bean.homePageMovieList}" layout="grid" columns="3">
+		<h:form style="margin-left:-10%;">
+			<div class="ui-grid ui-grid-responsive" style="color: white;">
+				<div class="ui-grid-row">
+					<div class="ui-grid-col-4">
+						<p:dataTable id="cinemasDataTable" var="item"
+							value="#{bean.cinemaList}" styleClass="noHeader">
 
-				<h:commandLink action="#{bean.clickMovie}">
-					<p:panel>
-						<h:panelGrid style="width:100%;text-align:center">
-							<h:panelGroup>
-								<div style="min-height: 60px;">
-									<h:outputText value="#{item.title}"
-										style="color:white;font-size:20px;text-algin:center;" />
-								</div>
-							</h:panelGroup>
-							<p:graphicImage value="#{item.posterImage}"
-								styleClass="imageInCatalogue" />
-						</h:panelGrid>
-					</p:panel>
-					<f:param name="movieId" value="#{item.id}" />
-				</h:commandLink>
+							<p:ajax event="rowSelect" listener="#{bean.select}"
+								process="cinemasDataTable" />
 
-			</p:dataGrid>
+							<p:column>
+								<h:outputText value="#{item.name}" />
+							</p:column>
+
+						</p:dataTable>
+					</div>
+					<div class="ui-grid-col-11">
+						<p:dataTable id="moviesDataTable" var="item"
+							value="#{bean.movieList}" sortBy="#{item.name}"
+							sortOrder="ascending" styleClass="noHeader">
+
+							<p:column>
+								<h:commandLink action="#{bean.select}">
+									<f:param name="movieId" value="#{item.id}" />
+
+									<div class="ui-grid ui-grid-responsive" style="color: white;">
+										<div class="ui-grid-row">
+											<div class="ui-grid-col-3">
+												<p:graphicImage value="#{item.posterImage}"
+													styleClass="image" />
+											</div>
+											<div class="ui-grid ui-grid-responsive" style="width: 100%;">
+												<div class="ui-grid-row">
+													<div class="ui-grid-col-9">
+														<h:outputText value="#{item.title}"
+															style="font-size: 25px;" />
+														<h:panelGroup
+															rendered="#{item.title != item.originalTitle}">
+															<br />
+															<h:outputText value="#{item.originalTitle}"
+																style="font-size: 18px;" />
+														</h:panelGroup>
+													</div>
+													<div class="ui-grid-col-6" style="text-align: right;">
+														<h:panelGroup rendered="#{item.rating != null}">
+															<i class="fa fa-fw fa-star-o"></i>
+															<h:outputText value="#{item.rating}" />
+															<br />
+														</h:panelGroup>
+													</div>
+												</div>
+												<br />
+												<div class="ui-grid-row">
+													<div class="ui-grid-col-12" style="font-size: 18px;">
+														<h:outputText value="#{item.genreInfo}" />
+													</div>
+												</div>
+												<br />
+												<div class="ui-grid-row">
+													<div class="ui-grid-col-12" style="font-size: 18px;">
+														<h:outputText value="#{item.firstDirector}" />
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</h:commandLink>
+								<p:separator />
+							</p:column>
+						</p:dataTable>
+					</div>
+
+				</div>
+			</div>
 		</h:form>
 	</h:body>
 </ui:composition>

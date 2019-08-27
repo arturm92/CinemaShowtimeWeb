@@ -5,16 +5,17 @@ import java.util.List;
 import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.ApiHelper;
-import model.json.Cinema;
+import cinemaShowtime.Filter;
 import model.json.City;
+import model.json.cinema.Cinema;
 import model.json.complex.Cinemas;
+import util.Consts;
 import util.Utils;
 
 public class CinemaBean {
 
 	private Cinemas cinemas;
 	private City city;
-	public List<Cinema> list;
 	private Cinema selectedCinema;
 	private MovieBean movieBean;
 
@@ -26,10 +27,20 @@ public class CinemaBean {
 	public void initCinemas(City city) {
 		Utils.getInstance().setCinemaSelectionVisible(true);
 		this.city = city;
-		this.cinemas = ApiHelper.getAllCinemasInCity(city);
-		this.list = cinemas.getList();
+		Filter filter = prepareFilter();
+		this.cinemas = ApiHelper.getCinemas(filter);
 
 	}
+	
+
+	private Filter prepareFilter() {
+		Filter filter = new Filter();
+		filter.addFilterParam(Filter.Parameter.LOCATION, city.getLat() + "," + city.getLon());
+		filter.addFilterParam(Filter.Parameter.DISTANCE, "10");
+		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+		return filter;
+	}
+
 
 	public void select(SelectEvent selectEvent) {
 		Utils.getInstance().setCinemaSelectionVisible(false);
@@ -37,12 +48,9 @@ public class CinemaBean {
 	}
 
 	public List<Cinema> getList() {
-		return list;
+		return cinemas.getList();
 	}
 
-	public void setList(List<Cinema> list) {
-		this.list = list;
-	}
 
 	public Cinema getSelectedCinema() {
 		return selectedCinema;

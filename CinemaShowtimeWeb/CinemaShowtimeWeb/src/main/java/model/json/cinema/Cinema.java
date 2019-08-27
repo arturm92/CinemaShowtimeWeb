@@ -1,4 +1,4 @@
-package model.json;
+package model.json.cinema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -51,20 +51,20 @@ public class Cinema extends BaseModel {
 		this.slug = slug;
 	}
 
-	public Long getChain_id() {
+	public Long getChainId() {
 		return chainId;
 	}
 
-	public void setChain_id(Long chain_id) {
-		this.chainId = chain_id;
+	public void setChainId(Long chainId) {
+		this.chainId = chainId;
 	}
 
-	public String getBooking_type() {
+	public String getBookingType() {
 		return bookingType;
 	}
 
-	public void setBooking_type(String booking_type) {
-		this.bookingType = booking_type;
+	public void setBookingType(String bookingType) {
+		this.bookingType = bookingType;
 	}
 
 	public Long getCityId() {

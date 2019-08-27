@@ -33,8 +33,11 @@ public class MovieCatalogueBean {
 
 	private void prepareMovieCatalogueList() {
 		Filter filter = prepareFilter();
+		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
 		movies = ApiHelper.getMoviesCatalogue(filter);
-		filter.deleteParam(Filter.LANG);
+		
+		filter.deleteFilterParam(Filter.Parameter.LANG);
+		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(movies, moviePosters);
@@ -42,19 +45,19 @@ public class MovieCatalogueBean {
 
 	private Filter prepareFilter() {
 		Filter filter = new Filter();
-		filter.addParam(Filter.LANG, Consts.LANGUAGE);
-		filter.addParam(Filter.COUNTRIES, Consts.COUNTRIES);
+		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES);
 		if (releaseDate != null) {
 			DateFormater df = new DateFormater();
 			String date = df.formatDateShort(releaseDate);
-			filter.addParam(Filter.RELEASE_DATE_FROM,date );
+			filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM,date );
 		}
 		if (!selectedGenreIds.isEmpty()) {
 			String genre_ids = "";
 			for (String id : selectedGenreIds) {
 				genre_ids += id + ",";
 			}
-			filter.addParam(Filter.GENRE_IDS,genre_ids );
+			filter.addFilterParam(Filter.Parameter.GENRE_IDS,genre_ids );
 		}
 		return filter;
 	}

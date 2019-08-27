@@ -3,9 +3,9 @@ package cinemaShowtime.beans;
 import java.util.List;
 
 import cinemaShowtime.ApiHelper;
-import model.json.Cinema;
 import model.json.Showtime;
 import model.json.ShowtimeDay;
+import model.json.cinema.Cinema;
 import model.json.complex.Showtimes;
 import model.json.movie.Movie;
 import util.Utils;

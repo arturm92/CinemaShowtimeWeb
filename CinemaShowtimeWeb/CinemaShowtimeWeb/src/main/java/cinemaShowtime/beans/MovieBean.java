@@ -9,10 +9,12 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.ApiHelper;
-import model.json.Cinema;
+import cinemaShowtime.Filter;
+import model.json.cinema.Cinema;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
+import util.Consts;
 import util.Utils;
 
 public class MovieBean {
@@ -25,19 +27,27 @@ public class MovieBean {
 
 	public MovieBean(Cinema cinema) {
 		long startTime = System.currentTimeMillis();
-
-		initMovies(cinema);
+		this.cinema = cinema;
+		initMovies();
 		
 		long stopTime = System.currentTimeMillis();
 		System.out.println("MovieBean started in " + ((stopTime - startTime) / 1000) + " second");
 		
 	}
 
-	public void initMovies(Cinema cinema) {
-		this.cinema = cinema;
-		this.movies = ApiHelper.getAllMoviesInCinema(cinema);
+	public void initMovies() {
+		Filter filter = prepareFilter();
+		this.movies = ApiHelper.getMoviesInCinema(filter);
 		Movies moviesDescription = ApiHelper.getAllMoviesDescriptionInCinema(cinema);
 		mergeMovieDetails(movies, moviesDescription);
+	}
+	
+	private Filter prepareFilter() {
+		Filter filter = new Filter();
+		filter.addQueryParam(Filter.Query.CINEMA_ID, cinema.getId().toString());
+		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+		return filter;
 	}
 
 	public void select(SelectEvent selectEvent) {

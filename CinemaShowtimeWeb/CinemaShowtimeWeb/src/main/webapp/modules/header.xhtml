@@ -33,7 +33,9 @@
 						url="/CinemaShowtimeWeb/cinemaPremiere/index.xhtml"
 						icon="fa fa-fw fa-diamond" />
 					<f:facet name="options">
-						<p:commandButton type="button" value="Zaloguj" icon="pi pi-users" />
+						<i class="fa fa-fw fa-location-arrow" style="margin-top: 10px;"></i>
+						<h:outputText value="#{controllerBean.homePageBean.currentCity}"
+							style="padding-right: 10px;" />
 					</f:facet>
 				</p:menubar>
 			</div>

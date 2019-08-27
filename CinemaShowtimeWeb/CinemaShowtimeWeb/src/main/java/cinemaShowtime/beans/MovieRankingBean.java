@@ -63,25 +63,26 @@ public class MovieRankingBean {
 	private Filter prepareFilter() {
 		Filter filter = new Filter();
 
-		filter.addParam(Filter.INCLUDE_OUTDATED, String.valueOf(!runtimeMovies));
+		filter.addFilterParam(Filter.Parameter.INCLUDE_OUTDATED, String.valueOf(!runtimeMovies));
 
 		String dateFrom = MovieHelper.getMinYear(filteredYearsList) + "-01-01";
 		String dateTo = MovieHelper.getMaxYear(filteredYearsList) + "-12-31";
 
-		filter.addParam(Filter.RELEASE_DATE_FROM, dateFrom);
-		filter.addParam(Filter.RELEASE_DATE_TO, dateTo);
+		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, dateFrom);
+		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_TO, dateTo);
 
-		filter.addParam(Filter.LANG, Consts.LANGUAGE);
-		filter.addParam(Filter.COUNTRIES, Consts.COUNTRIES);
+		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES);
 		return filter;
 	}
 
 	private void prepareDisplayRankingList() {
 		Filter filter = prepareFilter();
-
+		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
 		rankingMovies = ApiHelper.getMovies(filter);
 
-		filter.deleteParam(Filter.LANG);
+		filter.deleteFilterParam(Filter.Parameter.LANG);
+		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(rankingMovies, moviePosters);

@@ -32,15 +32,18 @@ public class CinemaPremiereBean {
 		prepareCinemaPremiereMoviesList();
 
 		long stopTime = System.currentTimeMillis();
-		System.out.println("CinemaPreviewBean started in " + ((stopTime - startTime) / 1000) + " second");
+		System.out.println("CinemaPremiereBean started in " + ((stopTime - startTime) / 1000) + " second");
 
 	}
 
 	private void prepareCinemaPremiereMoviesList() {
 		Filter filter = prepareFilter();
+		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
 		cinemaPremiereMovies = ApiHelper.getMovies(filter);
 
-		filter.deleteParam(Filter.LANG);
+		filter.deleteFilterParam(Filter.Parameter.LANG);
+		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
+		
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(cinemaPremiereMovies, moviePosters);
@@ -66,10 +69,10 @@ public class CinemaPremiereBean {
 	private Filter prepareFilter() {
 		Filter filter = new Filter();
 		DateFormater df = new DateFormater();
-		filter.addParam(Filter.RELEASE_DATE_FROM, df.recalculateDateByMonth(-1));
-		filter.addParam(Filter.RELEASE_DATE_TO, df.recalculateDateByMonth(0));
-		filter.addParam(Filter.LANG, Consts.LANGUAGE);
-		filter.addParam(Filter.COUNTRIES, Consts.COUNTRIES + ",US");
+		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, df.recalculateDateByMonth(-1));
+		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_TO, df.recalculateDateByMonth(0));
+		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES + ",US");
 		return filter;
 	}
 

@@ -36,27 +36,30 @@ public class CinemaPreviewBean {
 
 	private void prepareCinemaPreviewMoviesList() {
 		Filter filter = prepareFilter();
+		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+		
 		cinemaPreviewMovies = ApiHelper.getMovies(filter);
 		
-		filter.deleteParam(Filter.LANG);
+		filter.deleteFilterParam(Filter.Parameter.LANG);
+		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+		
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(cinemaPreviewMovies,moviePosters);
-		
 		cinemaPreviewMoviesList = cinemaPreviewMovies.getList();
 	}
 	
 	private Filter prepareFilter() {
 		Filter filter = new Filter();
-		filter.addParam(Filter.INCLUDE_UPCOMINGS, "true");
+		filter.addFilterParam(Filter.Parameter.INCLUDE_UPCOMINGS, "true");
 		DateFormater df = new DateFormater();
 		String date = df.formatDateShort(new Date());
-		filter.addParam(Filter.RELEASE_DATE_FROM, date);
+		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, date);
 		if (getFilterMode().equals("POLSKA")) {
-			filter.addParam(Filter.LANG, Consts.LANGUAGE);
-			filter.addParam(Filter.COUNTRIES, Consts.COUNTRIES);
+			filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+			filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES);
 		}else {
-			filter.addParam(Filter.COUNTRIES, Consts.COUNTRIES + ",US");
+			filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES + ",US");
 		}
 		return filter;
 	}

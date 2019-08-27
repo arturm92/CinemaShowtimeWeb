@@ -1,4 +1,4 @@
-package model.json;
+package model.json.cinema;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

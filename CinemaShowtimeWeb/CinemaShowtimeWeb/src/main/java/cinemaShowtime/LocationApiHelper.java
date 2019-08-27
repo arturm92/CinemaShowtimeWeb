@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import model.json.LocationApi;
+import model.json.cinema.LocationApi;
 import util.Consts;
 
 public class LocationApiHelper {
