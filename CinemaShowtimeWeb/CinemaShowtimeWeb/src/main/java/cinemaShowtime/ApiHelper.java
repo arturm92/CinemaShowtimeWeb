@@ -128,14 +128,12 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Showtimes getMovieShowtimesInCinema(Movie movie, Cinema cinema) {
+	public static Showtimes getMovieShowtimesInCinema(Filter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Showtimes> map = new TypeReference<Showtimes>() {
 			};
-			String params = "?cinema_id=" + cinema.getId();
-			params += "&movie_id=" + movie.getId();
-			String json = getDataFromApi(Consts.SHOWTIMES + params);
+			String json = getDataFromApi(Consts.SHOWTIMES + filter.prepareParameters());
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -199,6 +197,10 @@ public class ApiHelper {
 			params += "&release_date_from=" + date;
 			params += "&countries=" + Consts.COUNTRIES;
 			String json = getDataFromApi(Consts.MOVIES + params);
+			if (json.contains("\"code\":10005")) {
+				System.out.println("Wygasł klucz do API");
+				return null;
+			}
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();

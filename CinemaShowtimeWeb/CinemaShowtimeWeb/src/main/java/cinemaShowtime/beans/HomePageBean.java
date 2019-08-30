@@ -2,19 +2,24 @@ package cinemaShowtime.beans;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import cinemaShowtime.ApiHelper;
 import cinemaShowtime.Filter;
 import cinemaShowtime.LocationApiHelper;
 import cinemaShowtime.MovieHelper;
+import model.json.Showtime;
 import model.json.cinema.Cinema;
 import model.json.cinema.LocationApi;
 import model.json.cinema.comparator.CinemaNameComparator;
 import model.json.complex.Cinemas;
 import model.json.complex.Movies;
+import model.json.complex.Showtimes;
+import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
 import util.Consts;
+import util.DateFormater;
 
 public class HomePageBean {
 
@@ -23,9 +28,12 @@ public class HomePageBean {
 	private Cinemas cinemas;
 	private Movies movies;
 	private Movies moviePosters;
-
+	private Showtimes showtimes;
+	
 	public HomePageBean() {
 		try {
+			long startTime = System.currentTimeMillis();
+
 			Filter filter = prepareCinemaFilter();
 			cinemas = ApiHelper.getCinemas(filter);
 			customSortCinemas();
@@ -38,6 +46,24 @@ public class HomePageBean {
 			moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 			moviePosters.fillMovieMap();
 			MovieHelper.addPosterToMovie(movies, moviePosters);
+			
+			long stopTime = System.currentTimeMillis();
+			System.out.println("HomePageBean started in " + ((stopTime - startTime) / 1000) + " second");
+			
+			for (MovieFormatted movie : movies.getList()) {
+				filter = prepareShowtimeFilter(movie);
+				showtimes = ApiHelper.getMovieShowtimesInCinema(filter);	
+				movie.setShowtimeDayList(showtimes.getNormalizeList());
+				/*System.out.println(movie.getTitle());
+				for (Showtime showtime : showtimes.getList()) {
+					System.out.println(showtime.getStartAt());
+				}
+				System.out.println("*********");*/
+			}
+			
+			long stopTime2 = System.currentTimeMillis();
+			System.out.println("Showtimes load in " + ((stopTime2 - stopTime) / 1000) + " second");
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -72,9 +98,22 @@ public class HomePageBean {
 	
 	private Filter prepareMovieFilter() {
 		Filter filter = new Filter();
+		DateFormater df = new DateFormater();
 		filter.addQueryParam(Filter.Query.CINEMA_ID, cinemas.getList().get(0).getId().toString());
 		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+	
+		filter.addFilterParam(Filter.Parameter.TIME_TO,  df.convertSimpleDateToTimezone(df.getDaysFromToday(2)));
 		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+		return filter;
+	}
+	
+	private Filter prepareShowtimeFilter(Movie movie) {
+		Filter filter = new Filter();
+		DateFormater df = new DateFormater();
+		filter.addQueryParam(Filter.Query.CINEMA_ID, cinemas.getList().get(0).getId().toString());
+		filter.addQueryParam(Filter.Query.MOVIE_ID, movie.getId().toString());
+		filter.addFilterParam(Filter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
+		filter.addFilterParam(Filter.Parameter.TIME_TO,  df.convertSimpleDateToTimezone(df.getDaysFromToday(2)));
 		return filter;
 	}
 

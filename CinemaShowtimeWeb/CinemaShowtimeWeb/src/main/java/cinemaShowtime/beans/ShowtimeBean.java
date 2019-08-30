@@ -3,6 +3,7 @@ package cinemaShowtime.beans;
 import java.util.List;
 
 import cinemaShowtime.ApiHelper;
+import cinemaShowtime.Filter;
 import model.json.Showtime;
 import model.json.ShowtimeDay;
 import model.json.cinema.Cinema;
@@ -24,7 +25,8 @@ public class ShowtimeBean {
 	}
 
 	public void initShowtimes() {
-		this.showtimes = ApiHelper.getMovieShowtimesInCinema(movie, cinema);
+		Filter filter = prepareFilter();
+		this.showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		this.list = showtimes.getList();
 		Utils.getInstance().setShowtimeSelectionVisible(true);
 		
@@ -37,6 +39,14 @@ public class ShowtimeBean {
 		}*/
 		
 	}
+	
+	private Filter prepareFilter() {
+		Filter filter = new Filter();
+		filter.addQueryParam(Filter.Query.CINEMA_ID, cinema.getId().toString());
+		filter.addQueryParam(Filter.Query.MOVIE_ID, movie.getId().toString());
+		return filter;
+	}
+
 	
 	public List<ShowtimeDay> getShowtimeDayList(){
 		return showtimes.getNormalizeList();

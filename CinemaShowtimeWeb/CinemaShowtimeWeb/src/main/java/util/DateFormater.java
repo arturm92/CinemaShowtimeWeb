@@ -109,6 +109,15 @@ public class DateFormater {
 		return calendar.get(Calendar.YEAR);
 	}
 	
+	public Date getDaysFromToday(int amount) {
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, amount);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		return calendar.getTime();
+	}
+	
 	public Date parseString(String date) {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);

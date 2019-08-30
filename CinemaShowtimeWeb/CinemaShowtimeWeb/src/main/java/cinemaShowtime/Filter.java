@@ -19,6 +19,8 @@ public class Filter {
 		public static final String GENRE_IDS = "genre_ids";
 		public static final String LOCATION = "location";
 		public static final String DISTANCE = "distance";
+		public static final String TIME_FROM = "time_from";
+		public static final String TIME_TO = "time_to";
 	}
 
 	public class Query {

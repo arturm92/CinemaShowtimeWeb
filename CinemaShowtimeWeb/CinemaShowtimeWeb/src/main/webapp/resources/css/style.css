@@ -1,3 +1,7 @@
+body .ui-datatable .ui-datatable-data>tr>td {
+	padding: 0px;
+}
+
 .fullWidth {
 	width: 100%;
 }
@@ -56,6 +60,7 @@ body .ui-datatable .ui-datatable-data>tr {
 body .ui-datagrid .ui-datagrid-content {
 	border: none;
 	background-color: black;
+	padding: 0px;
 }
 
 .ui-g {
@@ -153,8 +158,20 @@ body .ui-autocomplete {
 	padding: 10px;
 }
 
+.showtimeHourHomePage {
+	border: 2px solid #ffb300;
+	text-align: center;
+	font-size: 18px;
+	padding: 5px;
+}
+
 .showtimeDay {
 	text-align: center;
 	font-size: 30px;
 	padding: 10px;
+}
+
+.showtimeDayHomePage {
+	text-align: center;
+	font-size: 18px;
 }

@@ -6,9 +6,12 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import model.json.ShowtimeDay;
 import util.DateFormater;
 
 public class MovieFormatted extends Movie {
+	
+	private List<ShowtimeDay> showtimeDayList;
 	
 	public String getTrailerURL() {
 		if (getTrailers() != null) {
@@ -148,6 +151,14 @@ public class MovieFormatted extends Movie {
 		}
 		DateFormater df = new DateFormater();
 		return df.parseString(map.get("date"));
+	}
+
+	public List<ShowtimeDay> getShowtimeDayList() {
+		return showtimeDayList;
+	}
+
+	public void setShowtimeDayList(List<ShowtimeDay> showtimeDayList) {
+		this.showtimeDayList = showtimeDayList;
 	}
 
 }

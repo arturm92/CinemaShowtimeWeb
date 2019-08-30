@@ -5,7 +5,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
-		<h:form style="margin-left:-10%;">
+		<h:form style="margin-left:-10%;margin-right: -10%;padding-top: 2%;">
 			<div class="ui-grid ui-grid-responsive" style="color: white;">
 				<div class="ui-grid-row">
 					<div class="ui-grid-col-4">
@@ -17,6 +17,7 @@
 
 							<p:column>
 								<h:outputText value="#{item.name}" />
+								<p:separator />
 							</p:column>
 
 						</p:dataTable>
@@ -36,7 +37,8 @@
 												<p:graphicImage value="#{item.posterImage}"
 													styleClass="image" />
 											</div>
-											<div class="ui-grid ui-grid-responsive" style="width: 100%;">
+											<div class="ui-grid ui-grid-responsive"
+												style="width: 100%; padding-left: 2%;">
 												<div class="ui-grid-row">
 													<div class="ui-grid-col-9">
 														<h:outputText value="#{item.title}"
@@ -68,6 +70,30 @@
 														<h:outputText value="#{item.firstDirector}" />
 													</div>
 												</div>
+												<br />
+												<div class="ui-grid-row">
+													<div class="ui-grid-col-12" style="font-size: 18px;">
+														<p:dataTable id="showtimesDayDataTable" var="showtime"
+															value="#{item.showtimeDayList}" styleClass="noHeader">
+															<p:column>
+																<h:panelGroup>
+																	<h:outputText value="#{showtime.date}"
+																		styleClass="showtimeDayHomePage" />
+																	<p:spacer width="1" height="22"
+																		styleClass="verticalSeparator" style="height:15px;" />
+																	<h:outputText value="#{showtime.day}"
+																		styleClass="showtimeDayHomePage" />
+																</h:panelGroup>
+
+																<p:dataGrid id="showtimesHourDataTable" var="hour"
+																	value="#{showtime.hours}" columns="9" layout="grid">
+																	<h:outputText value="#{hour}"
+																		styleClass="showtimeHourHomePage" />
+																</p:dataGrid>
+															</p:column>
+														</p:dataTable>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -76,7 +102,6 @@
 							</p:column>
 						</p:dataTable>
 					</div>
-
 				</div>
 			</div>
 		</h:form>

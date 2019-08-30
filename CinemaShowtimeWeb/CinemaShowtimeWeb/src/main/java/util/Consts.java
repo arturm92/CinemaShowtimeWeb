@@ -7,7 +7,7 @@ public class Consts {
 	public static final String COUNTRIES = "PL";
 	
 	public static final String BASE_URL = "https://api.internationalshowtimes.com/v4/";
-	public static final String API_KEY = "LZG67yUDsYG85s84tHkU8lZ0YMvAeccu";
+	public static final String API_KEY = "p4kJT5hqruzwzqqyNlUhbtXtMhZndaWN";
 	
 	public static final String LOCATION_BASE_URL = "https://api.ipgeolocation.io/ipgeo";
 	public static final String LOCATION_API_KEY= "7e0c13dce3d54d898899d8d501003bc3";
