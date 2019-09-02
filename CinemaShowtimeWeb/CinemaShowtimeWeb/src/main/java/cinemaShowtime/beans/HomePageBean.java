@@ -20,7 +20,6 @@ import model.json.cinema.comparator.CinemaNameComparator;
 import model.json.complex.Cinemas;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
-import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
 import util.Consts;
 import util.DateFormater;
@@ -33,23 +32,21 @@ public class HomePageBean {
 	private Movies movies;
 	private Movies moviePosters;
 	private Showtimes showtimes;
-
 	private Cinema selectedCinema;
+	private int distance = 30;
+	private String timeTo;
 
 	public HomePageBean() {
 		try {
 			long startTime = System.currentTimeMillis();
 
 			prepareCinemas();
-			prepareMoviesInCinema();
+			customSortCinemas();
+			prepareMovies();
+			prepareShowtimes();
 
 			long stopTime = System.currentTimeMillis();
 			System.out.println("HomePageBean started in " + ((stopTime - startTime) / 1000) + " second");
-
-			prepareShowtimesInCinema();
-
-			long stopTime2 = System.currentTimeMillis();
-			System.out.println("Showtimes load in " + ((stopTime2 - stopTime) / 1000) + " second");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,14 +56,14 @@ public class HomePageBean {
 	private void prepareCinemas() {
 		Filter filter = prepareCinemaFilter();
 		cinemas = ApiHelper.getCinemas(filter);
-		customSortCinemas();
+		if (cinemas.getList().isEmpty()) {
+			distance += 30;
+			prepareCinemas();
+		}
 	}
 
-	private void prepareMoviesInCinema() {
-		Filter filter;
-		filter = prepareMovieFilter();
-		movies = ApiHelper.getMoviesInCinema(filter);
-
+	private void prepareMovies() {
+		Filter filter = prepareMoviesInCinema(2);
 		filter.deleteFilterParam(Filter.Parameter.LANG);
 		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
@@ -74,8 +71,20 @@ public class HomePageBean {
 		MovieHelper.addPosterToMovie(movies, moviePosters);
 	}
 
-	private void prepareShowtimesInCinema() {
-		Filter filter = prepareShowtimeFilter(null);
+	private Filter prepareMoviesInCinema(int days) {
+		DateFormater df = new DateFormater();
+		timeTo = df.convertSimpleDateToTimezone(df.getDaysFromToday(days));
+		Filter filter = prepareMovieFilter();
+		movies = ApiHelper.getMoviesInCinema(filter);
+		if (movies.getList().isEmpty()) {
+			days += 5;
+			filter = prepareMoviesInCinema(days);
+		}
+		return filter;
+	}
+
+	private void prepareShowtimes() {
+		Filter filter = prepareShowtimeFilter();
 		showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		for (MovieFormatted movie : movies.getList()) {
 			List<Showtime> movieShowtime = showtimes.findMovieShowtime(movie.getId());
@@ -91,33 +100,32 @@ public class HomePageBean {
 
 		Filter filter = new Filter();
 		filter.addFilterParam(Filter.Parameter.LOCATION, locationApi.getLatitude() + "," + locationApi.getLongitude());
-		filter.addFilterParam(Filter.Parameter.DISTANCE, "30");
+		filter.addFilterParam(Filter.Parameter.DISTANCE, String.valueOf(distance));
 		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
 		return filter;
 	}
 
 	private Filter prepareMovieFilter() {
 		Filter filter = new Filter();
-		DateFormater df = new DateFormater();
 		filter.addQueryParam(Filter.Query.CINEMA_ID, getSelectedCinema().getId().toString());
 		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
-		filter.addFilterParam(Filter.Parameter.TIME_TO, df.convertSimpleDateToTimezone(df.getDaysFromToday(2)));
+		filter.addFilterParam(Filter.Parameter.TIME_TO, timeTo);
 		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
 		return filter;
 	}
 
-	private Filter prepareShowtimeFilter(Movie movie) {
+	private Filter prepareShowtimeFilter() {
 		Filter filter = new Filter();
 		DateFormater df = new DateFormater();
 		filter.addQueryParam(Filter.Query.CINEMA_ID, selectedCinema.getId().toString());
 		filter.addFilterParam(Filter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
-		filter.addFilterParam(Filter.Parameter.TIME_TO, df.convertSimpleDateToTimezone(df.getDaysFromToday(2)));
+		filter.addFilterParam(Filter.Parameter.TIME_TO, timeTo);
 		return filter;
 	}
 
 	public void selectCinema() {
-		prepareMoviesInCinema();
-		prepareShowtimesInCinema();
+		prepareMovies();
+		prepareShowtimes();
 	}
 
 	public void clickMovie() {
