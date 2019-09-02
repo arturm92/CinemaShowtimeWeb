@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -22,6 +24,8 @@ import model.json.movie.MovieFormatted;
 import model.json.movie.comparator.MovieRatingComparator;
 import util.Consts;
 
+@ManagedBean(name = "movieRankingBean", eager = true)
+@SessionScoped
 public class MovieRankingBean {
 
 	private Movie selectedMovie;

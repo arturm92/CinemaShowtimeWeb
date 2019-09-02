@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -17,6 +19,9 @@ import model.json.movie.MovieFormatted;
 import util.Consts;
 import util.DateFormater;
 
+
+@ManagedBean(name = "movieCatalogueBean", eager = true)
+@SessionScoped
 public class MovieCatalogueBean {
 
 	private Movies movies;
@@ -26,9 +31,15 @@ public class MovieCatalogueBean {
 	private Movies moviePosters;
 
 	public MovieCatalogueBean() {
+		long startTime = System.currentTimeMillis();
+	
 		genres = ApiHelper.getGenres().removeNullGenres().getList();
 		selectedGenreIds = new ArrayList<String>();
 		prepareMovieCatalogueList();
+		
+		long stopTime = System.currentTimeMillis();
+		System.out.println("MovieCatalogueBean started in " + ((stopTime - startTime) / 1000) + " second");
+		
 	}
 
 	private void prepareMovieCatalogueList() {

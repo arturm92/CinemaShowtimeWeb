@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -19,6 +21,8 @@ import model.json.movie.comparator.MovieReleaseDateComparartor;
 import util.Consts;
 import util.DateFormater;
 
+@ManagedBean(name = "cinemaPremiereBean", eager = true)
+@SessionScoped
 public class CinemaPremiereBean {
 
 	private List<MovieFormatted> cinemaPremiereMoviesList;

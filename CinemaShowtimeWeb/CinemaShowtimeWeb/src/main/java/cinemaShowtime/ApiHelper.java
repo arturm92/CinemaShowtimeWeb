@@ -31,7 +31,7 @@ public class ApiHelper {
 
 	public static String getDataFromApi(String url) {
 		try {
-			System.out.println("QUERY: " + url);
+			//System.out.println("QUERY: " + url);
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpGet request = new HttpGet(url);
 			request.addHeader("X-API-Key", Consts.API_KEY);

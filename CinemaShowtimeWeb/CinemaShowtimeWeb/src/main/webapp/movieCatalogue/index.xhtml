@@ -15,7 +15,9 @@
 			</ui:insert>
 		</div>
 		<div id="content" style="text-align: left;">
-			<ui:include src="movieCatalogue.xhtml" />
+			<ui:include src="movieCatalogue.xhtml">
+				<ui:param name="bean" value="#{movieCatalogueBean}" />
+			</ui:include>
 		</div>
 		<div id="footer">
 			<ui:insert name="footer">

@@ -10,9 +10,9 @@ import model.json.ShowtimeDay;
 import util.DateFormater;
 
 public class MovieFormatted extends Movie {
-	
+
 	private List<ShowtimeDay> showtimeDayList;
-	
+
 	public String getTrailerURL() {
 		if (getTrailers() != null) {
 			return getTrailers().get(0).getTrailerFiles().get(0).getUrl().replace("watch?v=", "v/");
@@ -103,8 +103,7 @@ public class MovieFormatted extends Movie {
 		}
 		return ret;
 	}
-	
-	
+
 	public Object getSimpleAgeLimit() {
 		if (getAgeLimit() != null) {
 			Object val = getAgeLimit().get("PL");
@@ -118,7 +117,7 @@ public class MovieFormatted extends Movie {
 		}
 		return null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public String getReleaseDateFormatted() {
 		LinkedHashMap<String, Object> releaseDateMap;
@@ -131,12 +130,13 @@ public class MovieFormatted extends Movie {
 				return "premiera w Polsce: " + map.get("date");
 			} else {
 				date = (ArrayList<Object>) releaseDateMap.get("US");
-				map = (LinkedHashMap<String, String>) date.get(0);
-				return "premiera na świecie: " + map.get("date");
+				if (date != null) {
+					map = (LinkedHashMap<String, String>) date.get(0);
+					return "premiera na świecie: " + map.get("date");
+				}
 			}
-		}else {
-			return null;
 		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

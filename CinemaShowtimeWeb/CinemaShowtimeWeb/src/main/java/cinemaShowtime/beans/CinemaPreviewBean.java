@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -16,6 +18,8 @@ import model.json.movie.MovieFormatted;
 import util.Consts;
 import util.DateFormater;
 
+@ManagedBean(name = "cinemaPreviewBean", eager = true)
+@SessionScoped
 public class CinemaPreviewBean {
 	
 	private List<MovieFormatted> cinemaPreviewMoviesList;
