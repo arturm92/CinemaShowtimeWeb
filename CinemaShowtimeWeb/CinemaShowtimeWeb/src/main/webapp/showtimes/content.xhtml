@@ -9,32 +9,30 @@
 		<h:panelGrid id="mainContent" columns="1" columnClasses="topAligned">
 
 			<h:panelGroup id="cityPanelGroup"
-				rendered="#{controllerBean.cityBean.citySelectionVisible}">
+				rendered="#{bean.citySelectionVisible}">
 				<ui:include src="citySelection.xhtml">
-					<ui:param name="bean" value="#{controllerBean.cityBean}" />
+					<ui:param name="bean" value="#{bean}" />
 				</ui:include>
 			</h:panelGroup>
 
 			<h:panelGroup id="cinemasInCityPanelGroup"
-				rendered="#{controllerBean.cityBean.cinemaBean.cinemaSelectionVisible}">
+				rendered="#{bean.cinemaSelectionVisible}">
 				<ui:include src="cinemaSelection.xhtml">
-					<ui:param name="bean" value="#{controllerBean.cityBean.cinemaBean}" />
+					<ui:param name="bean" value="#{bean}" />
 				</ui:include>
 			</h:panelGroup>
 
 			<h:panelGroup id="moviesInCinemaPanelGroup"
-				rendered="#{controllerBean.cityBean.cinemaBean.movieBean.movieSelectionVisible}">
+				rendered="#{bean.movieSelectionVisible}">
 				<ui:include src="movieSelection.xhtml">
-					<ui:param name="bean"
-						value="#{controllerBean.cityBean.cinemaBean.movieBean}" />
+					<ui:param name="bean" value="#{bean}" />
 				</ui:include>
 			</h:panelGroup>
 
 			<h:panelGroup id="showtimesInCinemaPanelGroup"
-				rendered="#{controllerBean.cityBean.cinemaBean.movieBean.showtimeBean.showtimeSelectionVisible}">
+				rendered="#{bean.showtimeSelectionVisible}">
 				<ui:include src="showtimeSelection.xhtml">
-					<ui:param name="bean"
-						value="#{controllerBean.cityBean.cinemaBean.movieBean.showtimeBean}" />
+					<ui:param name="bean" value="#{bean}" />
 				</ui:include>
 			</h:panelGroup>
 

@@ -6,14 +6,14 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import model.json.City;
-import util.Utils;
+import util.Application;
 
 @FacesConverter("cityConverter")
 public class CityConverter implements Converter {
 	
 	public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
 		if (value != null && value.trim().length() > 0) {
-			City city = Utils.getInstance().getCities().findCityByName(value);
+			City city = Application.getInstance().getCities().findCityByName(value);
 			return city;
 		} else {
 			return null;

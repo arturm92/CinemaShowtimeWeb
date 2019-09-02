@@ -7,16 +7,6 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class ControllerBean {
 
-	private CityBean cityBean;
-
-	public ControllerBean() {
-		cityBean = new CityBean();
-	}
-
-	public CityBean getCityBean() {
-		return cityBean;
-	}
-
 	public MovieDetailBean getMovieDetailBean() {
 		return MovieDetailBean.getInstance();
 	}
