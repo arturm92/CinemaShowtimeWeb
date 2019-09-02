@@ -54,7 +54,7 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 			showtimeDay = new ShowtimeDay();
 			showtimeDay.setDate(showtimeDate);
 		}
-		
+
 		if (showtimeDay.getHours() == null) {
 			hoursList = new ArrayList<String>();
 			hoursList.add(showtimeHour);
@@ -67,5 +67,15 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 			showtimeDay = createShowtimeDayList(showtimeDayList, null, showtimeDate, showtimeHour);
 		}
 		return showtimeDay;
+	}
+
+	public List<Showtime> findMovieShowtime(Long id) {
+		List<Showtime> returnList = new ArrayList<Showtime>();
+		for (Showtime showtime : list) {
+			if (showtime.getMovieId() != null && showtime.getMovieId().compareTo(id) == 0) {
+				returnList.add(showtime);
+			}
+		}
+		return returnList;
 	}
 }

@@ -23,7 +23,7 @@ import model.json.complex.Cities;
 import model.json.complex.Genres;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
-import model.json.movie.Movie;
+import model.json.movie.MovieFormatted;
 import util.Consts;
 import util.DateFormater;
 
@@ -31,7 +31,7 @@ public class ApiHelper {
 
 	public static String getDataFromApi(String url) {
 		try {
-			System.out.println("QUERY: " + url);
+			//System.out.println("QUERY: " + url);
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpGet request = new HttpGet(url);
 			request.addHeader("X-API-Key", Consts.API_KEY);
@@ -146,7 +146,7 @@ public class ApiHelper {
 
 	}
 
-	public static Movie getMovieMultimedia(Long movieId) {
+	public static MovieFormatted getMovieMultimedia(Long movieId) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
@@ -155,7 +155,7 @@ public class ApiHelper {
 			params += "&lang=" + Consts.MULTIMEDIA_LANGUAGE;
 			params += "&countries=" + Consts.COUNTRIES;
 			String json = getDataFromApi(Consts.MOVIES + params);
-			return mapper.readValue(json, Movie.class);
+			return mapper.readValue(json, MovieFormatted.class);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -166,7 +166,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movie getMovieDescription(Long movieId) {
+	public static MovieFormatted getMovieDescription(Long movieId) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
@@ -175,7 +175,7 @@ public class ApiHelper {
 			params += "&lang=" + Consts.LANGUAGE;
 			params += "&countries=" + Consts.COUNTRIES;
 			String json = getDataFromApi(Consts.MOVIES + params);
-			return mapper.readValue(json, Movie.class);
+			return mapper.readValue(json, MovieFormatted.class);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

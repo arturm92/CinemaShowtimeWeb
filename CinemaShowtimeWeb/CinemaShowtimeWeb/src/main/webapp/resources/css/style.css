@@ -1,3 +1,19 @@
+body .ui-datatable .ui-datatable-data>tr.ui-state-highlight {
+	color: #FFB300;
+}
+
+body .ui-datatable .ui-datatable-header {
+	border: none;
+	background-color: #FFB300;
+	color: black;
+	font-size: 20px;
+}
+
+body .ui-datatable thead th {
+	border: none;
+	background-color: black;
+}
+
 body .ui-datatable .ui-datatable-data>tr>td {
 	padding: 0px;
 }
@@ -48,6 +64,12 @@ body .ui-accordion .ui-accordion-content {
 
 body .ui-datatable
 	.ui-datatable-data>tr.ui-datatable-even {
+	border: none;
+	background-color: black;
+}
+
+body .ui-datatable
+	.ui-datatable-data>tr.ui-datatable-odd {
 	border: none;
 	background-color: black;
 }

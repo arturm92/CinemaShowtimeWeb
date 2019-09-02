@@ -29,7 +29,7 @@ public class Filter {
 	}
 
 	public class Field {
-		public static final String MOVIE_STANDARD_FIELDS = "id,title,original_title,poster_image.flat,release_dates,ratings,genres,crew";
+		public static final String MOVIE_STANDARD_FIELDS = "id,title,original_title,poster_image.flat,release_dates,ratings,genres,synopsis,website,cast,crew";
 		public static final String MOVIE_POSTER_FIELDS = "id,poster_image.flat";
 	}
 

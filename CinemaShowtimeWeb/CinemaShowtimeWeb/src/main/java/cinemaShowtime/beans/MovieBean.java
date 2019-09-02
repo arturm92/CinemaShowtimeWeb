@@ -10,6 +10,7 @@ import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.ApiHelper;
 import cinemaShowtime.Filter;
+import cinemaShowtime.MovieHelper;
 import model.json.cinema.Cinema;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
@@ -20,6 +21,7 @@ import util.Utils;
 public class MovieBean {
 
 	private Movies movies;
+	private Movies moviePosters;
 	private Cinema cinema;
 	private Movie selectedMovie;
 	private ShowtimeBean showtimeBean;
@@ -38,8 +40,15 @@ public class MovieBean {
 	public void initMovies() {
 		Filter filter = prepareFilter();
 		this.movies = ApiHelper.getMoviesInCinema(filter);
-		Movies moviesDescription = ApiHelper.getAllMoviesDescriptionInCinema(cinema);
-		mergeMovieDetails(movies, moviesDescription);
+		//Movies moviesDescription = ApiHelper.getAllMoviesDescriptionInCinema(cinema);
+		//mergeMovieDetails(movies, moviesDescription);
+		
+		filter.deleteFilterParam(Filter.Parameter.LANG);
+		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
+		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
+		moviePosters.fillMovieMap();
+		MovieHelper.addPosterToMovie(movies, moviePosters);
+
 	}
 	
 	private Filter prepareFilter() {

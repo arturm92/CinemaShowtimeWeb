@@ -10,7 +10,7 @@ public class Showtime {
 	@JsonProperty("cinema_id")
 	private String cinemaId;
 	@JsonProperty("movie_id")
-	private String movieId;
+	private Long movieId;
 	@JsonProperty("start_at")
 	private String startAt;
 	private String language;
@@ -38,10 +38,10 @@ public class Showtime {
 	public void setCinemaId(String cinemaId) {
 		this.cinemaId = cinemaId;
 	}
-	public String getMovieId() {
+	public Long getMovieId() {
 		return movieId;
 	}
-	public void setMovieId(String movieId) {
+	public void setMovieId(Long movieId) {
 		this.movieId = movieId;
 	}
 	public String getStartAt() {
