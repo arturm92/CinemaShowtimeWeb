@@ -31,12 +31,13 @@ public class ApiHelper {
 
 	public static String getDataFromApi(String url) {
 		try {
-			//System.out.println("QUERY: " + url);
+			// System.out.println("QUERY: " + url);
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpGet request = new HttpGet(url);
 			request.addHeader("X-API-Key", Consts.API_KEY);
 			HttpResponse response = client.execute(request);
-			//System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+			// System.out.println("Response Code : " +
+			// response.getStatusLine().getStatusCode());
 			return readResultContent(response);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -186,17 +187,13 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getNewestMovies() {
+	public static Movies getNewestMovies(Filter filter) {
 		try {
-			DateFormater df = new DateFormater();
-			String date = df.recalculateDateByMonth(-4);
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
-			String params = "?fields=id,title,poster_image.flat";
-			params += "&release_date_from=" + date;
-			params += "&countries=" + Consts.COUNTRIES;
-			String json = getDataFromApi(Consts.MOVIES + params);
+			String json = getDataFromApi(Consts.MOVIES + filter.prepareParameters());
+
 			if (json.contains("\"code\":10005")) {
 				System.out.println("Wygasł klucz do API");
 				return null;
@@ -246,7 +243,7 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 	public static Movies getMoviesCatalogue(Filter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -263,7 +260,7 @@ public class ApiHelper {
 		}
 		return null;
 	}
-	
+
 	public static Movies getMoviesPosterEngishVersion(Filter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();

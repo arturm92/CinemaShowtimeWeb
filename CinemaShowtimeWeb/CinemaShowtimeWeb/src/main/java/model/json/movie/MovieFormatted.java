@@ -32,7 +32,7 @@ public class MovieFormatted extends Movie {
 		if (getRatings() != null) {
 			Rating imdbRating = getRatings().getImdbRating();
 			if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
-				return imdbRating.getValue() + " / " + imdbRating.getVoteCount() + " ocen";
+				return imdbRating.getValue() + " / " + imdbRating.getVoteCount();
 			}
 		}
 		return null;
@@ -42,7 +42,7 @@ public class MovieFormatted extends Movie {
 		if (getRatings() != null) {
 			Rating tmdbRating = getRatings().getTmdbRating();
 			if (tmdbRating != null && !tmdbRating.getVoteCount().equals("0")) {
-				return tmdbRating.getValue() + " / " + tmdbRating.getVoteCount() + " ocen";
+				return tmdbRating.getValue() + " / " + tmdbRating.getVoteCount();
 			}
 		}
 		return null;
@@ -142,15 +142,24 @@ public class MovieFormatted extends Movie {
 	@SuppressWarnings("unchecked")
 	public Date getReleaseDateInDateType() {
 		LinkedHashMap<String, String> map;
-		List<Object> date = (ArrayList<Object>) getReleaseDate().get("PL");
-		if (date != null) {
-			map = (LinkedHashMap<String, String>) date.get(0);
-		} else {
-			date = (ArrayList<Object>) getReleaseDate().get("US");
-			map = (LinkedHashMap<String, String>) date.get(0);
+		LinkedHashMap<String, Object> releaseDateMap;
+		releaseDateMap = getReleaseDate();
+		if (releaseDateMap != null) {
+			List<Object> date = (ArrayList<Object>) releaseDateMap.get("PL");
+			if (date != null) {
+				map = (LinkedHashMap<String, String>) date.get(0);
+			} else {
+				date = (ArrayList<Object>) releaseDateMap.get("US");
+				if (date != null) {
+					map = (LinkedHashMap<String, String>) date.get(0);
+				}else {
+					return null;
+				}
+			}
+			DateFormater df = new DateFormater();
+			return df.parseString(map.get("date"));
 		}
-		DateFormater df = new DateFormater();
-		return df.parseString(map.get("date"));
+		return null;
 	}
 
 	public List<ShowtimeDay> getShowtimeDayList() {

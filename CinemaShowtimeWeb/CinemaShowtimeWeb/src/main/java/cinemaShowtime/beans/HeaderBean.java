@@ -10,21 +10,42 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import cinemaShowtime.ApiHelper;
+import cinemaShowtime.Filter;
+import cinemaShowtime.MovieHelper;
+import model.json.complex.Movies;
 import model.json.movie.MovieFormatted;
+import util.Consts;
+import util.DateFormater;
 
 @ManagedBean(name = "headerBean", eager = true)
 @SessionScoped
 public class HeaderBean {
-	
-	private List<MovieFormatted> headerMovies;
+
+	private Movies headerMovies;
+	private Movies moviePosters;
 
 	public HeaderBean() {
 		long startTime = System.currentTimeMillis();
-		
-		headerMovies = ApiHelper.getNewestMovies().getMoviesWithPosterList();
+
+		Filter filter = prepareFilter();
+		headerMovies = ApiHelper.getNewestMovies(filter);
+		filter.deleteFilterParam(Filter.Parameter.LANG);
+		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
+		moviePosters.fillMovieMap();
+		MovieHelper.addPosterToMovie(headerMovies, moviePosters);
 		
 		long stopTime = System.currentTimeMillis();
-		System.out.println("FirstPage start in " + ((stopTime - startTime) / 1000) + "second");
+		System.out.println("HeaderBean start in " + ((stopTime - startTime) / 1000) + "second");
+	}
+
+	private Filter prepareFilter() {
+		Filter filter = new Filter();
+		DateFormater df = new DateFormater();
+		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
+		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, df.recalculateDateByMonth(-4));
+		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		return filter;
 	}
 
 	public void clickMovie() {
@@ -37,14 +58,13 @@ public class HeaderBean {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private void updateHeaderMovieList(String movieId) {
 		List<MovieFormatted> newHeaderMovies = new ArrayList<MovieFormatted>();
 		List<MovieFormatted> tmp = new ArrayList<MovieFormatted>();
 		boolean copy = false;
-		for (MovieFormatted movie : headerMovies) {
+		for (MovieFormatted movie : headerMovies.getList()) {
 			if (copy) {
 				newHeaderMovies.add(movie);
 			} else {
@@ -57,10 +77,10 @@ public class HeaderBean {
 			}
 		}
 		newHeaderMovies.addAll(tmp);
-		headerMovies = newHeaderMovies;
+		headerMovies.setList(newHeaderMovies);
 	}
 
-	public List<MovieFormatted> getHeaderMovies() {
-		return headerMovies;
+	public List<MovieFormatted> getHeaderMoviesList() {
+		return headerMovies.getMoviesWithPosterList();
 	}
 }

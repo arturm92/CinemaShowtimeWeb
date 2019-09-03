@@ -7,7 +7,7 @@
 	<h:body>
 		<h:form>
 			<div>
-				<p:ring value="#{headerBean.headerMovies}" var="item">
+				<p:ring value="#{headerBean.headerMoviesList}" var="item">
 					<h:commandLink action="#{headerBean.clickMovie}">
 						<p:graphicImage value="#{item.posterImage}"
 							styleClass="imageInHeader" />
@@ -20,18 +20,21 @@
 					<p:menuitem url="/CinemaShowtimeWeb/index.xhtml" icon="pi pi-home" />
 					<p:menuitem value="REPERTUAR KIN"
 						url="/CinemaShowtimeWeb/showtimes/index.xhtml" icon="pi pi-search" />
-					<p:menuitem value="KATALOG FILMÓW"
-						url="/CinemaShowtimeWeb/movieCatalogue/index.xhtml"
-						icon="pi pi-list" />
-					<p:menuitem value="RANKING"
-						url="/CinemaShowtimeWeb/movieRanking/index.xhtml"
-						icon="fa fa-fw fa-star-o" />
-					<p:menuitem value="ZAPOWIEDZI"
-						url="/CinemaShowtimeWeb/cinemaPreview/index.xhtml"
-						icon="fa fa-fw fa-send-o" />
+					<p:menuitem value="TERAZ GRANE"
+						url="/CinemaShowtimeWeb/nowShowingMovie/index.xhtml"
+						icon="fa fa-fw fa-play-circle-o" />
 					<p:menuitem value="PREMIERY"
 						url="/CinemaShowtimeWeb/cinemaPremiere/index.xhtml"
 						icon="fa fa-fw fa-diamond" />
+					<p:menuitem value="ZAPOWIEDZI"
+						url="/CinemaShowtimeWeb/cinemaPreview/index.xhtml"
+						icon="fa fa-fw fa-send-o" />
+					<p:menuitem value="RANKING"
+						url="/CinemaShowtimeWeb/movieRanking/index.xhtml"
+						icon="fa fa-fw fa-star-o" />
+					<p:menuitem value="KATALOG FILMÓW"
+						url="/CinemaShowtimeWeb/movieCatalogue/index.xhtml"
+						icon="pi pi-list" />
 					<f:facet name="options">
 						<i class="fa fa-fw fa-location-arrow" style="margin-top: 10px;"></i>
 						<h:outputText value="#{homePageBean.currentCity}"

@@ -45,7 +45,7 @@ public class CinemaPreviewBean {
 		cinemaPreviewMovies = ApiHelper.getMovies(filter);
 		
 		filter.deleteFilterParam(Filter.Parameter.LANG);
-		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
 		
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
