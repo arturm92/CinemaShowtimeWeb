@@ -35,7 +35,7 @@ public class NowShowingMovieBean {
 		long startTime = System.currentTimeMillis();
 
 		prepareMovies();
-		filterMovies();
+		MovieHelper.verifyList(movies, null);
 		Collections.sort(movies.getList(), Collections.reverseOrder(new MovieReleaseDateComparartor()));
 
 		long stopTime = System.currentTimeMillis();
@@ -54,17 +54,7 @@ public class NowShowingMovieBean {
 		MovieHelper.addPosterToMovie(movies, moviePosters);
 	}
 
-	private void filterMovies() {
-		List<MovieFormatted> list = new ArrayList<MovieFormatted>();
-		for (MovieFormatted movie : movies.getList()) {
-			if (movie.getReleaseDate() != null
-					&& (movie.getReleaseDate().containsKey("PL") || movie.getReleaseDate().containsKey("US")
-							&& !(movie.getGenre() == null || movie.getGenre().isEmpty()))) {
-				list.add(movie);
-			}
-		}
-		movies.setList(list);
-	}
+	
 
 	public void clickMovie() {
 		try {

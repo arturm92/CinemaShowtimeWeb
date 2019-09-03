@@ -42,7 +42,7 @@ public class HeaderBean {
 		Filter filter = new Filter();
 		DateFormater df = new DateFormater();
 		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
-		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, df.recalculateDateByMonth(-4));
+		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(df.getMonthFromToday(-4)));
 		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
 		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES);
 		return filter;

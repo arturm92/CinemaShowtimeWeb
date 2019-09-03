@@ -46,6 +46,7 @@ public class MovieCatalogueBean {
 		Filter filter = prepareFilter();
 		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
 		movies = ApiHelper.getMoviesCatalogue(filter);
+		MovieHelper.verifyList(movies, null);
 		
 		filter.deleteFilterParam(Filter.Parameter.LANG);
 		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);

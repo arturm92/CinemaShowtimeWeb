@@ -1,7 +1,6 @@
 package cinemaShowtime.beans;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -25,56 +24,44 @@ import util.DateFormater;
 @SessionScoped
 public class CinemaPremiereBean {
 
-	private List<MovieFormatted> cinemaPremiereMoviesList;
-	private Movies cinemaPremiereMovies;
+	private Movies movies;
 	private Movies moviePosters;
 	private String filterMode;
 
+	private DateFormater df = new DateFormater();
+	private Date dateFrom;
+	
 	public CinemaPremiereBean() {
 		long startTime = System.currentTimeMillis();
-
+		
+		dateFrom = df.getMonthFromToday(0);
 		prepareCinemaPremiereMoviesList();
 
 		long stopTime = System.currentTimeMillis();
 		System.out.println("CinemaPremiereBean started in " + ((stopTime - startTime) / 1000) + " second");
-
 	}
 
 	private void prepareCinemaPremiereMoviesList() {
 		Filter filter = prepareFilter();
 		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
-		cinemaPremiereMovies = ApiHelper.getMovies(filter);
-
+		movies = ApiHelper.getMovies(filter);
+		MovieHelper.verifyList(movies, dateFrom);
 		filter.deleteFilterParam(Filter.Parameter.LANG);
 		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
 		
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
-		MovieHelper.addPosterToMovie(cinemaPremiereMovies, moviePosters);
+		MovieHelper.addPosterToMovie(movies, moviePosters);
 
-		Collections.sort(cinemaPremiereMovies.getList(), new MovieReleaseDateComparartor());
-
-		verifyList();
-		setCinemaPremiereMoviesList(cinemaPremiereMovies.getMoviesWithPosterList());
+		Collections.sort(movies.getList(), new MovieReleaseDateComparartor());
+		//setCinemaPremiereMoviesList(movies.getMoviesWithPosterList());
 	}
 
-	private void verifyList() {
-		DateFormater df = new DateFormater();
-		Date dateFrom = df.parseString(df.recalculateDateByMonth(-1));
-		List<MovieFormatted> veryfiedList = new ArrayList<MovieFormatted>();
-		for (MovieFormatted movie : cinemaPremiereMovies.getList()) {
-			if (movie.getReleaseDateInDateType().compareTo(dateFrom) > 0) {
-				veryfiedList.add(movie);
-			}
-		}
-		cinemaPremiereMovies.setList(veryfiedList);
-	}
 
 	private Filter prepareFilter() {
 		Filter filter = new Filter();
-		DateFormater df = new DateFormater();
-		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, df.recalculateDateByMonth(-1));
-		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_TO, df.recalculateDateByMonth(0));
+		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(dateFrom));
+		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_TO, df.formatDateShort(df.getMonthFromToday(1)));
 		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
 		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES + ",US");
 		return filter;
@@ -111,11 +98,8 @@ public class CinemaPremiereBean {
 		this.filterMode = filterMode;
 	}
 
-	public List<MovieFormatted> getCinemaPremiereMoviesList() {
-		return cinemaPremiereMoviesList;
+	public List<MovieFormatted> getMovieList() {
+		return movies.getList();
 	}
 
-	public void setCinemaPremiereMoviesList(List<MovieFormatted> cinemaPremiereMoviesList) {
-		this.cinemaPremiereMoviesList = cinemaPremiereMoviesList;
-	}
 }

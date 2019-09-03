@@ -60,14 +60,6 @@ public class DateFormater {
 		SimpleDateFormat sdf = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
 		return sdf.format(inputDate);
 	}
-
-	public String recalculateDateByMonth(int amount) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(new Date());
-		c.add(Calendar.MONTH, amount);
-		SimpleDateFormat sdf = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
-		return sdf.format(c.getTime());
-	}
 	
 	public String formatTimeOnly(String inputString) {
 		try {
@@ -114,6 +106,15 @@ public class DateFormater {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, amount);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		return calendar.getTime();
+	}
+	
+	public Date getMonthFromToday(int amount) {
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, amount);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		return calendar.getTime();
 	}
