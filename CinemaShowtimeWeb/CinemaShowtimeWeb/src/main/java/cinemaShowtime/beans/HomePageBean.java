@@ -70,6 +70,7 @@ public class HomePageBean {
 
 	private void prepareMovies() {
 		Filter filter = prepareMoviesInCinema(2);
+		MovieHelper.verifyList(movies, null);
 		filter.deleteFilterParam(Filter.Parameter.LANG);
 		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
@@ -149,7 +150,7 @@ public class HomePageBean {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void selectShowtime() {
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		String link = externalContext.getRequestParameterMap().get("link");

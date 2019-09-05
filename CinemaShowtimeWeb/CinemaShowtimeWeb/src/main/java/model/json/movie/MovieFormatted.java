@@ -61,8 +61,12 @@ public class MovieFormatted extends Movie {
 		return BigDecimal.ZERO;
 	}
 
+	public Integer getRatingIntValue() {
+		return getRatingValue().intValue();
+	}
+
 	public String getGenreInfo() {
-		String ret = "gatunek: ";
+		String ret = "";
 		if (getGenre() != null) {
 			for (Genre elem : getGenre()) {
 				ret += "[" + elem.getName() + "] ";
@@ -83,9 +87,16 @@ public class MovieFormatted extends Movie {
 
 	public String getCastText() {
 		String ret = "";
+		int i = 1;
 		if (getCast() != null) {
 			for (Person person : getCast()) {
-				ret += person.getCharacter() + " : " + person.getName() + "\n";
+				if (person.getCharacter() != null && person.getCharacter().length() > 0) {
+					ret += person.getCharacter() + " : " + person.getName() + "\n";
+					if (i == 9) {
+						break;
+					}
+					i++;
+				}
 			}
 		}
 		return ret;
@@ -152,7 +163,7 @@ public class MovieFormatted extends Movie {
 				date = (ArrayList<Object>) releaseDateMap.get("US");
 				if (date != null) {
 					map = (LinkedHashMap<String, String>) date.get(0);
-				}else {
+				} else {
 					return null;
 				}
 			}
@@ -168,6 +179,22 @@ public class MovieFormatted extends Movie {
 
 	public void setShowtimeDayList(List<ShowtimeDay> showtimeDayList) {
 		this.showtimeDayList = showtimeDayList;
+	}
+
+	public boolean isGalleryRendered() {
+		if (getSceneImages().size() > 5) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isTrailerRendered() {
+		if (getTrailers() != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

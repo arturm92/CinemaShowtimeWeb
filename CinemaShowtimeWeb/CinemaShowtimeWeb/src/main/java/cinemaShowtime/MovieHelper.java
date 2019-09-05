@@ -78,7 +78,9 @@ public class MovieHelper {
 
 	public static void mergeMovieDetails(Movie movie, Movie movieDescripstion) {
 		if (movie.getId().compareTo(movieDescripstion.getId()) == 0) {
-			movie.setDescription(movieDescripstion.getDescription());
+			if (movieDescripstion.getDescription()!= null) {
+				movie.setDescription(movieDescripstion.getDescription());
+			}
 			movie.setTitle(movieDescripstion.getTitle());
 			movie.setOriginalTitle(movieDescripstion.getOriginalTitle());
 			movie.setGenre(movieDescripstion.getGenre());
@@ -87,6 +89,9 @@ public class MovieHelper {
 			movie.setWebsite(movieDescripstion.getWebsite());
 			movie.setReleaseDate(movieDescripstion.getReleaseDate());
 			movie.setAgeLimit(movieDescripstion.getAgeLimit());
+			if (movie.getPosterImage() == null) {
+				movie.setPosterImages(Consts.DEFAULT_POSTER);
+			}
 		}
 	}
 

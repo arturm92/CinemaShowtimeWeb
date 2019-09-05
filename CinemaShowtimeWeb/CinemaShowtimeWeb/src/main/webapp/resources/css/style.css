@@ -160,6 +160,12 @@ body .ui-autocomplete {
 	width: 183px;
 }
 
+.imageInDetail {
+	height: 539px;
+	width: 363px;
+	padding-right: 6%;
+}
+
 .imageInGallery {
 	height: 275px;
 	margin-left: 55px;

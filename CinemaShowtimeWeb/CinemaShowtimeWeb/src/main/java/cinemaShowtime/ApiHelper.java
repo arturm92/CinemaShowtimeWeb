@@ -151,7 +151,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
 			String params = "/" + movieId;
-			params += "?fields=id,poster_image.flat,scene_images.flat,trailers,ratings";
+			params += "?fields=id,poster_image.flat,scene_images.flat,trailers,ratings,synopsis";
 			params += "&lang=" + Consts.MULTIMEDIA_LANGUAGE;
 			params += "&countries=" + Consts.COUNTRIES;
 			String json = getDataFromApi(Consts.MOVIES + params);

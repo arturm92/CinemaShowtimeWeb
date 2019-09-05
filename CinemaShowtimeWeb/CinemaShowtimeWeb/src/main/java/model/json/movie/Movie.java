@@ -70,9 +70,9 @@ public class Movie extends BaseModel {
 	}
 
 	public String getDescription() {
-		if (description == null || description.isEmpty()) {
-			return "Opis filmu jest niedostępny";
-		}
+		/*
+		 * if (description == null || description.isEmpty()) { return null; }
+		 */
 		return description;
 	}
 

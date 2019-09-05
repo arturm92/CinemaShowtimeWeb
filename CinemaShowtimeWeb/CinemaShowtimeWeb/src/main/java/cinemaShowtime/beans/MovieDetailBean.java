@@ -1,5 +1,10 @@
 package cinemaShowtime.beans;
 
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.PrimeFaces;
+
 import cinemaShowtime.ApiHelper;
 import cinemaShowtime.MovieHelper;
 import model.json.movie.Movie;
@@ -29,6 +34,12 @@ public class MovieDetailBean {
 		MovieHelper.mergeMovieDetails(movie, movieDescripstion);
 	}
 
+	public void goToMovieWebsite() {
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		String link = externalContext.getRequestParameterMap().get("link");
+		PrimeFaces.current().executeScript("window.open('" + link + "', '_newtab')");
+	}
+	
 	public Movie getMovie() {
 		return movie;
 	}

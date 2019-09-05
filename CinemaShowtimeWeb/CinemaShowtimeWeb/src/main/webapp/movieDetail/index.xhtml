@@ -16,6 +16,8 @@
 		</div>
 		<div id="content">
 			<ui:include src="movieDetail.xhtml">
+				<ui:param name="movie"
+					value="#{controllerBean.movieDetailBean.movie}" />
 				<ui:param name="bean" value="#{controllerBean.movieDetailBean}" />
 			</ui:include>
 		</div>

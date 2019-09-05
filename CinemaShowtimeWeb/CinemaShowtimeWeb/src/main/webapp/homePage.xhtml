@@ -10,77 +10,79 @@
 			<div class="ui-grid ui-grid-responsive" style="color: white;">
 				<div class="ui-grid-row">
 					<div class="ui-grid-col-4">
-						<p:dataTable id="cinemasDataTable" var="item"
+						<p:dataTable id="cinemasDataTable" var="cinema"
 							value="#{bean.cinemaList}" selectionMode="single"
-							selection="#{bean.selectedCinema}" rowKey="#{item.id}"
+							selection="#{bean.selectedCinema}" rowKey="#{cinema.id}"
 							styleClass="noHeader">
 							<p:ajax event="rowSelect" listener="#{bean.selectCinema}"
 								process="cinemasDataTable"
 								update=":homePageForm:moviesDataTable" />
 
 							<p:column>
-								<h:outputText value="#{item.name}" />
+								<h:outputText value="#{cinema.name}" />
 								<p:separator />
 							</p:column>
 						</p:dataTable>
 					</div>
 					<div class="ui-grid-col-11" style="padding-left: 2%;">
-						<p:dataTable id="moviesDataTable" var="item"
-							value="#{bean.movieList}" sortBy="#{item.name}"
+						<p:dataTable id="moviesDataTable" var="movie"
+							value="#{bean.movieList}" sortBy="#{movie.name}"
 							sortOrder="ascending">
 							<f:facet name="header">
 								<h:outputText value="#{bean.selectedCinema.name}" />
 							</f:facet>
 
 							<p:column>
-								<div class="ui-grid ui-grid-responsive" style="color: white;">
+								<div class="ui-grid ui-grid-responsive"
+									style="color: white; font-size: 18px;">
 									<div class="ui-grid-row">
 										<div class="ui-grid-col-3">
 											<h:commandLink action="#{bean.clickMovie}">
-												<p:graphicImage value="#{item.posterImage}"
+												<p:graphicImage value="#{movie.posterImage}"
 													styleClass="image" />
-												<f:param name="movieId" value="#{item.id}" />
+												<f:param name="movieId" value="#{movie.id}" />
 											</h:commandLink>
 										</div>
 										<div class="ui-grid ui-grid-responsive"
 											style="width: 100%; padding-left: 2%;">
 											<div class="ui-grid-row">
-												<div class="ui-grid-col-9">
-													<h:outputText value="#{item.title}"
-														style="font-size: 25px;" />
+												<div class="ui-grid-col-12">
+													<h:outputText value="#{movie.title}"
+														style="font-size: 34px;" />
 													<h:panelGroup
-														rendered="#{item.title != item.originalTitle}">
+														rendered="#{movie.title != movie.originalTitle}">
 														<br />
-														<h:outputText value="#{item.originalTitle}"
-															style="font-size: 18px;" />
-													</h:panelGroup>
-												</div>
-												<div class="ui-grid-col-6"
-													style="font-size: 25px; text-align: right;">
-													<h:panelGroup rendered="#{item.rating != null}">
-														<i class="fa fa-fw fa-star-o"></i>
-														<h:outputText value="#{item.rating}" />
-														<br />
+														<h:outputText value="#{movie.originalTitle}"
+															style="font-size: 22px;" />
 													</h:panelGroup>
 												</div>
 											</div>
 											<br />
 											<div class="ui-grid-row">
-												<div class="ui-grid-col-12" style="font-size: 18px;">
-													<h:outputText value="#{item.genreInfo}" />
+												<div class="ui-grid-col-12">
+													<h:outputText value="#{movie.genreInfo}" />
 												</div>
 											</div>
 											<br />
 											<div class="ui-grid-row">
-												<div class="ui-grid-col-12" style="font-size: 18px;">
-													<h:outputText value="#{item.firstDirector}" />
+												<div class="ui-grid-col-7">
+													<p:rating stars="10" value="#{movie.ratingIntValue}"
+														readonly="true" />
+												</div>
+												<div class="ui-grid-col-8">
+													<h:outputText value="(#{movie.rating})" />
+												</div>
+											</div>
+											<div class="ui-grid-row">
+												<div class="ui-grid-col-12">
+													<h:outputText value="#{movie.firstDirector}" />
 												</div>
 											</div>
 											<br />
 											<div class="ui-grid-row">
-												<div class="ui-grid-col-12" style="font-size: 18px;">
+												<div class="ui-grid-col-12">
 													<p:dataTable id="showtimesDayDataTable" var="showtimeDay"
-														value="#{item.showtimeDayList}" styleClass="noHeader">
+														value="#{movie.showtimeDayList}" styleClass="noHeader">
 														<p:column>
 															<h:panelGroup>
 																<h:outputText value="#{showtimeDay.date}"
