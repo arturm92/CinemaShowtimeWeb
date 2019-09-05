@@ -13,10 +13,12 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
 
-import cinemaShowtime.ApiHelper;
-import cinemaShowtime.ApiFilter;
-import cinemaShowtime.LocationApiHelper;
-import cinemaShowtime.MovieHelper;
+import cinemaShowtime.filters.ApiFilter;
+import cinemaShowtime.helpers.ApiHelper;
+import cinemaShowtime.helpers.LocationApiHelper;
+import cinemaShowtime.helpers.MovieHelper;
+import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.DateFormater;
 import model.json.Showtime;
 import model.json.cinema.Cinema;
 import model.json.cinema.LocationApi;
@@ -25,8 +27,6 @@ import model.json.complex.Cinemas;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
 import model.json.movie.MovieFormatted;
-import util.Consts;
-import util.DateFormater;
 
 @ManagedBean(name = "homePageBean", eager = true)
 @SessionScoped
@@ -70,7 +70,7 @@ public class HomePageBean {
 
 	private void prepareMovies() {
 		ApiFilter filter = prepareMoviesInCinema(2);
-		MovieHelper.verifyList(movies, null);
+		MovieHelper.verifyList(movies, null, null);
 		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
 		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
@@ -95,9 +95,10 @@ public class HomePageBean {
 		showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		for (MovieFormatted movie : movies.getList()) {
 			List<Showtime> movieShowtime = showtimes.findMovieShowtime(movie.getId());
-			for (Showtime showtime : movieShowtime) {
-				System.out.println(movie.getTitle() + "/" + showtime.getMovieId() + " " + showtime.getStartAt());
-			}
+			/*
+			 * for (Showtime showtime : movieShowtime) { System.out.println(movie.getTitle()
+			 * + "/" + showtime.getMovieId() + " " + showtime.getStartAt()); }
+			 */
 			Showtimes tmp = new Showtimes();
 			tmp.setList(movieShowtime);
 			movie.setShowtimeDayList(tmp.getNormalizeList());
@@ -109,7 +110,8 @@ public class HomePageBean {
 		setCurrentCity(locationApi.getCity());
 
 		ApiFilter filter = new ApiFilter();
-		filter.addFilterParam(ApiFilter.Parameter.LOCATION, locationApi.getLatitude() + "," + locationApi.getLongitude());
+		filter.addFilterParam(ApiFilter.Parameter.LOCATION,
+				locationApi.getLatitude() + "," + locationApi.getLongitude());
 		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(distance));
 		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
 		return filter;

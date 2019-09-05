@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import model.json.base.BaseComplexModel;
+import model.json.movie.Genre;
 import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
 
@@ -30,6 +31,9 @@ public class Movies extends BaseComplexModel implements JsonList<MovieFormatted>
 	public void showAllElements() {
 		for (Movie movie : list) {
 			System.out.println(movie.getTitle() + "/" + movie.getId() + "/" + movie.getPosterImage());
+			for (Genre genre : movie.getGenre()) {
+				System.out.println(genre.getName() + "/" + genre.getId());
+			}
 		}
 
 	}
@@ -60,10 +64,11 @@ public class Movies extends BaseComplexModel implements JsonList<MovieFormatted>
 
 	public void fillMovieMap() {
 		movieMap = new HashMap<>();
-		//System.out.println("******MOVIE_MAP*******");
+		// System.out.println("******MOVIE_MAP*******");
 		for (MovieFormatted movie : list) {
 			movieMap.put(movie.getId(), movie);
-			//System.out.println(movie.getTitle() + "/" + movie.getId() + "/" + movie.getPosterImage());
+			// System.out.println(movie.getTitle() + "/" + movie.getId() + "/" +
+			// movie.getPosterImage());
 		}
 	}
 

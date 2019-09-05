@@ -10,14 +10,14 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import cinemaShowtime.ApiHelper;
-import cinemaShowtime.ApiFilter;
-import cinemaShowtime.MovieHelper;
+import cinemaShowtime.filters.ApiFilter;
+import cinemaShowtime.helpers.ApiHelper;
+import cinemaShowtime.helpers.MovieHelper;
+import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.DateFormater;
 import model.json.complex.Movies;
 import model.json.movie.MovieFormatted;
 import model.json.movie.comparator.MovieRatingComparator;
-import util.Consts;
-import util.DateFormater;
 
 @ManagedBean(name = "headerBean", eager = true)
 @SessionScoped

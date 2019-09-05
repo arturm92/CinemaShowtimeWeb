@@ -1,11 +1,15 @@
-package util;
+package cinemaShowtime.utils;
+
+import java.util.List;
 
 import model.json.complex.Cities;
+import model.json.movie.Genre;
 
 public class Application {
 
 	private static Application instance = null;
 	private Cities cities;
+	private List<Genre> genreList;
 
 	public static Application getInstance() {
 		if (instance == null) {
@@ -21,5 +25,14 @@ public class Application {
 	public Cities getCities() {
 		return cities;
 	}
+
+	public List<Genre> getGenreList() {
+		return genreList;
+	}
+
+	public void setGenreList(List<Genre> genreList) {
+		this.genreList = genreList;
+	}
+
 
 }

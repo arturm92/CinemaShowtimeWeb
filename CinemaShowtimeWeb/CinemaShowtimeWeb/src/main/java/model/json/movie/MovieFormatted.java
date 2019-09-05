@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import cinemaShowtime.utils.DateFormater;
 import model.json.ShowtimeDay;
-import util.DateFormater;
 
 public class MovieFormatted extends Movie {
 

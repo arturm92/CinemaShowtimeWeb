@@ -1,4 +1,4 @@
-package util;
+package cinemaShowtime.utils;
 
 import java.util.Calendar;
 import java.util.Date;

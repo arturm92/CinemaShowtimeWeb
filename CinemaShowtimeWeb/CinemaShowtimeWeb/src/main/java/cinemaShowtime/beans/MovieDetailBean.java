@@ -5,8 +5,8 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
 
-import cinemaShowtime.ApiHelper;
-import cinemaShowtime.MovieHelper;
+import cinemaShowtime.helpers.ApiHelper;
+import cinemaShowtime.helpers.MovieHelper;
 import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
 

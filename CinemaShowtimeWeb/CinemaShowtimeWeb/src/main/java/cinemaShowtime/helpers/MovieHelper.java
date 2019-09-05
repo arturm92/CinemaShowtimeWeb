@@ -1,4 +1,4 @@
-package cinemaShowtime;
+package cinemaShowtime.helpers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -7,63 +7,92 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.Util;
 import model.json.complex.Movies;
+import model.json.movie.Genre;
 import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
-import util.Consts;
-import util.DateFormater;
 
 public class MovieHelper {
 
-	public static void verifyList(Movies movies, Date dateFrom) {
-		DateFormater df = new DateFormater();
+	public static void verifyList(Movies movies, Date dateFrom, List<Genre> genreList) {
 		List<MovieFormatted> veryfiedList = new ArrayList<MovieFormatted>();
 		LinkedHashMap<String, Object> releaseDateMap;
 
 		for (MovieFormatted movie : movies.getList()) {
 			boolean addMovie = true;
+			releaseDateMap = movie.getReleaseDate();
 			// System.out.println(movie.getTitle());
-			if (Util.containsSecialCharacter(movie.getTitle())) { // rozpoznaje dziwne znaki w tytułach
+			if (Util.containsSecialCharacter(movie.getTitle())
+					|| Util.containsSecialCharacter(movie.getOriginalTitle())) { // rozpoznaje dziwne znaki w tytułach
 				addMovie = false;
-				// System.out.println("japonskie albo ruskie gówno");
 			} else if (movie.getGenre() == null || movie.getGenre().isEmpty()) { // odrzuca braki w opisie gatunków
 				addMovie = false;
-				// System.out.println("brak gatunku");
-			} else {
-				releaseDateMap = movie.getReleaseDate();
-				if (releaseDateMap != null) { // tylko światowe filmy
-					if (releaseDateMap.size() <= 2 && !releaseDateMap.containsKey("PL")) {
-						addMovie = false;
-						// System.out.println("kino niszowe");
-					} else if (releaseDateMap.size() <= 3 && releaseDateMap.size() > 2
-							&& (releaseDateMap.containsKey("IN") || releaseDateMap.containsKey("AR")
-									|| releaseDateMap.containsKey("IT"))) {
-						addMovie = false;
-						// System.out.println("kino niszowe");
-					} else { // sprawdzanie daty wydanaia (opcjonalne)s
-						if (dateFrom != null) {
-							for (Map.Entry entry : releaseDateMap.entrySet()) {
-								List<Object> list = (List<Object>) entry.getValue();
-								LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) list.get(0);
-								Date releaseDate = df.parseString(map.get("date"));
-								if (releaseDate.compareTo(dateFrom) < 0) {
-									addMovie = false;
-								} /*
-									 * else { System.out.println(entry.getKey());
-									 * System.out.println(map.get("date")); }
-									 */
-							}
-						}
-					}
-				} else {
+			} else if (releaseDateMap != null) { // tylko światowe filmy
+				if (releaseDateMap.size() <= 3 && releaseDateMap.size() > 2 && (releaseDateMap.containsKey("IN")
+						|| releaseDateMap.containsKey("AR") || releaseDateMap.containsKey("IT"))) {
 					addMovie = false;
+				} else { // sprawdzanie daty wydanaia (opcjonalne)
+					if (dateFrom != null) {
+						addMovie = chcekReleaseDate(dateFrom, releaseDateMap);
+					}
 				}
+			} else {
+				addMovie = false;
 			}
-			if (addMovie) {
-				veryfiedList.add(movie);
+			if (addMovie) { // sprawdza zgodnosc gatunku (opcjonalne)
+				if (checkMovieGenre(genreList, movie)) {
+					veryfiedList.add(movie);
+				}
 			}
 		}
 		movies.setList(veryfiedList);
+
+	}
+
+	private static boolean chcekReleaseDate(Date dateFrom, LinkedHashMap<String, Object> releaseDateMap) {
+		DateFormater df = new DateFormater();
+		for (Map.Entry entry : releaseDateMap.entrySet()) {
+			List<Object> list = (List<Object>) entry.getValue();
+			LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) list.get(0);
+			Date releaseDate = df.parseString(map.get("date"));
+			if (releaseDate.compareTo(dateFrom) < 0) {
+				return false;
+			} /*
+				 * else { System.out.println(entry.getKey());
+				 * System.out.println(map.get("date")); }
+				 */
+		}
+		return true;
+	}
+
+	private static boolean checkMovieGenre(List<Genre> genreList, MovieFormatted movie) {
+		boolean addMovie;
+		addMovie = false;
+		if (genreList == null || genreList.isEmpty()) {
+			return true;
+		} else {
+			for (Genre genre : genreList) {
+				// System.out.println("filter genre" + genre.getName());
+				// System.out.println("movie genres:");
+				if (!addMovie) {
+					for (Genre movieGenre : movie.getGenre()) {
+						System.out.println(movieGenre.getName() + "/" + movieGenre.getId());
+						if (movieGenre.getId().compareTo(genre.getId()) == 0) {
+							addMovie = true;
+							// System.out.println("dobry gatunek");
+							break;
+						} else {
+							addMovie = false;
+							// System.out.println("zły gatunek");
+						}
+					}
+				}
+			}
+		}
+		return addMovie;
 	}
 
 	public static void addPosterToMovie(Movies movies, Movies moviePosters) {

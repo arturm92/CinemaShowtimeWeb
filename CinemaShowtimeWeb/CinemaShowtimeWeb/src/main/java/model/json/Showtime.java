@@ -2,7 +2,7 @@ package model.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import util.DateFormater;
+import cinemaShowtime.utils.DateFormater;
 
 public class Showtime {
  

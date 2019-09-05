@@ -12,9 +12,11 @@ import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
-import cinemaShowtime.ApiHelper;
-import cinemaShowtime.ApiFilter;
-import cinemaShowtime.MovieHelper;
+import cinemaShowtime.filters.ApiFilter;
+import cinemaShowtime.helpers.ApiHelper;
+import cinemaShowtime.helpers.MovieHelper;
+import cinemaShowtime.utils.Application;
+import cinemaShowtime.utils.Consts;
 import model.json.City;
 import model.json.Showtime;
 import model.json.ShowtimeDay;
@@ -25,8 +27,6 @@ import model.json.complex.Movies;
 import model.json.complex.Showtimes;
 import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
-import util.Consts;
-import util.Application;
 
 @ManagedBean(name = "cinemaShowingBean", eager = true)
 @SessionScoped
@@ -72,7 +72,7 @@ public class CinemaShowingBean {
 
 		ApiFilter filter = prepareMovieFilter();
 		this.movies = ApiHelper.getMoviesInCinema(filter);
-		MovieHelper.verifyList(movies, null);
+		MovieHelper.verifyList(movies, null, null);
 		/*
 		 * System.out.println("*****MOVIES*****"); movies.showAllElements();
 		 * System.out.println("**********");

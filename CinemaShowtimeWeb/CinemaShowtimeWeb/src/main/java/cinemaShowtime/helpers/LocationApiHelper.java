@@ -1,4 +1,4 @@
-package cinemaShowtime;
+package cinemaShowtime.helpers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,8 +17,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cinemaShowtime.utils.Consts;
 import model.json.cinema.LocationApi;
-import util.Consts;
 
 public class LocationApiHelper {
 

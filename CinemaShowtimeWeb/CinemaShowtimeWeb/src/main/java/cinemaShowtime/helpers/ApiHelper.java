@@ -1,4 +1,4 @@
-package cinemaShowtime;
+package cinemaShowtime.helpers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +17,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cinemaShowtime.filters.ApiFilter;
+import cinemaShowtime.utils.Consts;
 import model.json.cinema.Cinema;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
@@ -24,7 +26,6 @@ import model.json.complex.Genres;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
 import model.json.movie.MovieFormatted;
-import util.Consts;
 
 public class ApiHelper {
 

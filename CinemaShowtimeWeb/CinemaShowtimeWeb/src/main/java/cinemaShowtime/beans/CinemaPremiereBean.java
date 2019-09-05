@@ -1,8 +1,6 @@
 package cinemaShowtime.beans;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -11,29 +9,32 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import cinemaShowtime.ApiHelper;
-import cinemaShowtime.ApiFilter;
-import cinemaShowtime.MovieHelper;
+import cinemaShowtime.filters.ApiFilter;
+import cinemaShowtime.filters.Filter;
+import cinemaShowtime.filters.FilterInterfaceImpl;
+import cinemaShowtime.helpers.ApiHelper;
+import cinemaShowtime.helpers.MovieHelper;
+import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.DateFormater;
 import model.json.complex.Movies;
+import model.json.movie.Genre;
 import model.json.movie.MovieFormatted;
-import model.json.movie.comparator.MovieReleaseDateComparartor;
-import util.Consts;
-import util.DateFormater;
 
 @ManagedBean(name = "cinemaPremiereBean", eager = true)
 @SessionScoped
-public class CinemaPremiereBean {
+public class CinemaPremiereBean extends FilterInterfaceImpl {
 
 	private Movies movies;
 	private Movies moviePosters;
-	private String filterMode;
 
 	private DateFormater df = new DateFormater();
 	private Date dateFrom;
-	
+
 	public CinemaPremiereBean() {
 		long startTime = System.currentTimeMillis();
-		
+
+		setConfiguration(Filter.Configuration.PREMIERE);
+		initFilter();
 		dateFrom = df.getMonthFromToday(0);
 		prepareCinemaPremiereMoviesList();
 
@@ -45,18 +46,20 @@ public class CinemaPremiereBean {
 		ApiFilter filter = prepareFilter();
 		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 		movies = ApiHelper.getMovies(filter);
-		MovieHelper.verifyList(movies, dateFrom);
+		MovieHelper.verifyList(movies, dateFrom, getMovieFilter().getSelectedGenreList());
 		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
 		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
-		
+
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(movies, moviePosters);
 
-		Collections.sort(movies.getList(), new MovieReleaseDateComparartor());
-		//setCinemaPremiereMoviesList(movies.getMoviesWithPosterList());
-	}
+		// setCinemaPremiereMoviesList(movies.getMoviesWithPosterList());
+		getMovieSorter().setMovies(movies);
+		getMovieSorter().setSortType(false);
+		getMovieSorter().dateSort();
 
+	}
 
 	private ApiFilter prepareFilter() {
 		ApiFilter filter = new ApiFilter();
@@ -64,11 +67,20 @@ public class CinemaPremiereBean {
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, df.formatDateShort(df.getMonthFromToday(1)));
 		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
 		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		if (!getMovieFilter().getSelectedGenreList().isEmpty()) {
+			String genre_ids = "";
+			for (Genre genre : getMovieFilter().getSelectedGenreList()) {
+				genre_ids += genre.getId() + ",";
+			}
+			filter.addFilterParam(ApiFilter.Parameter.GENRE_IDS, genre_ids);
+		}
 		return filter;
 	}
 
-	public void filter() {
-		prepareCinemaPremiereMoviesList();
+	public void doFilter() {
+		if (getMovieFilter().canFilter()) {
+			prepareCinemaPremiereMoviesList();
+		}
 	}
 
 	public void clickMovie() {
@@ -80,22 +92,6 @@ public class CinemaPremiereBean {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-	}
-
-	public List<String> getFilterModeList() {
-		return Arrays.asList("dupa", "dupa2");
-	}
-
-	public String getFilterMode() {
-		if (filterMode == null) {
-			return getFilterModeList().get(0);
-		}
-		return filterMode;
-	}
-
-	public void setFilterMode(String filterMode) {
-		this.filterMode = filterMode;
 	}
 
 	public List<MovieFormatted> getMovieList() {

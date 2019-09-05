@@ -5,11 +5,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import cinemaShowtime.utils.DateFormater;
 import model.json.Showtime;
 import model.json.ShowtimeDay;
 import model.json.ShowtimeHour;
 import model.json.base.BaseComplexModel;
-import util.DateFormater;
 
 public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 

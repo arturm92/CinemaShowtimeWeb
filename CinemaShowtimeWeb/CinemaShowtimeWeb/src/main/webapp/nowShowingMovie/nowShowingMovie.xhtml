@@ -6,27 +6,22 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form id="nowShowingMovieForm">
-			<p:accordionPanel style="text-align: left;">
+			<p:accordionPanel>
 				<p:tab>
+					<ui:include src="../modules/filter/movieFilter.xhtml">
+						<ui:param name="filter" value="#{bean.movieFilter}" />
+						<ui:param name="sorter" value="#{bean.movieSorter}" />
+					</ui:include>
 					<div class="ui-grid-row">
-						<h:outputText value="SORTUJ" />
-						<p:selectBooleanButton value="#{bean.sortType}" onLabel="ROSNĄCO"
-							offLabel="MALEJĄCO" onIcon="fa fa-fw fa-arrow-up"
-							offIcon="fa fa-fw fa-arrow-down" style="margin-left: 2%;">
-						</p:selectBooleanButton>
-						<h:outputText value="WEDŁUG" style="margin-left: 2%;" />
-						<p:commandButton value="Data premiery" action="#{bean.dateSort}"
-							ajax="false" style="margin-left: 2%;">
-						</p:commandButton>
-						<p:commandButton value="Oceny" action="#{bean.ratingSort}"
-							ajax="false" style="margin-left: 2%;">
-						</p:commandButton>
-						<p:commandButton value="Tytułu" action="#{bean.titleSort}"
-							ajax="false" style="margin-left: 2%;">
-						</p:commandButton>
+						<div class="ui-grid-col-2">
+							<p:commandButton value="Filtruj" action="#{bean.doFilter}"
+								icon="pi pi-search" ajax="false">
+							</p:commandButton>
+						</div>
 					</div>
 				</p:tab>
 			</p:accordionPanel>
+
 
 			<p:dataGrid id="nowShowingMovieDataTable" var="movie"
 				value="#{bean.movieList}" columns="4" layout="grid" rows="15"

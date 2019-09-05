@@ -1,4 +1,4 @@
-package util;
+package cinemaShowtime.utils;
 
 public class Consts {
 	

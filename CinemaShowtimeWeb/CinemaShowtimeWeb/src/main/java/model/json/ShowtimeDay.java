@@ -2,7 +2,7 @@ package model.json;
 
 import java.util.List;
 
-import util.DateFormater;
+import cinemaShowtime.utils.DateFormater;
 
 public class ShowtimeDay {
 

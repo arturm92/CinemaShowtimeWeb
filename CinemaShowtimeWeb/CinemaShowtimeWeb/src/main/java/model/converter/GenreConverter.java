@@ -6,24 +6,26 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import cinemaShowtime.utils.Application;
-import model.json.City;
+import model.json.movie.Genre;
 
-@FacesConverter("cityConverter")
-public class CityConverter implements Converter {
-	
+@FacesConverter("genreConverter")
+public class GenreConverter implements Converter {
+
 	public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
 		if (value != null && value.trim().length() > 0) {
-			City city = Application.getInstance().getCities().findCityByName(value);
-			return city;
-		} else {
-			return null;
+			for (Genre genre : Application.getInstance().getGenreList()) {
+				if (genre.getName().equals(value)) {
+					return genre;
+				}
+			}
 		}
+		return null;
 	}
 
 	public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-		City city = (City) object;
+		Genre genre = (Genre) object;
 		if (object != null) {
-			return city.getName();
+			return genre.getName();
 		} else {
 			return null;
 		}

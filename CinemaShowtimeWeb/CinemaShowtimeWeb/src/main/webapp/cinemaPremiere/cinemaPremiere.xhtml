@@ -6,24 +6,22 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form id="cinemaPremiereForm">
-			<p:accordionPanel style="text-align: left;">
+			<p:accordionPanel>
 				<p:tab>
+					<ui:include src="../modules/filter/movieFilter.xhtml">
+						<ui:param name="filter" value="#{bean.movieFilter}" />
+						<ui:param name="sorter" value="#{bean.movieSorter}" />
+					</ui:include>
 					<div class="ui-grid-row">
-						<div class="ui-grid-col-3">Gdzie:</div>
-						<p:selectOneButton value="#{bean.filterMode}">
-							<f:selectItems var="item" itemValue="#{item}"
-								value="#{bean.filterModeList}" />
-						</p:selectOneButton>
-					</div>
-					<div class="ui-grid-row">
-						<div class="ui-grid-col-3">
-							<p:commandButton value="Filtruj" action="#{bean.filter}"
+						<div class="ui-grid-col-2">
+							<p:commandButton value="Filtruj" action="#{bean.doFilter}"
 								icon="pi pi-search" ajax="false">
 							</p:commandButton>
 						</div>
 					</div>
 				</p:tab>
 			</p:accordionPanel>
+
 
 			<p:dataTable id="cinemaPremiereDataTable" var="movie"
 				value="#{bean.movieList}" sortBy="#{movie.name}"

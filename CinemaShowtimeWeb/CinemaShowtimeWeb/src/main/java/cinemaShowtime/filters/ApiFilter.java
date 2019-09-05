@@ -1,4 +1,4 @@
-package cinemaShowtime;
+package cinemaShowtime.filters;
 
 import java.util.HashMap;
 import java.util.Map;

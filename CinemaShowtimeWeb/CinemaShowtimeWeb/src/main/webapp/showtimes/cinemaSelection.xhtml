@@ -14,16 +14,17 @@
 				<p:menuitem value="Wybierz seans" />
 			</p:steps>
 
-			<p:dataTable id="cinemaDataTable" var="item" value="#{bean.cinemaList}"
-				selectionMode="single" selection="#{bean.selectedCinema}"
-				rowKey="#{item.id}" sortBy="#{item.name}"
-				sortOrder="ascending" styleClass="noHeader">
+			<p:dataTable id="cinemaDataTable" var="item"
+				value="#{bean.cinemaList}" selectionMode="single"
+				selection="#{bean.selectedCinema}" rowKey="#{item.id}"
+				sortBy="#{item.name}" sortOrder="ascending" styleClass="noHeader">
 				<p:ajax event="rowSelect" listener="#{bean.selectCinema}"
 					update="mainContent,moviesInCinemaPanelGroup"
 					process="cinemaDataTable" />
 
 				<p:column>
-					<h:outputText value="#{item.name}" style="padding-left:40%;" />
+					<h:outputText value="#{item.name}"
+						style="padding-left:36%;font-size:24;" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
