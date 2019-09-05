@@ -8,21 +8,9 @@
 		<h:form>
 			<p:accordionPanel>
 				<p:tab>
-					<div class="ui-grid-row">
-						<div class="ui-grid-col-3">Gatunki</div>
-						<div class="ui-grid-col-9">
-							<p:selectManyButton value="#{bean.selectedGenreIds}">
-								<f:selectItems var="item" itemValue="#{item.id}"
-									itemLabel="#{item.name}" value="#{bean.genres}" />
-							</p:selectManyButton>
-						</div>
-					</div>
-					<div class="ui-grid-row">
-						<div class="ui-grid-col-3">Data premiery</div>
-						<div class="ui-grid-col-9">
-							<p:calendar value="#{bean.releaseDate}" showOn="button" />
-						</div>
-					</div>
+					<ui:include src="../modules/movieFilter.xhtml">
+						<ui:param name="filter" value="#{bean.movieFilter}" />
+					</ui:include>
 					<div class="ui-grid-row">
 						<div class="ui-grid-col-3">
 							<p:commandButton value="Filtruj" action="#{bean.filter}"
@@ -35,24 +23,22 @@
 		</h:form>
 
 		<h:form>
-			<p:dataView var="item" value="#{bean.movieList}" rows="15"
+			<p:dataView var="movie" value="#{bean.movieList}" rows="15"
 				paginator="true" rowsPerPageTemplate="15,50,100"
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 				<p:dataViewGridItem>
 					<p:panel>
-						<h:panelGrid style="width:100%;text-align:center">
-							<h:panelGroup>
-								<div style="min-height: 60px;">
-									<h:outputText value="#{item.title}"
-										style="color:white;font-size:20px;text-algin:center;" />
-								</div>
-							</h:panelGroup>
+						<h:panelGrid
+							style="width:100%; text-align:center; color: white; font-size: 20px;">
 							<h:commandLink action="#{bean.clickMovie}">
-								<p:graphicImage value="#{item.posterImage}"
+								<p:graphicImage value="#{movie.posterImage}"
 									styleClass="imageInCatalogue" />
-								<f:param name="movieId" value="#{item.id}" />
+								<f:param name="movieId" value="#{movie.id}" />
 							</h:commandLink>
+							<h:outputText value="#{movie.title}" />
+							<p:rating stars="5" value="#{movie.ratingShortIntValue}"
+								readonly="true" rendered="#{movie.ratingIntValue > 0}" />
 						</h:panelGrid>
 					</p:panel>
 				</p:dataViewGridItem>
@@ -61,7 +47,7 @@
 					<h:panelGroup style="border-bottom: 1px solid white;">
 						<ui:include src="../modules/movieDisplayContent.xhtml">
 							<ui:param name="bean" value="#{bean}" />
-							<ui:param name="item" value="#{item}" />
+							<ui:param name="movie" value="#{movie}" />
 						</ui:include>
 					</h:panelGroup>
 				</p:dataViewListItem>

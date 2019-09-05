@@ -39,10 +39,11 @@
 								<div class="ui-grid-row">
 									<div class="ui-grid-col-7">
 										<p:rating stars="10" value="#{movie.ratingIntValue}"
-											readonly="true" />
+											readonly="true" rendered="#{movie.ratingIntValue > 0}" />
 									</div>
 									<div class="ui-grid-col-8">
-										<h:outputText value="(#{movie.rating})" />
+										<h:outputText value="#{movie.rating}"
+											rendered="#{movie.ratingIntValue > 0}" />
 									</div>
 								</div>
 								<div class="ui-grid-row">
@@ -61,11 +62,10 @@
 								<br />
 								<div class="ui-grid-row">
 									<div class="ui-grid-col-15">
-										<h:outputText value="#{movie.firstDirector}"
-											style="color:white; white-space: pre-line;" />
+										<h:outputText value="#{movie.firstDirector}" />
 										<p:separator />
 										<h:outputText value="#{movie.castText}"
-											style="color:white; white-space: pre-line;" />
+											style="white-space: pre-line;" />
 									</div>
 								</div>
 								<br />

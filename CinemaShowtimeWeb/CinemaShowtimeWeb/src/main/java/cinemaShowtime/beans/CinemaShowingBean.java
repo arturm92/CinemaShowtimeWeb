@@ -13,7 +13,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.ApiHelper;
-import cinemaShowtime.Filter;
+import cinemaShowtime.ApiFilter;
 import cinemaShowtime.MovieHelper;
 import model.json.City;
 import model.json.Showtime;
@@ -63,22 +63,22 @@ public class CinemaShowingBean {
 
 	public void initCinemas() {
 		setCinemaSelectionVisible(true);
-		Filter filter = prepareCinemaFilter();
+		ApiFilter filter = prepareCinemaFilter();
 		this.cinemas = ApiHelper.getCinemas(filter);
 	}
 
 	public void initMovies() {
 		setMovieSelectionVisible(true);
 
-		Filter filter = prepareMovieFilter();
+		ApiFilter filter = prepareMovieFilter();
 		this.movies = ApiHelper.getMoviesInCinema(filter);
 		MovieHelper.verifyList(movies, null);
 		/*
 		 * System.out.println("*****MOVIES*****"); movies.showAllElements();
 		 * System.out.println("**********");
 		 */
-		filter.deleteFilterParam(Filter.Parameter.LANG);
-		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
+		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
+		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		/*
 		 * System.out.println("*****MOVIES_POSTER*****");
@@ -89,7 +89,7 @@ public class CinemaShowingBean {
 	}
 
 	public void initShowtimes() {
-		Filter filter = prepareShowtimeFilter();
+		ApiFilter filter = prepareShowtimeFilter();
 		this.showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		setShowtimeSelectionVisible(true);
 
@@ -101,26 +101,26 @@ public class CinemaShowingBean {
 
 	}
 
-	private Filter prepareCinemaFilter() {
-		Filter filter = new Filter();
-		filter.addFilterParam(Filter.Parameter.LOCATION, selectedCity.getLat() + "," + selectedCity.getLon());
-		filter.addFilterParam(Filter.Parameter.DISTANCE, "10");
-		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+	private ApiFilter prepareCinemaFilter() {
+		ApiFilter filter = new ApiFilter();
+		filter.addFilterParam(ApiFilter.Parameter.LOCATION, selectedCity.getLat() + "," + selectedCity.getLon());
+		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, "10");
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
 		return filter;
 	}
 
-	private Filter prepareMovieFilter() {
-		Filter filter = new Filter();
-		filter.addQueryParam(Filter.Query.CINEMA_ID, selectedCinema.getId().toString());
-		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
-		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+	private ApiFilter prepareMovieFilter() {
+		ApiFilter filter = new ApiFilter();
+		filter.addQueryParam(ApiFilter.Query.CINEMA_ID, selectedCinema.getId().toString());
+		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
 		return filter;
 	}
 
-	private Filter prepareShowtimeFilter() {
-		Filter filter = new Filter();
-		filter.addQueryParam(Filter.Query.CINEMA_ID, selectedCinema.getId().toString());
-		filter.addQueryParam(Filter.Query.MOVIE_ID, selectedMovie.getId().toString());
+	private ApiFilter prepareShowtimeFilter() {
+		ApiFilter filter = new ApiFilter();
+		filter.addQueryParam(ApiFilter.Query.CINEMA_ID, selectedCinema.getId().toString());
+		filter.addQueryParam(ApiFilter.Query.MOVIE_ID, selectedMovie.getId().toString());
 		return filter;
 	}
 

@@ -11,7 +11,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import cinemaShowtime.ApiHelper;
-import cinemaShowtime.Filter;
+import cinemaShowtime.ApiFilter;
 import cinemaShowtime.MovieHelper;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
@@ -44,11 +44,11 @@ public class NowShowingMovieBean {
 	}
 
 	private void prepareMovies() {
-		Filter filter = prepareFilter();
-		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+		ApiFilter filter = prepareFilter();
+		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 		movies = ApiHelper.getMovies(filter);
-		filter.deleteFilterParam(Filter.Parameter.LANG);
-		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
+		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
+		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(movies, moviePosters);
@@ -67,13 +67,13 @@ public class NowShowingMovieBean {
 		}
 	}
 
-	private Filter prepareFilter() {
+	private ApiFilter prepareFilter() {
 		DateFormater df = new DateFormater();
-		Filter filter = new Filter();
-		String date = df.convertSimpleDateToTimezone(df.getDaysFromToday(0));
-		filter.addFilterParam(Filter.Parameter.TIME_FROM, date);
-		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
-		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		ApiFilter filter = new ApiFilter();
+		filter.addFilterParam(ApiFilter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(df.getDaysFromToday(0)));
+		filter.addFilterParam(ApiFilter.Parameter.TIME_TO, df.convertSimpleDateToTimezone(df.getDaysFromToday(1)));
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
 		return filter;
 	}
 

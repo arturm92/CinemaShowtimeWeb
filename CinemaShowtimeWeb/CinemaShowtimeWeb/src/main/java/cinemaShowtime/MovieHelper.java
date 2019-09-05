@@ -35,6 +35,11 @@ public class MovieHelper {
 					if (releaseDateMap.size() <= 2 && !releaseDateMap.containsKey("PL")) {
 						addMovie = false;
 						// System.out.println("kino niszowe");
+					} else if (releaseDateMap.size() <= 3 && releaseDateMap.size() > 2
+							&& (releaseDateMap.containsKey("IN") || releaseDateMap.containsKey("AR")
+									|| releaseDateMap.containsKey("IT"))) {
+						addMovie = false;
+						// System.out.println("kino niszowe");
 					} else { // sprawdzanie daty wydanaia (opcjonalne)s
 						if (dateFrom != null) {
 							for (Map.Entry entry : releaseDateMap.entrySet()) {
@@ -50,6 +55,8 @@ public class MovieHelper {
 							}
 						}
 					}
+				} else {
+					addMovie = false;
 				}
 			}
 			if (addMovie) {
@@ -78,11 +85,15 @@ public class MovieHelper {
 
 	public static void mergeMovieDetails(Movie movie, Movie movieDescripstion) {
 		if (movie.getId().compareTo(movieDescripstion.getId()) == 0) {
-			if (movieDescripstion.getDescription()!= null) {
+			if (movieDescripstion.getDescription() != null) {
 				movie.setDescription(movieDescripstion.getDescription());
 			}
-			movie.setTitle(movieDescripstion.getTitle());
-			movie.setOriginalTitle(movieDescripstion.getOriginalTitle());
+			if (movieDescripstion.getTitle() != null) {
+				movie.setTitle(movieDescripstion.getTitle());
+			}
+			if (movieDescripstion.getOriginalTitle() != null) {
+				movie.setOriginalTitle(movieDescripstion.getOriginalTitle());
+			}
 			movie.setGenre(movieDescripstion.getGenre());
 			movie.setCast(movieDescripstion.getCast());
 			movie.setCrew(movieDescripstion.getCrew());

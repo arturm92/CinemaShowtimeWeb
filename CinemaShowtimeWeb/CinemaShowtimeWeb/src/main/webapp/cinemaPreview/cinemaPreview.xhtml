@@ -6,15 +6,15 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form id="cinemaPreviewForm">
-			<p:dataTable id="cinemaPreviewDataTable" var="item"
+			<p:dataTable id="cinemaPreviewDataTable" var="movie"
 				value="#{bean.movieList}" rows="15" paginator="true"
 				rowsPerPageTemplate="15,50,100"
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				sortBy="#{item.name}" sortOrder="ascending" styleClass="noHeader">
+				sortBy="#{movie.name}" sortOrder="ascending" styleClass="noHeader">
 				<p:column>
 					<ui:include src="../modules/movieDisplayContent.xhtml">
 						<ui:param name="bean" value="#{bean}" />
-						<ui:param name="item" value="#{item}" />
+						<ui:param name="movie" value="#{movie}" />
 					</ui:include>
 				</p:column>
 			</p:dataTable>

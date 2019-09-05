@@ -14,7 +14,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 
 import cinemaShowtime.ApiHelper;
-import cinemaShowtime.Filter;
+import cinemaShowtime.ApiFilter;
 import cinemaShowtime.LocationApiHelper;
 import cinemaShowtime.MovieHelper;
 import model.json.Showtime;
@@ -60,7 +60,7 @@ public class HomePageBean {
 	}
 
 	private void prepareCinemas() {
-		Filter filter = prepareCinemaFilter();
+		ApiFilter filter = prepareCinemaFilter();
 		cinemas = ApiHelper.getCinemas(filter);
 		if (cinemas.getList().isEmpty()) {
 			distance += 30;
@@ -69,19 +69,19 @@ public class HomePageBean {
 	}
 
 	private void prepareMovies() {
-		Filter filter = prepareMoviesInCinema(2);
+		ApiFilter filter = prepareMoviesInCinema(2);
 		MovieHelper.verifyList(movies, null);
-		filter.deleteFilterParam(Filter.Parameter.LANG);
-		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
+		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
+		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(movies, moviePosters);
 	}
 
-	private Filter prepareMoviesInCinema(int days) {
+	private ApiFilter prepareMoviesInCinema(int days) {
 		DateFormater df = new DateFormater();
 		timeTo = df.convertSimpleDateToTimezone(df.getDaysFromToday(days));
-		Filter filter = prepareMovieFilter();
+		ApiFilter filter = prepareMovieFilter();
 		movies = ApiHelper.getMoviesInCinema(filter);
 		if (movies.getList().isEmpty()) {
 			days += 5;
@@ -91,7 +91,7 @@ public class HomePageBean {
 	}
 
 	private void prepareShowtimes() {
-		Filter filter = prepareShowtimeFilter();
+		ApiFilter filter = prepareShowtimeFilter();
 		showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		for (MovieFormatted movie : movies.getList()) {
 			List<Showtime> movieShowtime = showtimes.findMovieShowtime(movie.getId());
@@ -104,34 +104,34 @@ public class HomePageBean {
 		}
 	}
 
-	private Filter prepareCinemaFilter() {
+	private ApiFilter prepareCinemaFilter() {
 		LocationApi locationApi = LocationApiHelper.getLocation();
 		setCurrentCity(locationApi.getCity());
 
-		Filter filter = new Filter();
-		filter.addFilterParam(Filter.Parameter.LOCATION, locationApi.getLatitude() + "," + locationApi.getLongitude());
-		filter.addFilterParam(Filter.Parameter.DISTANCE, String.valueOf(distance));
-		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+		ApiFilter filter = new ApiFilter();
+		filter.addFilterParam(ApiFilter.Parameter.LOCATION, locationApi.getLatitude() + "," + locationApi.getLongitude());
+		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(distance));
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
 		return filter;
 	}
 
-	private Filter prepareMovieFilter() {
+	private ApiFilter prepareMovieFilter() {
 		DateFormater df = new DateFormater();
-		Filter filter = new Filter();
-		filter.addQueryParam(Filter.Query.CINEMA_ID, getSelectedCinema().getId().toString());
-		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
-		filter.addFilterParam(Filter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
-		filter.addFilterParam(Filter.Parameter.TIME_TO, timeTo);
-		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
+		ApiFilter filter = new ApiFilter();
+		filter.addQueryParam(ApiFilter.Query.CINEMA_ID, getSelectedCinema().getId().toString());
+		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
+		filter.addFilterParam(ApiFilter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
+		filter.addFilterParam(ApiFilter.Parameter.TIME_TO, timeTo);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
 		return filter;
 	}
 
-	private Filter prepareShowtimeFilter() {
+	private ApiFilter prepareShowtimeFilter() {
 		DateFormater df = new DateFormater();
-		Filter filter = new Filter();
-		filter.addQueryParam(Filter.Query.CINEMA_ID, selectedCinema.getId().toString());
-		filter.addFilterParam(Filter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
-		filter.addFilterParam(Filter.Parameter.TIME_TO, timeTo);
+		ApiFilter filter = new ApiFilter();
+		filter.addQueryParam(ApiFilter.Query.CINEMA_ID, selectedCinema.getId().toString());
+		filter.addFilterParam(ApiFilter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
+		filter.addFilterParam(ApiFilter.Parameter.TIME_TO, timeTo);
 		return filter;
 	}
 

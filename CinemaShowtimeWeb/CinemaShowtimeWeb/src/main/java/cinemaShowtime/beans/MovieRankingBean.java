@@ -16,7 +16,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.ApiHelper;
-import cinemaShowtime.Filter;
+import cinemaShowtime.ApiFilter;
 import cinemaShowtime.MovieHelper;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
@@ -64,29 +64,29 @@ public class MovieRankingBean {
 		filteredYearsList.add(filterYearsList.get(pos));
 	}
 
-	private Filter prepareFilter() {
-		Filter filter = new Filter();
+	private ApiFilter prepareFilter() {
+		ApiFilter filter = new ApiFilter();
 
-		filter.addFilterParam(Filter.Parameter.INCLUDE_OUTDATED, String.valueOf(!runtimeMovies));
+		filter.addFilterParam(ApiFilter.Parameter.INCLUDE_OUTDATED, String.valueOf(!runtimeMovies));
 
 		String dateFrom = MovieHelper.getMinYear(filteredYearsList) + "-01-01";
 		String dateTo = MovieHelper.getMaxYear(filteredYearsList) + "-12-31";
 
-		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, dateFrom);
-		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_TO, dateTo);
+		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, dateFrom);
+		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, dateTo);
 
-		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
-		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
 		return filter;
 	}
 
 	private void prepareDisplayRankingList() {
-		Filter filter = prepareFilter();
-		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+		ApiFilter filter = prepareFilter();
+		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 		rankingMovies = ApiHelper.getMovies(filter);
 
-		filter.deleteFilterParam(Filter.Parameter.LANG);
-		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
+		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
+		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(rankingMovies, moviePosters);

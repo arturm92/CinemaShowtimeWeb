@@ -74,7 +74,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Cinemas getCinemas(Filter filter) {
+	public static Cinemas getCinemas(ApiFilter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Cinemas> map = new TypeReference<Cinemas>() {
@@ -91,7 +91,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getMoviesInCinema(Filter filter) {
+	public static Movies getMoviesInCinema(ApiFilter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
@@ -128,7 +128,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Showtimes getMovieShowtimesInCinema(Filter filter) {
+	public static Showtimes getMovieShowtimesInCinema(ApiFilter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Showtimes> map = new TypeReference<Showtimes>() {
@@ -186,7 +186,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getNewestMovies(Filter filter) {
+	public static Movies getNewestMovies(ApiFilter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
@@ -226,7 +226,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getMovies(Filter filter) {
+	public static Movies getMovies(ApiFilter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
@@ -243,7 +243,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getMoviesCatalogue(Filter filter) {
+	public static Movies getMoviesCatalogue(ApiFilter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
@@ -260,7 +260,7 @@ public class ApiHelper {
 		return null;
 	}
 
-	public static Movies getMoviesPosterEngishVersion(Filter filter) {
+	public static Movies getMoviesPosterEngishVersion(ApiFilter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {

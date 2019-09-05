@@ -2,6 +2,7 @@ package cinemaShowtime.beans;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -10,10 +11,11 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import cinemaShowtime.ApiHelper;
-import cinemaShowtime.Filter;
+import cinemaShowtime.ApiFilter;
 import cinemaShowtime.MovieHelper;
 import model.json.complex.Movies;
 import model.json.movie.MovieFormatted;
+import model.json.movie.comparator.MovieRatingComparator;
 import util.Consts;
 import util.DateFormater;
 
@@ -27,24 +29,28 @@ public class HeaderBean {
 	public HeaderBean() {
 		long startTime = System.currentTimeMillis();
 
-		Filter filter = prepareFilter();
+		ApiFilter filter = prepareFilter();
 		headerMovies = ApiHelper.getNewestMovies(filter);
-		filter.deleteFilterParam(Filter.Parameter.LANG);
+		Collections.sort(headerMovies.getList(), Collections.reverseOrder(new MovieRatingComparator()));
+		headerMovies.setList(headerMovies.getList().subList(0, 20));
+		
+		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(headerMovies, moviePosters);
-		
+
 		long stopTime = System.currentTimeMillis();
 		System.out.println("HeaderBean start in " + ((stopTime - startTime) / 1000) + "second");
 	}
 
-	private Filter prepareFilter() {
-		Filter filter = new Filter();
+	private ApiFilter prepareFilter() {
+		ApiFilter filter = new ApiFilter();
 		DateFormater df = new DateFormater();
-		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
-		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(df.getMonthFromToday(-4)));
-		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
-		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
+		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(df.getMonthFromToday(-1)));
+		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, df.formatDateShort(df.getMonthFromToday(1)));
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
 		return filter;
 	}
 

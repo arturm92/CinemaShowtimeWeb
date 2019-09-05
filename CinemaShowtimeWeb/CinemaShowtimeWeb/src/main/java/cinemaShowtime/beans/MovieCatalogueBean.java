@@ -1,8 +1,7 @@
 package cinemaShowtime.beans;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -11,73 +10,75 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import cinemaShowtime.ApiHelper;
-import cinemaShowtime.Filter;
+import cinemaShowtime.MovieFilter;
+import cinemaShowtime.ApiFilter;
 import cinemaShowtime.MovieHelper;
 import model.json.complex.Movies;
-import model.json.movie.Genre;
 import model.json.movie.MovieFormatted;
+import model.json.movie.comparator.MovieTitleComparator;
 import util.Consts;
-import util.DateFormater;
-
 
 @ManagedBean(name = "movieCatalogueBean", eager = true)
 @SessionScoped
 public class MovieCatalogueBean {
 
 	private Movies movies;
-	private List<Genre> genres;
-	private List<String> selectedGenreIds;
-	private Date releaseDate;
 	private Movies moviePosters;
+	private MovieFilter movieFilter;
 
 	public MovieCatalogueBean() {
 		long startTime = System.currentTimeMillis();
-	
-		genres = ApiHelper.getGenres().removeNullGenres().getList();
-		selectedGenreIds = new ArrayList<String>();
+
+		movieFilter = new MovieFilter();
 		prepareMovieCatalogueList();
-		
+
 		long stopTime = System.currentTimeMillis();
 		System.out.println("MovieCatalogueBean started in " + ((stopTime - startTime) / 1000) + " second");
-		
+
 	}
 
 	private void prepareMovieCatalogueList() {
-		Filter filter = prepareFilter();
-		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+		ApiFilter filter = prepareFilter();
+		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 		movies = ApiHelper.getMoviesCatalogue(filter);
 		MovieHelper.verifyList(movies, null);
-		
-		filter.deleteFilterParam(Filter.Parameter.LANG);
-		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
+		Collections.sort(movies.getList(), new MovieTitleComparator());
+
+		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
+		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(movies, moviePosters);
+		
+		movieFilter.updateFilterFlag(false);
 	}
 
-	private Filter prepareFilter() {
-		Filter filter = new Filter();
-		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
-		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES);
-		if (releaseDate != null) {
-			DateFormater df = new DateFormater();
-			String date = df.formatDateShort(releaseDate);
-			filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM,date );
+	private ApiFilter prepareFilter() {
+		ApiFilter filter = new ApiFilter();
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		if (!movieFilter.getFilteredYearList().isEmpty()) {
+			String dateFrom = MovieHelper.getMinYear(movieFilter.getFilteredYearList()) + "-01-01";
+			String dateTo = MovieHelper.getMaxYear(movieFilter.getFilteredYearList()) + "-12-31";
+			filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, dateFrom);
+			filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, dateTo);
 		}
-		if (!selectedGenreIds.isEmpty()) {
+		if (!movieFilter.getSelectedGenreIds().isEmpty()) {
 			String genre_ids = "";
-			for (String id : selectedGenreIds) {
+			for (String id : movieFilter.getSelectedGenreIds()) {
 				genre_ids += id + ",";
 			}
-			filter.addFilterParam(Filter.Parameter.GENRE_IDS,genre_ids );
+			filter.addFilterParam(ApiFilter.Parameter.GENRE_IDS, genre_ids);
 		}
 		return filter;
 	}
 
 	public void filter() {
-		prepareMovieCatalogueList();
+		if (movieFilter.canFilter()) {
+			prepareMovieCatalogueList();
+		}
 	}
-	
+
 	public void clickMovie() {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
@@ -88,28 +89,12 @@ public class MovieCatalogueBean {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public List<MovieFormatted> getMovieList() {
 		return movies.getList();
 	}
 
-	public List<Genre> getGenres() {
-		return genres;
-	}
-	
-	public Date getReleaseDate() {
-		return releaseDate;
-	}
-
-	public void setReleaseDate(Date releaseDate) {
-		this.releaseDate = releaseDate;
-	}
-
-	public List<String> getSelectedGenreIds() {
-		return selectedGenreIds;
-	}
-
-	public void setSelectedGenreIds(List<String> selectedGenreIds) {
-		this.selectedGenreIds = selectedGenreIds;
+	public MovieFilter getMovieFilter() {
+		return movieFilter;
 	}
 }

@@ -25,13 +25,13 @@
 				</p:tab>
 			</p:accordionPanel>
 
-			<p:dataTable id="cinemaPremiereDataTable" var="item"
-				value="#{bean.movieList}" sortBy="#{item.name}"
+			<p:dataTable id="cinemaPremiereDataTable" var="movie"
+				value="#{bean.movieList}" sortBy="#{movie.name}"
 				sortOrder="ascending" styleClass="noHeader">
 				<p:column>
 					<ui:include src="../modules/movieDisplayContent.xhtml">
 						<ui:param name="bean" value="#{bean}" />
-						<ui:param name="item" value="#{item}" />
+						<ui:param name="movie" value="#{movie}" />
 					</ui:include>
 				</p:column>
 			</p:dataTable>

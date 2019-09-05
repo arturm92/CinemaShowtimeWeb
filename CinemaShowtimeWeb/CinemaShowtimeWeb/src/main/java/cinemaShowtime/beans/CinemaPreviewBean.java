@@ -1,12 +1,9 @@
 package cinemaShowtime.beans;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -14,9 +11,8 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import cinemaShowtime.ApiHelper;
-import cinemaShowtime.Filter;
+import cinemaShowtime.ApiFilter;
 import cinemaShowtime.MovieHelper;
-import cinemaShowtime.Util;
 import model.json.complex.Movies;
 import model.json.movie.MovieFormatted;
 import model.json.movie.comparator.MovieReleaseDateComparartor;
@@ -45,27 +41,25 @@ public class CinemaPreviewBean {
 	}
 
 	private void prepareCinemaPreviewMoviesList() {
-		Filter filter = prepareFilter();
-		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+		ApiFilter filter = prepareFilter();
+		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 
 		movies = ApiHelper.getMovies(filter);
 		MovieHelper.verifyList(movies, dateFrom);
-		filter.deleteFilterParam(Filter.Parameter.LANG);
-		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
+		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
+		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(movies, moviePosters);
 	}
 
-	
-
-	private Filter prepareFilter() {
-		Filter filter = new Filter();
-		filter.addFilterParam(Filter.Parameter.INCLUDE_UPCOMINGS, "true");
-		filter.addFilterParam(Filter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(dateFrom));
-		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
-		filter.addFilterParam(Filter.Parameter.COUNTRIES, Consts.COUNTRIES + ",US");
+	private ApiFilter prepareFilter() {
+		ApiFilter filter = new ApiFilter();
+		filter.addFilterParam(ApiFilter.Parameter.INCLUDE_UPCOMINGS, "true");
+		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(dateFrom));
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
 		return filter;
 	}
 

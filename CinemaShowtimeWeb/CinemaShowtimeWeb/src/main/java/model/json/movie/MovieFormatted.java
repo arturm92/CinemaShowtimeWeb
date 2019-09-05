@@ -32,7 +32,7 @@ public class MovieFormatted extends Movie {
 		if (getRatings() != null) {
 			Rating imdbRating = getRatings().getImdbRating();
 			if (imdbRating != null && !imdbRating.getVoteCount().equals("0")) {
-				return imdbRating.getValue() + " / " + imdbRating.getVoteCount();
+				return "(" + imdbRating.getValue() + " / " + imdbRating.getVoteCount() + ")";
 			}
 		}
 		return null;
@@ -42,7 +42,7 @@ public class MovieFormatted extends Movie {
 		if (getRatings() != null) {
 			Rating tmdbRating = getRatings().getTmdbRating();
 			if (tmdbRating != null && !tmdbRating.getVoteCount().equals("0")) {
-				return tmdbRating.getValue() + " / " + tmdbRating.getVoteCount();
+				return "(" + tmdbRating.getValue() + " / " + tmdbRating.getVoteCount() + ")";
 			}
 		}
 		return null;
@@ -63,6 +63,12 @@ public class MovieFormatted extends Movie {
 
 	public Integer getRatingIntValue() {
 		return getRatingValue().intValue();
+	}
+
+	public Integer getRatingShortIntValue() {
+		BigDecimal divisor = new BigDecimal("2");
+		BigDecimal shortValue = getRatingValue().divide(divisor, BigDecimal.ROUND_HALF_UP);
+		return shortValue.intValue();
 	}
 
 	public String getGenreInfo() {
@@ -182,7 +188,7 @@ public class MovieFormatted extends Movie {
 	}
 
 	public boolean isGalleryRendered() {
-		if (getSceneImages().size() > 5) {
+		if (getSceneImages() != null && getSceneImages().size() > 5) {
 			return true;
 		} else {
 			return false;

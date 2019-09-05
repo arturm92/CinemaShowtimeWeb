@@ -28,7 +28,7 @@
 				</p:tab>
 			</p:accordionPanel>
 
-			<p:dataGrid id="nowShowingMovieDataTable" var="item"
+			<p:dataGrid id="nowShowingMovieDataTable" var="movie"
 				value="#{bean.movieList}" columns="4" layout="grid" rows="15"
 				paginator="true" rowsPerPageTemplate="15,50,100"
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -37,12 +37,13 @@
 					<h:panelGrid
 						style="width:100%; text-align:center; color: white; font-size: 20px;">
 						<h:commandLink action="#{bean.clickMovie}">
-							<p:graphicImage value="#{item.posterImage}"
+							<p:graphicImage value="#{movie.posterImage}"
 								styleClass="imageInCatalogue" />
-							<f:param name="movieId" value="#{item.id}" />
+							<f:param name="movieId" value="#{movie.id}" />
 						</h:commandLink>
-						<h:outputText value="#{item.title}" />
-						<h:outputText value="#{item.rating}" />
+						<h:outputText value="#{movie.title}" />
+						<p:rating stars="5" value="#{movie.ratingShortIntValue}"
+							readonly="true" rendered="#{movie.ratingIntValue > 0}" />
 					</h:panelGrid>
 				</p:panel>
 			</p:dataGrid>

@@ -3,7 +3,7 @@ package cinemaShowtime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Filter {
+public class ApiFilter {
 
 	private HashMap<String, String> filterParameter;
 	private HashMap<String, String> queryParameter;
@@ -35,7 +35,7 @@ public class Filter {
 
 	private boolean isFirst;
 
-	public Filter() {
+	public ApiFilter() {
 		queryParameter = new HashMap<String, String>();
 		filterParameter = new HashMap<String, String>();
 	}
