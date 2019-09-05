@@ -5,7 +5,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
-		<h:form>
+		<h:form id="nowShowingMovieForm">
 			<p:accordionPanel style="text-align: left;">
 				<p:tab>
 					<div class="ui-grid-row">
@@ -27,28 +27,24 @@
 					</div>
 				</p:tab>
 			</p:accordionPanel>
-		</h:form>
 
-		<h:form id="nowShowingMovieForm">
 			<p:dataGrid id="nowShowingMovieDataTable" var="item"
 				value="#{bean.movieList}" columns="4" layout="grid" rows="15"
 				paginator="true" rowsPerPageTemplate="15,50,100"
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				styleClass="noHeader">
-
-				<h:commandLink action="#{bean.clickMovie}">
-					<p:panel>
-						<h:panelGrid
-							style="width:100%; text-align:center; color: white; font-size: 20px;">
+				<p:panel>
+					<h:panelGrid
+						style="width:100%; text-align:center; color: white; font-size: 20px;">
+						<h:commandLink action="#{bean.clickMovie}">
 							<p:graphicImage value="#{item.posterImage}"
 								styleClass="imageInCatalogue" />
-							<h:outputText value="#{item.title}" />
-							<h:outputText value="#{item.rating}" />
-						</h:panelGrid>
-					</p:panel>
-					<f:param name="movieId" value="#{item.id}" />
-				</h:commandLink>
-
+							<f:param name="movieId" value="#{item.id}" />
+						</h:commandLink>
+						<h:outputText value="#{item.title}" />
+						<h:outputText value="#{item.rating}" />
+					</h:panelGrid>
+				</p:panel>
 			</p:dataGrid>
 		</h:form>
 	</h:body>

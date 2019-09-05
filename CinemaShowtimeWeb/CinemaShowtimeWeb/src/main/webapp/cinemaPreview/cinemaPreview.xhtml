@@ -12,12 +12,10 @@
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				sortBy="#{item.name}" sortOrder="ascending" styleClass="noHeader">
 				<p:column>
-					<h:commandLink action="#{bean.clickMovie}">
-						<ui:include src="../modules/movieDisplayContent.xhtml">
-							<ui:param name="item" value="#{item}" />
-						</ui:include>
-						<f:param name="movieId" value="#{item.id}" />
-					</h:commandLink>
+					<ui:include src="../modules/movieDisplayContent.xhtml">
+						<ui:param name="bean" value="#{bean}" />
+						<ui:param name="item" value="#{item}" />
+					</ui:include>
 				</p:column>
 			</p:dataTable>
 		</h:form>

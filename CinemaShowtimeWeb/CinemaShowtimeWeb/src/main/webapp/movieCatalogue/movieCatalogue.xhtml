@@ -11,26 +11,21 @@
 					<div class="ui-grid-row">
 						<div class="ui-grid-col-3">Gatunki</div>
 						<div class="ui-grid-col-9">
-							<p:selectManyButton
-								value="#{bean.selectedGenreIds}">
+							<p:selectManyButton value="#{bean.selectedGenreIds}">
 								<f:selectItems var="item" itemValue="#{item.id}"
-									itemLabel="#{item.name}"
-									value="#{bean.genres}" />
+									itemLabel="#{item.name}" value="#{bean.genres}" />
 							</p:selectManyButton>
 						</div>
 					</div>
 					<div class="ui-grid-row">
 						<div class="ui-grid-col-3">Data premiery</div>
 						<div class="ui-grid-col-9">
-							<p:calendar
-								value="#{bean.releaseDate}"
-								showOn="button" />
+							<p:calendar value="#{bean.releaseDate}" showOn="button" />
 						</div>
 					</div>
 					<div class="ui-grid-row">
 						<div class="ui-grid-col-3">
-							<p:commandButton value="Filtruj"
-								action="#{bean.filter}"
+							<p:commandButton value="Filtruj" action="#{bean.filter}"
 								icon="pi pi-search" ajax="false">
 							</p:commandButton>
 						</div>
@@ -40,45 +35,36 @@
 		</h:form>
 
 		<h:form>
-			<p:dataView var="item"
-				value="#{bean.movieList}" rows="15"
+			<p:dataView var="item" value="#{bean.movieList}" rows="15"
 				paginator="true" rowsPerPageTemplate="15,50,100"
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				gridIcon="pi pi-th-large" listIcon="pi pi-bars">
-
 				<p:dataViewGridItem>
-					<h:commandLink
-						action="#{bean.clickMovie}">
-						<p:panel>
-							<h:panelGrid style="width:100%;text-align:center">
-								<h:panelGroup>
-									<div style="min-height: 60px;">
-										<h:outputText value="#{item.title}"
-											style="color:white;font-size:20px;text-algin:center;" />
-									</div>
-								</h:panelGroup>
+					<p:panel>
+						<h:panelGrid style="width:100%;text-align:center">
+							<h:panelGroup>
+								<div style="min-height: 60px;">
+									<h:outputText value="#{item.title}"
+										style="color:white;font-size:20px;text-algin:center;" />
+								</div>
+							</h:panelGroup>
+							<h:commandLink action="#{bean.clickMovie}">
 								<p:graphicImage value="#{item.posterImage}"
 									styleClass="imageInCatalogue" />
-							</h:panelGrid>
-						</p:panel>
-						<f:param name="movieId" value="#{item.id}" />
-					</h:commandLink>
-
-
+								<f:param name="movieId" value="#{item.id}" />
+							</h:commandLink>
+						</h:panelGrid>
+					</p:panel>
 				</p:dataViewGridItem>
 
 				<p:dataViewListItem id="listItem">
 					<h:panelGroup style="border-bottom: 1px solid white;">
-						<h:commandLink
-							action="#{bean.clickMovie}">
-							<ui:include src="../modules/movieDisplayContent.xhtml">
-								<ui:param name="item" value="#{item}" />
-							</ui:include>
-							<f:param name="movieId" value="#{item.id}" />
-						</h:commandLink>
+						<ui:include src="../modules/movieDisplayContent.xhtml">
+							<ui:param name="bean" value="#{bean}" />
+							<ui:param name="item" value="#{item}" />
+						</ui:include>
 					</h:panelGroup>
 				</p:dataViewListItem>
-
 			</p:dataView>
 		</h:form>
 	</h:body>

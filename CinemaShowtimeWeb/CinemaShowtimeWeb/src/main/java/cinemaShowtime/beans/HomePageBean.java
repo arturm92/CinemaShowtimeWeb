@@ -11,6 +11,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.PrimeFaces;
+
 import cinemaShowtime.ApiHelper;
 import cinemaShowtime.Filter;
 import cinemaShowtime.LocationApiHelper;
@@ -92,6 +94,9 @@ public class HomePageBean {
 		showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		for (MovieFormatted movie : movies.getList()) {
 			List<Showtime> movieShowtime = showtimes.findMovieShowtime(movie.getId());
+			for (Showtime showtime : movieShowtime) {
+				System.out.println(movie.getTitle() + "/" + showtime.getMovieId() + " " + showtime.getStartAt());
+			}
 			Showtimes tmp = new Showtimes();
 			tmp.setList(movieShowtime);
 			movie.setShowtimeDayList(tmp.getNormalizeList());
@@ -110,17 +115,19 @@ public class HomePageBean {
 	}
 
 	private Filter prepareMovieFilter() {
+		DateFormater df = new DateFormater();
 		Filter filter = new Filter();
 		filter.addQueryParam(Filter.Query.CINEMA_ID, getSelectedCinema().getId().toString());
 		filter.setFields(Filter.Field.MOVIE_STANDARD_FIELDS);
+		filter.addFilterParam(Filter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
 		filter.addFilterParam(Filter.Parameter.TIME_TO, timeTo);
 		filter.addFilterParam(Filter.Parameter.LANG, Consts.LANGUAGE);
 		return filter;
 	}
 
 	private Filter prepareShowtimeFilter() {
-		Filter filter = new Filter();
 		DateFormater df = new DateFormater();
+		Filter filter = new Filter();
 		filter.addQueryParam(Filter.Query.CINEMA_ID, selectedCinema.getId().toString());
 		filter.addFilterParam(Filter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
 		filter.addFilterParam(Filter.Parameter.TIME_TO, timeTo);
@@ -141,6 +148,12 @@ public class HomePageBean {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void selectShowtime() {
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		String link = externalContext.getRequestParameterMap().get("link");
+		PrimeFaces.current().executeScript("window.open('" + link + "', '_newtab')");
 	}
 
 	private void customSortCinemas() {

@@ -49,69 +49,67 @@
 				value="#{bean.displayRankingList}" selectionMode="single"
 				selection="#{bean.selectedMovie}" rowKey="#{item.id}"
 				sortBy="#{item.name}" sortOrder="ascending" styleClass="noHeader">
-
 				<p:ajax event="rowSelect" listener="#{bean.select}"
 					process="moviesRankingDataTable" />
 
 				<p:column>
-					<h:commandLink action="#{bean.clickMovie}">
-						<div class="ui-grid ui-grid-responsive"
-							style="color: white; margin-left: 5%;">
-							<div class="ui-grid-row">
-								<div class="ui-grid-col-2"
-									style="font-size: 40px; padding-top: 10%;">
-									<h:outputText value="#{item.numberInList}" />
-								</div>
-								<div class="ui-grid-col-3">
+					<div class="ui-grid ui-grid-responsive"
+						style="color: white; margin-left: 5%;">
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-2"
+								style="font-size: 40px; padding-top: 10%;">
+								<h:outputText value="#{item.numberInList}" />
+							</div>
+							<div class="ui-grid-col-3">
+								<h:commandLink action="#{bean.clickMovie}">
 									<p:graphicImage value="#{item.posterImage}" styleClass="image" />
+									<f:param name="movieId" value="#{item.id}" />
+								</h:commandLink>
+							</div>
+							<div class="ui-grid ui-grid-responsive"
+								style="width: 100%; padding-left: 5%;">
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-9">
+										<h:outputText value="#{item.title}" style="font-size: 32px;" />
+										<h:panelGroup rendered="#{item.title != item.originalTitle}">
+											<br />
+											<h:outputText value="#{item.originalTitle}"
+												style="font-size: 18px;" />
+										</h:panelGroup>
+									</div>
+									<div class="ui-grid-col-6"
+										style="font-size: 30px; text-align: right; white-space: pre-line;">
+										<h:panelGroup rendered="#{item.rating != null}">
+											<i class="fa fa-fw fa-star-o"></i>
+											<h:outputText value="#{item.rating}" />
+											<br />
+										</h:panelGroup>
+									</div>
 								</div>
-								<div class="ui-grid ui-grid-responsive"
-									style="width: 100%; padding-left: 5%;">
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-9">
-											<h:outputText value="#{item.title}" style="font-size: 32px;" />
-											<h:panelGroup rendered="#{item.title != item.originalTitle}">
-												<br />
-												<h:outputText value="#{item.originalTitle}"
-													style="font-size: 18px;" />
-											</h:panelGroup>
-										</div>
-										<div class="ui-grid-col-6"
-											style="font-size: 30px; text-align: right; white-space: pre-line;">
-											<h:panelGroup rendered="#{item.rating != null}">
-												<i class="fa fa-fw fa-star-o"></i>
-												<h:outputText value="#{item.rating}" />
-												<br />
-											</h:panelGroup>
-										</div>
+								<br />
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-15" style="font-size: 18px;">
+										<h:outputText value="#{item.genreInfo}" />
 									</div>
-									<br />
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-15" style="font-size: 18px;">
-											<h:outputText value="#{item.genreInfo}" />
-										</div>
+								</div>
+								<br />
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-15" style="font-size: 18px;">
+										<h:outputText value="#{item.firstDirector}" />
 									</div>
-									<br />
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-15" style="font-size: 18px;">
-											<h:outputText value="#{item.firstDirector}" />
-										</div>
-									</div>
-									<br />
-									<div class="ui-grid-row">
-										<div class="ui-grid-col-15" style="font-size: 18px;">
-											<h:outputText value="#{item.releaseDateFormatted}" />
-										</div>
+								</div>
+								<br />
+								<div class="ui-grid-row">
+									<div class="ui-grid-col-15" style="font-size: 18px;">
+										<h:outputText value="#{item.releaseDateFormatted}" />
 									</div>
 								</div>
 							</div>
 						</div>
-						<f:param name="movieId" value="#{item.id}" />
-					</h:commandLink>
+					</div>
 					<p:separator />
 				</p:column>
 			</p:dataTable>
-
 		</h:form>
 	</h:body>
 </ui:composition>

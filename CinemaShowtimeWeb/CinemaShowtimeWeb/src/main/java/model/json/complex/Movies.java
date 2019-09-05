@@ -29,7 +29,7 @@ public class Movies extends BaseComplexModel implements JsonList<MovieFormatted>
 	@Override
 	public void showAllElements() {
 		for (Movie movie : list) {
-			System.out.println("MovieId: " + movie.getId() + " title: " + movie.getTitle());
+			System.out.println(movie.getTitle() + "/" + movie.getId() + "/" + movie.getPosterImage());
 		}
 
 	}
@@ -47,22 +47,24 @@ public class Movies extends BaseComplexModel implements JsonList<MovieFormatted>
 	public List<MovieFormatted> getMoviesWithPosterList() {
 		List<MovieFormatted> movieWithPosterList = new ArrayList<MovieFormatted>();
 		for (MovieFormatted movie : list) {
-			if(movie.getPosterImage() != null && !movie.getPosterImage().equals("/resources/img/default_poster.jpg") ) {
+			if (movie.getPosterImage() != null && !movie.getPosterImage().equals("/resources/img/default_poster.jpg")) {
 				movieWithPosterList.add(movie);
 			}
 		}
 		return movieWithPosterList;
 	}
-	
+
 	public HashMap<Long, MovieFormatted> getMovieMap() {
 		return movieMap;
 	}
 
 	public void fillMovieMap() {
 		movieMap = new HashMap<>();
+		//System.out.println("******MOVIE_MAP*******");
 		for (MovieFormatted movie : list) {
 			movieMap.put(movie.getId(), movie);
+			//System.out.println(movie.getTitle() + "/" + movie.getId() + "/" + movie.getPosterImage());
 		}
 	}
-	
+
 }

@@ -8,7 +8,10 @@
 		<div class="ui-grid ui-grid-responsive" style="color: white;">
 			<div class="ui-grid-row">
 				<div class="ui-grid-col-3">
-					<p:graphicImage value="#{item.posterImage}" styleClass="image" />
+					<h:commandLink action="#{bean.clickMovie}">
+						<f:param name="movieId" value="#{item.id}" />
+						<p:graphicImage value="#{item.posterImage}" styleClass="image" />
+					</h:commandLink>
 				</div>
 				<div class="ui-grid ui-grid-responsive"
 					style="width: 100%; padding-left: 2%; padding-top: 2%;">

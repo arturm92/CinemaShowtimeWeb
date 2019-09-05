@@ -9,6 +9,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.ApiHelper;
@@ -36,13 +37,13 @@ public class CinemaShowingBean {
 	private Movies movies;
 	private Movies moviePosters;
 	private Showtimes showtimes;
-	
+
 	private City selectedCity;
 	private Cinema selectedCinema;
 	private Movie selectedMovie;
-	
+
 	private List<City> citiesQuickList;
-	
+
 	private boolean citySelectionVisible;
 	private boolean cinemaSelectionVisible;
 	private boolean movieSelectionVisible;
@@ -65,34 +66,40 @@ public class CinemaShowingBean {
 		Filter filter = prepareCinemaFilter();
 		this.cinemas = ApiHelper.getCinemas(filter);
 	}
-	
+
 	public void initMovies() {
 		setMovieSelectionVisible(true);
-		
+
 		Filter filter = prepareMovieFilter();
 		this.movies = ApiHelper.getMoviesInCinema(filter);
+		MovieHelper.verifyList(movies, null);
+		/*
+		 * System.out.println("*****MOVIES*****"); movies.showAllElements();
+		 * System.out.println("**********");
+		 */
 		filter.deleteFilterParam(Filter.Parameter.LANG);
 		filter.setFields(Filter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
+		/*
+		 * System.out.println("*****MOVIES_POSTER*****");
+		 * moviePosters.showAllElements(); System.out.println("**********");
+		 */
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(movies, moviePosters);
 	}
-	
+
 	public void initShowtimes() {
 		Filter filter = prepareShowtimeFilter();
 		this.showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		setShowtimeSelectionVisible(true);
-		
-		/*List<ShowtimeDay> showtimeDayList = showtimes.getNormalizeList();
-		for (ShowtimeDay sd : showtimeDayList) {
-			System.out.println(sd.getDate());
-			for (String h : sd.getHours()) {
-				System.out.println(h);
-			}
-		}*/
-		
+
+		/*
+		 * List<ShowtimeDay> showtimeDayList = showtimes.getNormalizeList(); for
+		 * (ShowtimeDay sd : showtimeDayList) { System.out.println(sd.getDate()); for
+		 * (String h : sd.getHours()) { System.out.println(h); } }
+		 */
+
 	}
-	
 
 	private Filter prepareCinemaFilter() {
 		Filter filter = new Filter();
@@ -116,7 +123,7 @@ public class CinemaShowingBean {
 		filter.addQueryParam(Filter.Query.MOVIE_ID, selectedMovie.getId().toString());
 		return filter;
 	}
-	
+
 	public List<City> getCitiesList(String prefix) {
 		List<City> returnList = new ArrayList<City>();
 		if (prefix.length() > 0) {
@@ -154,7 +161,7 @@ public class CinemaShowingBean {
 		setCinemaSelectionVisible(false);
 		initMovies();
 	}
-	
+
 	public void selectMovie(SelectEvent selectEvent) {
 		setMovieSelectionVisible(false);
 		initShowtimes();
@@ -166,6 +173,12 @@ public class CinemaShowingBean {
 		selectedMovie = movies.findMovie(Long.valueOf(movieId));
 		setMovieSelectionVisible(false);
 		initShowtimes();
+	}
+
+	public void selectShowtime() {
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		String link = externalContext.getRequestParameterMap().get("link");
+		PrimeFaces.current().executeScript("window.open('" + link + "', '_newtab')");
 	}
 
 	public void showMovieDetail() {
@@ -199,7 +212,7 @@ public class CinemaShowingBean {
 		setMovieSelectionVisible(true);
 		setShowtimeSelectionVisible(false);
 	}
-	
+
 	private void createCitiesQuickSelection() {
 		citiesQuickList = new ArrayList<City>();
 		long startTime = System.currentTimeMillis();
@@ -227,7 +240,7 @@ public class CinemaShowingBean {
 		}
 		return cities;
 	}
-	
+
 	public City getSelectedCity() {
 		return selectedCity;
 	}
@@ -235,7 +248,7 @@ public class CinemaShowingBean {
 	public void setSelectedCity(City selectedCity) {
 		this.selectedCity = selectedCity;
 	}
-	
+
 	public Cinema getSelectedCinema() {
 		return selectedCinema;
 	}
@@ -243,7 +256,7 @@ public class CinemaShowingBean {
 	public void setSelectedCinema(Cinema selectedCinema) {
 		this.selectedCinema = selectedCinema;
 	}
-	
+
 	public Movie getSelectedMovie() {
 		return selectedMovie;
 	}
@@ -251,7 +264,7 @@ public class CinemaShowingBean {
 	public void setSelectedMovie(Movie selectedMovie) {
 		this.selectedMovie = selectedMovie;
 	}
-	
+
 	public List<Cinema> getCinemaList() {
 		return cinemas.getList();
 	}
@@ -259,14 +272,14 @@ public class CinemaShowingBean {
 	public List<MovieFormatted> getMovieList() {
 		return movies.getList();
 	}
-	
-	public List<ShowtimeDay> getShowtimeDayList(){
+
+	public List<ShowtimeDay> getShowtimeDayList() {
 		return showtimes.getNormalizeList();
 	}
 
 	public List<Showtime> getShowtimeList() {
 		return showtimes.getList();
-	}	
+	}
 
 	public List<City> getCitiesQuickList() {
 		return citiesQuickList;
@@ -279,7 +292,7 @@ public class CinemaShowingBean {
 	public void setCitySelectionVisible(boolean citySelectionVisible) {
 		this.citySelectionVisible = citySelectionVisible;
 	}
-	
+
 	public boolean isCinemaSelectionVisible() {
 		return cinemaSelectionVisible;
 	}
@@ -287,7 +300,7 @@ public class CinemaShowingBean {
 	public void setCinemaSelectionVisible(boolean cinemaSelectionVisible) {
 		this.cinemaSelectionVisible = cinemaSelectionVisible;
 	}
-	
+
 	public boolean isMovieSelectionVisible() {
 		return movieSelectionVisible;
 	}
@@ -303,6 +316,5 @@ public class CinemaShowingBean {
 	public void setShowtimeSelectionVisible(boolean showtimeSelectionVisible) {
 		this.showtimeSelectionVisible = showtimeSelectionVisible;
 	}
-
 
 }

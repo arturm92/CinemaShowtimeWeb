@@ -7,26 +7,26 @@ import util.DateFormater;
 public class ShowtimeDay {
 
 	private String date;
-	private List<String> hours;
-	
+	private List<ShowtimeHour> hoursList;
+
 	public String getDate() {
 		return date;
 	}
-	
+
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
-	public List<String> getHours() {
-		return hours;
+
+	public List<ShowtimeHour> getHoursList() {
+		return hoursList;
 	}
-	
-	public void setHours(List<String> hours) {
-		this.hours = hours;
+
+	public void setHoursList(List<ShowtimeHour> hoursList) {
+		this.hoursList = hoursList;
 	}
-	
+
 	public String getDay() {
 		DateFormater df = new DateFormater();
-		return df.getDay(date);		
+		return df.getDay(date);
 	}
 }

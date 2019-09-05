@@ -22,19 +22,19 @@ public class MovieHelper {
 
 		for (MovieFormatted movie : movies.getList()) {
 			boolean addMovie = true;
-			//System.out.println(movie.getTitle());
+			// System.out.println(movie.getTitle());
 			if (Util.containsSecialCharacter(movie.getTitle())) { // rozpoznaje dziwne znaki w tytułach
 				addMovie = false;
-				//System.out.println("japonskie albo ruskie gówno");
+				// System.out.println("japonskie albo ruskie gówno");
 			} else if (movie.getGenre() == null || movie.getGenre().isEmpty()) { // odrzuca braki w opisie gatunków
 				addMovie = false;
-				//System.out.println("brak gatunku");
+				// System.out.println("brak gatunku");
 			} else {
 				releaseDateMap = movie.getReleaseDate();
 				if (releaseDateMap != null) { // tylko światowe filmy
 					if (releaseDateMap.size() <= 2 && !releaseDateMap.containsKey("PL")) {
 						addMovie = false;
-						//System.out.println("kino niszowe");
+						// System.out.println("kino niszowe");
 					} else { // sprawdzanie daty wydanaia (opcjonalne)s
 						if (dateFrom != null) {
 							for (Map.Entry entry : releaseDateMap.entrySet()) {
@@ -43,10 +43,10 @@ public class MovieHelper {
 								Date releaseDate = df.parseString(map.get("date"));
 								if (releaseDate.compareTo(dateFrom) < 0) {
 									addMovie = false;
-								}/* else {
-									System.out.println(entry.getKey());
-									System.out.println(map.get("date"));
-								}*/
+								} /*
+									 * else { System.out.println(entry.getKey());
+									 * System.out.println(map.get("date")); }
+									 */
 							}
 						}
 					}
@@ -62,11 +62,16 @@ public class MovieHelper {
 	public static void addPosterToMovie(Movies movies, Movies moviePosters) {
 		for (Movie movie : movies.getList()) {
 			if (movie.getPosterImage() == null || movie.getPosterImage().equals(Consts.DEFAULT_POSTER)) {
-				String moviePoster = moviePosters.getMovieMap().get(movie.getId()).getPosterImage();
-				if (moviePoster == null) {
-					moviePoster = Consts.DEFAULT_POSTER;
+				try {
+					String moviePoster = moviePosters.getMovieMap().get(movie.getId()).getPosterImage();
+					if (moviePoster == null) {
+						moviePoster = Consts.DEFAULT_POSTER;
+					}
+					movie.setPosterImages(moviePoster);
+				} catch (NullPointerException e) {
+					System.out.println(movie.getTitle() + "/" + movie.getId() + "/" + movie.getPosterImage());
 				}
-				movie.setPosterImages(moviePoster);
+
 			}
 		}
 	}
@@ -122,6 +127,5 @@ public class MovieHelper {
 		}
 		System.out.println("***************");
 	}
-
 
 }

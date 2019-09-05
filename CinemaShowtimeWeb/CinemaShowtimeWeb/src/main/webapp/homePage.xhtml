@@ -10,12 +10,10 @@
 			<div class="ui-grid ui-grid-responsive" style="color: white;">
 				<div class="ui-grid-row">
 					<div class="ui-grid-col-4">
-
 						<p:dataTable id="cinemasDataTable" var="item"
 							value="#{bean.cinemaList}" selectionMode="single"
 							selection="#{bean.selectedCinema}" rowKey="#{item.id}"
 							styleClass="noHeader">
-
 							<p:ajax event="rowSelect" listener="#{bean.selectCinema}"
 								process="cinemasDataTable"
 								update=":homePageForm:moviesDataTable" />
@@ -24,91 +22,92 @@
 								<h:outputText value="#{item.name}" />
 								<p:separator />
 							</p:column>
-
 						</p:dataTable>
 					</div>
 					<div class="ui-grid-col-11" style="padding-left: 2%;">
 						<p:dataTable id="moviesDataTable" var="item"
 							value="#{bean.movieList}" sortBy="#{item.name}"
 							sortOrder="ascending">
-
-
 							<f:facet name="header">
 								<h:outputText value="#{bean.selectedCinema.name}" />
 							</f:facet>
 
 							<p:column>
-								<h:commandLink action="#{bean.clickMovie}">
-									<div class="ui-grid ui-grid-responsive" style="color: white;">
-										<div class="ui-grid-row">
-											<div class="ui-grid-col-3">
+								<div class="ui-grid ui-grid-responsive" style="color: white;">
+									<div class="ui-grid-row">
+										<div class="ui-grid-col-3">
+											<h:commandLink action="#{bean.clickMovie}">
 												<p:graphicImage value="#{item.posterImage}"
 													styleClass="image" />
+												<f:param name="movieId" value="#{item.id}" />
+											</h:commandLink>
+										</div>
+										<div class="ui-grid ui-grid-responsive"
+											style="width: 100%; padding-left: 2%;">
+											<div class="ui-grid-row">
+												<div class="ui-grid-col-9">
+													<h:outputText value="#{item.title}"
+														style="font-size: 25px;" />
+													<h:panelGroup
+														rendered="#{item.title != item.originalTitle}">
+														<br />
+														<h:outputText value="#{item.originalTitle}"
+															style="font-size: 18px;" />
+													</h:panelGroup>
+												</div>
+												<div class="ui-grid-col-6"
+													style="font-size: 25px; text-align: right;">
+													<h:panelGroup rendered="#{item.rating != null}">
+														<i class="fa fa-fw fa-star-o"></i>
+														<h:outputText value="#{item.rating}" />
+														<br />
+													</h:panelGroup>
+												</div>
 											</div>
-											<div class="ui-grid ui-grid-responsive"
-												style="width: 100%; padding-left: 2%;">
-												<div class="ui-grid-row">
-													<div class="ui-grid-col-9">
-														<h:outputText value="#{item.title}"
-															style="font-size: 25px;" />
-														<h:panelGroup
-															rendered="#{item.title != item.originalTitle}">
-															<br />
-															<h:outputText value="#{item.originalTitle}"
-																style="font-size: 18px;" />
-														</h:panelGroup>
-													</div>
-													<div class="ui-grid-col-6"
-														style="font-size: 25px; text-align: right;">
-														<h:panelGroup rendered="#{item.rating != null}">
-															<i class="fa fa-fw fa-star-o"></i>
-															<h:outputText value="#{item.rating}" />
-															<br />
-														</h:panelGroup>
-													</div>
+											<br />
+											<div class="ui-grid-row">
+												<div class="ui-grid-col-12" style="font-size: 18px;">
+													<h:outputText value="#{item.genreInfo}" />
 												</div>
-												<br />
-												<div class="ui-grid-row">
-													<div class="ui-grid-col-12" style="font-size: 18px;">
-														<h:outputText value="#{item.genreInfo}" />
-													</div>
+											</div>
+											<br />
+											<div class="ui-grid-row">
+												<div class="ui-grid-col-12" style="font-size: 18px;">
+													<h:outputText value="#{item.firstDirector}" />
 												</div>
-												<br />
-												<div class="ui-grid-row">
-													<div class="ui-grid-col-12" style="font-size: 18px;">
-														<h:outputText value="#{item.firstDirector}" />
-													</div>
-												</div>
-												<br />
-												<div class="ui-grid-row">
-													<div class="ui-grid-col-12" style="font-size: 18px;">
-														<p:dataTable id="showtimesDayDataTable" var="showtime"
-															value="#{item.showtimeDayList}" styleClass="noHeader">
-															<p:column>
-																<h:panelGroup>
-																	<h:outputText value="#{showtime.date}"
-																		styleClass="showtimeDayHomePage" />
-																	<p:spacer width="1" height="22"
-																		styleClass="verticalSeparator" style="height:15px;" />
-																	<h:outputText value="#{showtime.day}"
-																		styleClass="showtimeDayHomePage" />
-																</h:panelGroup>
-
-																<p:dataGrid id="showtimesHourDataTable" var="hour"
-																	value="#{showtime.hours}" columns="9" layout="grid">
-																	<h:outputText value="#{hour}"
+											</div>
+											<br />
+											<div class="ui-grid-row">
+												<div class="ui-grid-col-12" style="font-size: 18px;">
+													<p:dataTable id="showtimesDayDataTable" var="showtimeDay"
+														value="#{item.showtimeDayList}" styleClass="noHeader">
+														<p:column>
+															<h:panelGroup>
+																<h:outputText value="#{showtimeDay.date}"
+																	styleClass="showtimeDayHomePage" />
+																<p:spacer width="1" height="22"
+																	styleClass="verticalSeparator" style="height:15px;" />
+																<h:outputText value="#{showtimeDay.day}"
+																	styleClass="showtimeDayHomePage" />
+															</h:panelGroup>
+															<p:dataGrid id="showtimesHourDataTable"
+																var="showtimeHour" value="#{showtimeDay.hoursList}"
+																columns="9" layout="grid">
+																<h:commandLink action="#{bean.selectShowtime}">
+																	<f:param name="link"
+																		value="#{showtimeHour.bookingLink}" />
+																	<h:outputText value="#{showtimeHour.hour}"
 																		styleClass="showtimeHourHomePage" />
-																</p:dataGrid>
-															</p:column>
-														</p:dataTable>
-													</div>
+																</h:commandLink>
+															</p:dataGrid>
+														</p:column>
+													</p:dataTable>
 												</div>
 											</div>
 										</div>
 									</div>
-									<p:separator />
-									<f:param name="movieId" value="#{item.id}" />
-								</h:commandLink>
+								</div>
+								<p:separator />
 							</p:column>
 						</p:dataTable>
 					</div>

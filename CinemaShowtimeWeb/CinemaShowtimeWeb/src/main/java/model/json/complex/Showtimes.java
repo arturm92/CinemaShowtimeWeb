@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import model.json.Showtime;
 import model.json.ShowtimeDay;
+import model.json.ShowtimeHour;
 import model.json.base.BaseComplexModel;
 import util.DateFormater;
 
@@ -39,7 +40,9 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 		ShowtimeDay showtimeDay = null;
 		for (Showtime showtime : list) {
 			String showtimeDate = df.formatDateShort(showtime.getStartAt());
-			String showtimeHour = df.formatTimeOnly(showtime.getStartAt());
+			ShowtimeHour showtimeHour = new ShowtimeHour();
+			showtimeHour.setHour(df.formatTimeOnly(showtime.getStartAt()));
+			showtimeHour.setBookingLink(showtime.getBookingLink());
 			showtimeDay = createShowtimeDayList(showtimeDayList, showtimeDay, showtimeDate, showtimeHour);
 
 		}
@@ -48,19 +51,19 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 	}
 
 	private ShowtimeDay createShowtimeDayList(List<ShowtimeDay> showtimeDayList, ShowtimeDay showtimeDay,
-			String showtimeDate, String showtimeHour) {
-		List<String> hoursList;
+			String showtimeDate, ShowtimeHour showtimeHour) {
+		List<ShowtimeHour> hoursList;
 		if (showtimeDay == null) {
 			showtimeDay = new ShowtimeDay();
 			showtimeDay.setDate(showtimeDate);
 		}
 
-		if (showtimeDay.getHours() == null) {
-			hoursList = new ArrayList<String>();
+		if (showtimeDay.getHoursList() == null) {
+			hoursList = new ArrayList<ShowtimeHour>();
 			hoursList.add(showtimeHour);
-			showtimeDay.setHours(hoursList);
+			showtimeDay.setHoursList(hoursList);
 		} else if (showtimeDay.getDate().equals(showtimeDate)) {
-			hoursList = showtimeDay.getHours();
+			hoursList = showtimeDay.getHoursList();
 			hoursList.add(showtimeHour);
 		} else if (!showtimeDay.getDate().equals(showtimeDate)) {
 			showtimeDayList.add(showtimeDay);
