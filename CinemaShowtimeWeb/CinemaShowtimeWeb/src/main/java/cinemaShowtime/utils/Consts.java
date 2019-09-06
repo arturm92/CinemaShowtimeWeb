@@ -25,4 +25,5 @@ public class Consts {
 	public static final String TIME_FORMAT = "HH:mm";
 	
 	public static final String DEFAULT_POSTER = "/resources/img/default_poster.jpg";
+	public static final int DISTANCE = 25;
 }

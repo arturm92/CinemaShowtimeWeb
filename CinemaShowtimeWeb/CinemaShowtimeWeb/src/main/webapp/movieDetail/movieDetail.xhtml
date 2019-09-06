@@ -12,7 +12,7 @@
 					<div class="ui-grid ui-grid-responsive" style="color: white;">
 						<div class="ui-grid-row">
 							<div class="ui-grid-col-5">
-								<h:commandLink action="#{bean.goToMovieWebsite}">
+								<h:commandLink action="#{bean.goToWebsite}">
 									<f:param name="link" value="#{movie.website}" />
 									<p:graphicImage value="#{movie.posterImage}"
 										styleClass="imageInDetail" />
@@ -88,16 +88,61 @@
 					</div>
 					<p:separator rendered="#{movie.galleryRendered}" />
 					<br />
-					<div class="ui-grid-row">
-						<div class="ui-grid-col-15"
-							style="text-align: left; padding-left: 20%;">
-							<p:galleria value="#{movie.sceneImages}" var="image"
-								panelWidth="600" panelHeight="313"
-								rendered="#{movie.galleryRendered}">
-								<p:graphicImage value="#{image}" styleClass="imageInGallery" />
-							</p:galleria>
+					<h:panelGroup rendered="#{bean.renderedShowtime}">
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-6">
+								<p:autoComplete id="citAutoComplete"
+									value="#{bean.selectedCity}"
+									completeMethod="#{bean.getCityFilterList}" var="city"
+									itemValue="#{city}" itemLabel="#{city.name}"
+									converter="cityConverter" dropdown="true"
+									inputStyle="width:100%;">
+									<p:ajax event="itemSelect" listener="#{bean.selectCity}"
+										update=":movieDetailForm:cinemaAutoComplete,:movieDetailForm:showtimesDayDataTable" />
+								</p:autoComplete>
+							</div>
+							<div class="ui-grid-col-6">
+								<p:autoComplete id="cinemaAutoComplete"
+									value="#{bean.selectedCinema}"
+									completeMethod="#{bean.getCinemaFilterList}" var="cinema"
+									itemValue="#{cinema}" itemLabel="#{cinema.name}"
+									converter="cinemaConverter" dropdown="true"
+									inputStyle="width:100%;">
+									<p:ajax event="itemSelect" listener="#{bean.selectCinema}"
+										update=":movieDetailForm:showtimesDayDataTable" />
+								</p:autoComplete>
+							</div>
 						</div>
-					</div>
+
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-15"
+								style="font-size: 25px; margin-left: 2%;">
+								<p:dataTable id="showtimesDayDataTable" var="showtimeDay"
+									value="#{bean.showtimeDayList}" styleClass="noHeader">
+									<p:column>
+										<h:panelGroup>
+											<h:outputText value="#{showtimeDay.date}"
+												styleClass="showtimeDay" />
+											<p:spacer width="1" height="18"
+												styleClass="verticalSeparator" />
+											<h:outputText value="#{showtimeDay.day}"
+												styleClass="showtimeDay" />
+										</h:panelGroup>
+
+										<p:dataGrid id="showtimesHourDataTable" var="showtimeHour"
+											value="#{showtimeDay.hoursList}" columns="8" layout="grid"
+											style="margin-left:5%;">
+											<h:commandLink action="#{bean.goToWebsite}">
+												<f:param name="link" value="#{showtimeHour.bookingLink}" />
+												<h:outputText value="#{showtimeHour.hour}"
+													styleClass="showtimeHour" />
+											</h:commandLink>
+										</p:dataGrid>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</h:panelGroup>
 				</p:fieldset>
 			</h:panelGroup>
 		</h:form>

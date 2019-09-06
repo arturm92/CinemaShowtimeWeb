@@ -8,7 +8,7 @@ public class Showtime {
  
 	private String id;
 	@JsonProperty("cinema_id")
-	private String cinemaId;
+	private Long cinemaId;
 	@JsonProperty("movie_id")
 	private Long movieId;
 	@JsonProperty("start_at")
@@ -32,10 +32,10 @@ public class Showtime {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getCinemaId() {
+	public Long getCinemaId() {
 		return cinemaId;
 	}
-	public void setCinemaId(String cinemaId) {
+	public void setCinemaId(Long cinemaId) {
 		this.cinemaId = cinemaId;
 	}
 	public Long getMovieId() {

@@ -29,7 +29,7 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 	@Override
 	public void showAllElements() {
 		for (Showtime showtime : list) {
-			System.out.println("MovieId: " + showtime.getMovieId() + " StartAt" + showtime.getStartAt());
+			System.out.println("CinemaId: " + showtime.getCinemaId() + " MovieId: " + showtime.getMovieId() + " StartAt" + showtime.getStartAt());
 		}
 	}
 

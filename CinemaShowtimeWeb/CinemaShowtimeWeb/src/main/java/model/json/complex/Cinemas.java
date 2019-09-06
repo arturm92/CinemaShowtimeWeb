@@ -29,4 +29,15 @@ public class Cinemas extends BaseComplexModel implements JsonList<Cinema> {
 		}
 	}
 
+	public Cinema findCinemaByName(String cinemaName) {
+		if (cinemaName != null && !cinemaName.isEmpty()) {
+			for (Cinema cinema : list) {
+				if (cinema.getName().equals(cinemaName)) {
+					return cinema;
+				}
+			}
+		}
+		return null;
+	}
+
 }

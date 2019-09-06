@@ -39,7 +39,7 @@ public class HomePageBean {
 	private Movies moviePosters;
 	private Showtimes showtimes;
 	private Cinema selectedCinema;
-	private int distance = 30;
+	private int distance = Consts.DISTANCE;
 	private String timeTo;
 
 	public HomePageBean() {
@@ -63,7 +63,7 @@ public class HomePageBean {
 		ApiFilter filter = prepareCinemaFilter();
 		cinemas = ApiHelper.getCinemas(filter);
 		if (cinemas.getList().isEmpty()) {
-			distance += 30;
+			distance += 25;
 			prepareCinemas();
 		}
 	}
@@ -112,7 +112,7 @@ public class HomePageBean {
 		ApiFilter filter = new ApiFilter();
 		filter.addFilterParam(ApiFilter.Parameter.LOCATION,
 				locationApi.getLatitude() + "," + locationApi.getLongitude());
-		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(distance));
+		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(Consts.DISTANCE));
 		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
 		return filter;
 	}
