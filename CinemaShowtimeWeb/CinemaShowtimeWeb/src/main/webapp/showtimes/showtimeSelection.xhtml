@@ -19,8 +19,10 @@
 			<div class="ui-grid ui-grid-responsive" style="color: white;">
 				<div class="ui-grid-row">
 					<div class="ui-grid-col-3">
-						<p:graphicImage value="#{bean.selectedMovie.posterImage}"
-							styleClass="image" />
+						<h:commandLink action="#{bean.clickMovie}">
+							<f:param name="movieId" value="#{bean.selectedMovie.id}" />
+							<p:graphicImage value="#{bean.selectedMovie.posterImage}" styleClass="image" />
+						</h:commandLink>
 					</div>
 					<div class="ui-grid-col-9" style="font-size: 25px;">
 						<p:dataTable id="showtimesDayDataTable" var="showtimeDay"
@@ -35,7 +37,7 @@
 								</h:panelGroup>
 
 								<p:dataGrid id="showtimesHourDataTable" var="showtimeHour"
-									value="#{showtimeDay.hoursList}" columns="6" layout="grid">
+									value="#{showtimeDay.hoursList}" columns="8" layout="grid">
 									<h:commandLink action="#{bean.selectShowtime}">
 										<f:param name="link" value="#{showtimeHour.bookingLink}" />
 										<h:outputText value="#{showtimeHour.hour}"

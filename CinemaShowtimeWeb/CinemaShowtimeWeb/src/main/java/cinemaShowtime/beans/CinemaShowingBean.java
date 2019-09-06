@@ -167,21 +167,21 @@ public class CinemaShowingBean {
 		initShowtimes();
 	}
 
-	public void selectMovie() {
+	public void showShowtime() {
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 		String movieId = ec.getRequestParameterMap().get("movieId");
 		selectedMovie = movies.findMovie(Long.valueOf(movieId));
 		setMovieSelectionVisible(false);
 		initShowtimes();
 	}
-
+	
 	public void selectShowtime() {
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		String link = externalContext.getRequestParameterMap().get("link");
 		PrimeFaces.current().executeScript("window.open('" + link + "', '_newtab')");
 	}
 
-	public void showMovieDetail() {
+	public void clickMovie() {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");
@@ -197,6 +197,13 @@ public class CinemaShowingBean {
 		setCinemaSelectionVisible(false);
 		setMovieSelectionVisible(false);
 		setShowtimeSelectionVisible(false);
+		selectedCity = null;
+		selectedCinema = null;
+		selectedMovie = null;
+		cinemas = null;
+		movies = null;
+		moviePosters = null;
+		showtimes = null;
 	}
 
 	public void secondStepClicked() {
@@ -204,6 +211,10 @@ public class CinemaShowingBean {
 		setCinemaSelectionVisible(true);
 		setMovieSelectionVisible(false);
 		setShowtimeSelectionVisible(false);
+		selectedCinema = null;
+		selectedMovie = null;
+		movies = null;
+		moviePosters = null;
 	}
 
 	public void thirdStepClicked() {
@@ -211,6 +222,8 @@ public class CinemaShowingBean {
 		setCinemaSelectionVisible(false);
 		setMovieSelectionVisible(true);
 		setShowtimeSelectionVisible(false);
+		selectedMovie = null;
+		showtimes = null;
 	}
 
 	private void createCitiesQuickSelection() {

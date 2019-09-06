@@ -28,7 +28,7 @@
 						style="color: white; font-size: 18px;">
 						<div class="ui-grid-row">
 							<div class="ui-grid-col-3">
-								<h:commandLink action="#{bean.selectMovie}">
+								<h:commandLink action="#{bean.clickMovie}">
 									<f:param name="movieId" value="#{movie.id}" />
 									<p:graphicImage value="#{movie.posterImage}" styleClass="image" />
 								</h:commandLink>
@@ -73,6 +73,7 @@
 										<h:outputText value="#{movie.firstDirector}" />
 									</div>
 								</div>
+								<br />
 								<div class="ui-grid-row">
 									<div class="ui-grid-col-12">
 										<h:outputText value="#{movie.description}" />
@@ -81,12 +82,11 @@
 								<br />
 								<div class="ui-grid-row">
 									<div class="ui-grid-col-12"></div>
-									<div class="ui-grid-col-3">
-										<p:commandButton value="Szczegóły filmu"
-											action="#{bean.showMovieDetail}"
-											icon="fa fa-fw fa-question-circle">
+									<div class="ui-grid-col-4">
+										<h:commandLink action="#{bean.showShowtime}">
 											<f:param name="movieId" value="#{movie.id}" />
-										</p:commandButton>
+											<h:outputText value="POKAŻ REPERTUAR"/>
+										</h:commandLink>
 									</div>
 								</div>
 							</div>
