@@ -19,6 +19,7 @@ import cinemaShowtime.helpers.LocationApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Consts;
 import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.Logger;
 import model.json.Showtime;
 import model.json.cinema.Cinema;
 import model.json.cinema.LocationApi;
@@ -52,8 +53,7 @@ public class HomePageBean {
 			prepareShowtimes();
 
 			long stopTime = System.currentTimeMillis();
-			System.out.println("HomePageBean started in " + ((stopTime - startTime) / 1000) + " second");
-
+			Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -95,10 +95,6 @@ public class HomePageBean {
 		showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		for (MovieFormatted movie : movies.getList()) {
 			List<Showtime> movieShowtime = showtimes.findMovieShowtime(movie.getId());
-			/*
-			 * for (Showtime showtime : movieShowtime) { System.out.println(movie.getTitle()
-			 * + "/" + showtime.getMovieId() + " " + showtime.getStartAt()); }
-			 */
 			Showtimes tmp = new Showtimes();
 			tmp.setList(movieShowtime);
 			movie.setShowtimeDayList(tmp.getNormalizeList());

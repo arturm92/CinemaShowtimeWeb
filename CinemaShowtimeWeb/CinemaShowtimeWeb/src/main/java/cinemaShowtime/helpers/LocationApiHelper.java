@@ -47,7 +47,6 @@ public class LocationApiHelper {
 			url += "&ip=" + getIp();
 			HttpGet request = new HttpGet(url);
 			HttpResponse response = client.execute(request);
-			System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 			return readResultContent(response);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

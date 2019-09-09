@@ -16,6 +16,7 @@ import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Consts;
 import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
 import model.json.movie.Genre;
 import model.json.movie.MovieFormatted;
@@ -39,7 +40,7 @@ public class CinemaPreviewBean extends FilterInterfaceImpl {
 		prepareCinemaPreviewMoviesList();
 
 		long stopTime = System.currentTimeMillis();
-		System.out.println("CinemaPreviewBean started in " + ((stopTime - startTime) / 1000) + " second");
+		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
 
 	private void prepareCinemaPreviewMoviesList() {

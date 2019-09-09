@@ -9,6 +9,7 @@ import java.util.Map;
 
 import cinemaShowtime.utils.Consts;
 import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.Logger;
 import cinemaShowtime.utils.Util;
 import model.json.complex.Movies;
 import model.json.movie.Genre;
@@ -24,7 +25,6 @@ public class MovieHelper {
 		for (MovieFormatted movie : movies.getList()) {
 			boolean addMovie = true;
 			releaseDateMap = movie.getReleaseDate();
-			// System.out.println(movie.getTitle());
 			if (Util.containsSecialCharacter(movie.getTitle())
 					|| Util.containsSecialCharacter(movie.getOriginalTitle())) { // rozpoznaje dziwne znaki w tytułach
 				addMovie = false;
@@ -60,10 +60,7 @@ public class MovieHelper {
 			Date releaseDate = df.parseString(map.get("date"));
 			if (releaseDate.compareTo(dateFrom) < 0) {
 				return false;
-			} /*
-				 * else { System.out.println(entry.getKey());
-				 * System.out.println(map.get("date")); }
-				 */
+			}
 		}
 		return true;
 	}
@@ -75,18 +72,17 @@ public class MovieHelper {
 			return true;
 		} else {
 			for (Genre genre : genreList) {
-				// System.out.println("filter genre" + genre.getName());
-				// System.out.println("movie genres:");
+				Logger.log("GATUNEK[FILTR]:" + genre.getName());
 				if (!addMovie) {
 					for (Genre movieGenre : movie.getGenre()) {
-						System.out.println(movieGenre.getName() + "/" + movieGenre.getId());
+						Logger.log("GATUNEK[FIM]:" + movieGenre.getName() + "/" + movieGenre.getId());
 						if (movieGenre.getId().compareTo(genre.getId()) == 0) {
 							addMovie = true;
-							// System.out.println("dobry gatunek");
+							Logger.log("ZGODNY GATUNEK");
 							break;
 						} else {
 							addMovie = false;
-							// System.out.println("zły gatunek");
+							Logger.log("NIEZGODNY GATUNEK");
 						}
 					}
 				}
@@ -105,9 +101,9 @@ public class MovieHelper {
 					}
 					movie.setPosterImages(moviePoster);
 				} catch (NullPointerException e) {
-					System.out.println(movie.getTitle() + "/" + movie.getId() + "/" + movie.getPosterImage());
+					Logger.log("BRAK FILMU W MAPIE: " + movie.getTitle() + "/" + movie.getId() + "/"
+							+ movie.getPosterImage());
 				}
-
 			}
 		}
 	}
@@ -158,19 +154,19 @@ public class MovieHelper {
 	}
 
 	public static void printMoviesRating(List<MovieFormatted> movieList) {
-		System.out.println("***************");
+		Logger.log("***************");
 		for (MovieFormatted movie : movieList) {
-			System.out.println(movie.getTitle() + " " + movie.getRatingValue());
+			Logger.log(movie.getTitle() + "/" + movie.getRatingValue());
 		}
-		System.out.println("***************");
+		Logger.log("***************");
 	}
 
 	public static void printMoives(List<MovieFormatted> movieList) {
-		System.out.println("***************");
+		Logger.log("***************");
 		for (MovieFormatted movie : movieList) {
-			System.out.println(movie.getId() + " | " + movie.getTitle() + " | " + movie.getPosterImage());
+			Logger.log(movie.getId() + "/" + movie.getTitle() + "/" + movie.getPosterImage());
 		}
-		System.out.println("***************");
+		Logger.log("***************");
 	}
 
 }

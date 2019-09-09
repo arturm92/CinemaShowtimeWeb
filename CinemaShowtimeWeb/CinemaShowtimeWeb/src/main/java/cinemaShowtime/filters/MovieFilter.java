@@ -1,6 +1,5 @@
 package cinemaShowtime.filters;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import javax.faces.context.FacesContext;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.Logger;
 import model.json.movie.Genre;
 
 public class MovieFilter {
@@ -37,10 +37,6 @@ public class MovieFilter {
 	private void initGenreList() {
 		genreList = ApiHelper.getGenres().removeNullGenres().getList();
 		Application.getInstance().setGenreList(genreList);
-		/*
-		 * for (Genre genre : genreList) { System.out.println(genre.getName() + "/" +
-		 * genre.getId()); }
-		 */
 		selectedGenreList = new ArrayList<Genre>();
 		Random random = new Random();
 		int randomIndex = random.nextInt(genreList.size() - 1);
@@ -92,10 +88,6 @@ public class MovieFilter {
 		this.runtimeMovies = runtimeMovies;
 	}
 
-	private int intVal(String val) {
-		return new BigDecimal(val).intValue();
-	}
-
 	private void showMessage(String msg) {
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Błąd parametrów filtra!", msg));
@@ -111,7 +103,7 @@ public class MovieFilter {
 
 	public void setSelectedGenreList(List<Genre> selectedGenreList) {
 		if (isDifferentList(this.selectedGenreList, selectedGenreList)) {
-			System.out.println("GATUNKI ZOSTAŁY ZMIENIONE");
+			Logger.log("ZMIENIONO GATUNEK");
 			updateFilterFlag(true);
 		}
 		this.selectedGenreList = selectedGenreList;
@@ -123,7 +115,7 @@ public class MovieFilter {
 
 	public void setSelectedYear(String selectedYear) {
 		if (!selectedYear.equals(this.selectedYear)) {
-			System.out.println("ZMIENIONO ROK");
+		    Logger.log("ZMIENIONO ROK");
 			updateFilterFlag(true);
 		}
 		this.selectedYear = selectedYear;

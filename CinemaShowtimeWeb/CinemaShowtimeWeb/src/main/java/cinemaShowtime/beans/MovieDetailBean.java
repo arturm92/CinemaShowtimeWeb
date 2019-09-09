@@ -122,7 +122,6 @@ public class MovieDetailBean {
 		List<Showtime> filteredList = new ArrayList<Showtime>();
 		for (Showtime showtime : showtimes.getList()) {
 			if (showtime.getCinemaId().compareTo(getSelectedCinema().getId()) == 0) {
-				System.out.println(showtime.getCinemaId());
 				filteredList.add(showtime);
 			}
 		}

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.Logger;
 import model.json.cinema.Cinema;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
@@ -31,13 +32,11 @@ public class ApiHelper {
 
 	public static String getDataFromApi(String url) {
 		try {
-			System.out.println("QUERY: " + url);
+			Logger.log("QUERY: " + url);
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpGet request = new HttpGet(url);
 			request.addHeader("X-API-Key", Consts.API_KEY);
 			HttpResponse response = client.execute(request);
-			// System.out.println("Response Code : " +
-			// response.getStatusLine().getStatusCode());
 			return readResultContent(response);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -193,11 +192,6 @@ public class ApiHelper {
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
 			String json = getDataFromApi(Consts.MOVIES + filter.prepareParameters());
-
-			if (json.contains("\"code\":10005")) {
-				System.out.println("Wygasł klucz do API");
-				return null;
-			}
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();

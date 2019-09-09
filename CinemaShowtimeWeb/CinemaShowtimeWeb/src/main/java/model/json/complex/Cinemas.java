@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import cinemaShowtime.utils.Logger;
 import model.json.base.BaseComplexModel;
 import model.json.cinema.Cinema;
 
@@ -25,7 +26,7 @@ public class Cinemas extends BaseComplexModel implements JsonList<Cinema> {
 	@Override
 	public void showAllElements() {
 		for (Cinema cinema : list) {
-			System.out.println("CinemaId: " + cinema.getId() + " name: " + cinema.getName());
+			Logger.log("[CINEMA]" + cinema.getName() + "/" + cinema.getId());
 		}
 	}
 

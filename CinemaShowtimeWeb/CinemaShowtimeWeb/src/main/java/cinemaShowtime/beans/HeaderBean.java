@@ -15,6 +15,7 @@ import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Consts;
 import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
 import model.json.movie.MovieFormatted;
 import model.json.movie.comparator.MovieRatingComparator;
@@ -40,7 +41,7 @@ public class HeaderBean {
 		MovieHelper.addPosterToMovie(headerMovies, moviePosters);
 
 		long stopTime = System.currentTimeMillis();
-		System.out.println("HeaderBean start in " + ((stopTime - startTime) / 1000) + "second");
+		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
 
 	private ApiFilter prepareFilter() {

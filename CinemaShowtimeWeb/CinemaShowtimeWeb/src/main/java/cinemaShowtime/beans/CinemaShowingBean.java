@@ -17,6 +17,7 @@ import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.Logger;
 import model.json.City;
 import model.json.Showtime;
 import model.json.ShowtimeDay;
@@ -50,9 +51,12 @@ public class CinemaShowingBean {
 	private boolean showtimeSelectionVisible;
 
 	public CinemaShowingBean() {
+		long startTime = System.currentTimeMillis();
 		initCities();
 		createCitiesQuickSelection();
-		System.out.println("CityBean started!");
+		
+		long stopTime = System.currentTimeMillis();
+		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
 
 	public void initCities() {
@@ -73,17 +77,9 @@ public class CinemaShowingBean {
 		ApiFilter filter = prepareMovieFilter();
 		this.movies = ApiHelper.getMoviesInCinema(filter);
 		MovieHelper.verifyList(movies, null, null);
-		/*
-		 * System.out.println("*****MOVIES*****"); movies.showAllElements();
-		 * System.out.println("**********");
-		 */
 		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
 		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
-		/*
-		 * System.out.println("*****MOVIES_POSTER*****");
-		 * moviePosters.showAllElements(); System.out.println("**********");
-		 */
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(movies, moviePosters);
 	}
@@ -92,13 +88,6 @@ public class CinemaShowingBean {
 		ApiFilter filter = prepareShowtimeFilter();
 		this.showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		setShowtimeSelectionVisible(true);
-
-		/*
-		 * List<ShowtimeDay> showtimeDayList = showtimes.getNormalizeList(); for
-		 * (ShowtimeDay sd : showtimeDayList) { System.out.println(sd.getDate()); for
-		 * (String h : sd.getHours()) { System.out.println(h); } }
-		 */
-
 	}
 
 	private ApiFilter prepareCinemaFilter() {
@@ -228,8 +217,6 @@ public class CinemaShowingBean {
 
 	private void createCitiesQuickSelection() {
 		citiesQuickList = new ArrayList<City>();
-		long startTime = System.currentTimeMillis();
-
 		citiesQuickList.add(findCity("bydgoszcz"));
 		citiesQuickList.add(findCity("gdańsk"));
 		citiesQuickList.add(findCity("gdynia"));
@@ -242,9 +229,6 @@ public class CinemaShowingBean {
 		citiesQuickList.add(findCity("warszawa"));
 		citiesQuickList.add(findCity("wrocław"));
 		citiesQuickList.add(findCity("zielona gora"));
-
-		long stopTime = System.currentTimeMillis();
-		System.out.println("Cities find in " + ((stopTime - startTime) / 1000) + "second");
 	}
 
 	public Cities getCities() {

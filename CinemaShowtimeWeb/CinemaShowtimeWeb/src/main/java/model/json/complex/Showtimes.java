@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.Logger;
 import model.json.Showtime;
 import model.json.ShowtimeDay;
 import model.json.ShowtimeHour;
@@ -29,7 +30,8 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 	@Override
 	public void showAllElements() {
 		for (Showtime showtime : list) {
-			System.out.println("CinemaId: " + showtime.getCinemaId() + " MovieId: " + showtime.getMovieId() + " StartAt" + showtime.getStartAt());
+			Logger.log("[SHOWTIME]\n[CINEMA]" + showtime.getCinemaId() + "/[MOVIE]" + showtime.getMovieId() + "/[TIME]"
+					+ showtime.getStartAt());
 		}
 	}
 
