@@ -15,7 +15,7 @@ import cinemaShowtime.filters.Filter;
 import cinemaShowtime.filters.FilterInterfaceImpl;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
-import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
@@ -53,8 +53,8 @@ public class MovieRankingBean extends FilterInterfaceImpl {
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, dateFrom);
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, dateTo);
 
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
-		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Const.COUNTRIES);
 		return filter;
 	}
 

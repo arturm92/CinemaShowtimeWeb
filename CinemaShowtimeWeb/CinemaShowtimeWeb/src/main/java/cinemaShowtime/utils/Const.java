@@ -1,6 +1,6 @@
 package cinemaShowtime.utils;
 
-public class Consts {
+public class Const {
 	
 	public static final String LANGUAGE = "pl";
 	public static final String MULTIMEDIA_LANGUAGE = "en";

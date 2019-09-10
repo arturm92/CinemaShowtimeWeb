@@ -23,13 +23,13 @@ public class DateFormater {
 
 	public String formatDateWithTimezone(String inputDate) {
 		try {
-			DateFormat inputDateFormat = new SimpleDateFormat(Consts.TIMEZONE_DATE_FORMAT);
+			DateFormat inputDateFormat = new SimpleDateFormat(Const.TIMEZONE_DATE_FORMAT);
 			Date date = inputDateFormat.parse(inputDate);
 
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
 
-			SimpleDateFormat sdf = new SimpleDateFormat(Consts.TIME_DATE_FORMAT);
+			SimpleDateFormat sdf = new SimpleDateFormat(Const.TIME_DATE_FORMAT);
 
 			String output = sdf.format(date);
 			output += " " + daysMapping.get(calendar.get(Calendar.DAY_OF_WEEK));
@@ -43,12 +43,12 @@ public class DateFormater {
 
 	public String formatDateShort(String inputString) {
 		try {
-			DateFormat inputDateFormat = new SimpleDateFormat(Consts.TIMEZONE_DATE_FORMAT);
+			DateFormat inputDateFormat = new SimpleDateFormat(Const.TIMEZONE_DATE_FORMAT);
 			Date date = inputDateFormat.parse(inputString);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
 
-			SimpleDateFormat sdf = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
+			SimpleDateFormat sdf = new SimpleDateFormat(Const.SIMPLE_DATE_FORMAT);
 			return sdf.format(date);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -57,18 +57,18 @@ public class DateFormater {
 	}
 
 	public String formatDateShort(Date inputDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
+		SimpleDateFormat sdf = new SimpleDateFormat(Const.SIMPLE_DATE_FORMAT);
 		return sdf.format(inputDate);
 	}
 	
 	public String formatTimeOnly(String inputString) {
 		try {
-			DateFormat inputDateFormat = new SimpleDateFormat(Consts.TIMEZONE_DATE_FORMAT);
+			DateFormat inputDateFormat = new SimpleDateFormat(Const.TIMEZONE_DATE_FORMAT);
 			Date date = inputDateFormat.parse(inputString);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
 
-			SimpleDateFormat sdf = new SimpleDateFormat(Consts.TIME_FORMAT);
+			SimpleDateFormat sdf = new SimpleDateFormat(Const.TIME_FORMAT);
 			return sdf.format(date);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -78,7 +78,7 @@ public class DateFormater {
 
 	public String getDay(String inputDate) {
 		try {
-			DateFormat inputDateFormat = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
+			DateFormat inputDateFormat = new SimpleDateFormat(Const.SIMPLE_DATE_FORMAT);
 			Date date = inputDateFormat.parse(inputDate);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
@@ -90,7 +90,7 @@ public class DateFormater {
 	}
 	
 	public String convertSimpleDateToTimezone(Date date) {
-		DateFormat inputDateFormat = new SimpleDateFormat(Consts.TIMEZONE_DATE_FORMAT);
+		DateFormat inputDateFormat = new SimpleDateFormat(Const.TIMEZONE_DATE_FORMAT);
 		return inputDateFormat.format(date);
 	}
 	
@@ -121,7 +121,7 @@ public class DateFormater {
 	
 	public Date parseString(String date) {
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat(Consts.SIMPLE_DATE_FORMAT);
+			SimpleDateFormat sdf = new SimpleDateFormat(Const.SIMPLE_DATE_FORMAT);
 			return sdf.parse(date);
 		} catch (ParseException e) {
 			e.printStackTrace();

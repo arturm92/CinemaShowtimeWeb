@@ -13,7 +13,7 @@ import javax.faces.context.FacesContext;
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
-import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
@@ -50,8 +50,8 @@ public class HeaderBean {
 		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(df.getMonthFromToday(-1)));
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, df.formatDateShort(df.getMonthFromToday(1)));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
-		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Const.COUNTRIES);
 		return filter;
 	}
 

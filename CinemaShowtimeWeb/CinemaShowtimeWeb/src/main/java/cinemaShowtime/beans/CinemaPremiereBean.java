@@ -14,7 +14,7 @@ import cinemaShowtime.filters.Filter;
 import cinemaShowtime.filters.FilterInterfaceImpl;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
-import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
@@ -66,8 +66,8 @@ public class CinemaPremiereBean extends FilterInterfaceImpl {
 		ApiFilter filter = new ApiFilter();
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(dateFrom));
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, df.formatDateShort(df.getMonthFromToday(1)));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
-		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Const.COUNTRIES);
 		if (!getMovieFilter().getSelectedGenreList().isEmpty()) {
 			String genre_ids = "";
 			for (Genre genre : getMovieFilter().getSelectedGenreList()) {

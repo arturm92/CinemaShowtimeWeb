@@ -3,7 +3,7 @@ package cinemaShowtime.utils;
 public class Logger {
 
 	public static void log(String message) {
-		if (Consts.LOGGER) {
+		if (Const.LOGGER) {
 			System.out.println(message);
 		}
 	}

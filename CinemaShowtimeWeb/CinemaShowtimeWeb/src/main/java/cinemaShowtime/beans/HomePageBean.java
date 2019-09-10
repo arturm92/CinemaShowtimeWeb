@@ -17,7 +17,7 @@ import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.LocationApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
-import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
 import model.json.Showtime;
@@ -40,7 +40,7 @@ public class HomePageBean {
 	private Movies moviePosters;
 	private Showtimes showtimes;
 	private Cinema selectedCinema;
-	private int distance = Consts.DISTANCE;
+	private int distance = Const.DISTANCE;
 	private String timeTo;
 
 	public HomePageBean() {
@@ -108,8 +108,8 @@ public class HomePageBean {
 		ApiFilter filter = new ApiFilter();
 		filter.addFilterParam(ApiFilter.Parameter.LOCATION,
 				locationApi.getLatitude() + "," + locationApi.getLongitude());
-		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(Consts.DISTANCE));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(Const.DISTANCE));
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
 		return filter;
 	}
 
@@ -120,7 +120,7 @@ public class HomePageBean {
 		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 		filter.addFilterParam(ApiFilter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
 		filter.addFilterParam(ApiFilter.Parameter.TIME_TO, timeTo);
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
 		return filter;
 	}
 

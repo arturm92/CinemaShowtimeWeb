@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.Const;
 import model.json.cinema.LocationApi;
 
 public class LocationApiHelper {
@@ -42,8 +42,8 @@ public class LocationApiHelper {
 	public static String getLocationFromApi() {
 		try {
 			HttpClient client = HttpClientBuilder.create().build();
-			String url = Consts.LOCATION_BASE_URL;
-			url += "?apiKey=" + Consts.LOCATION_API_KEY;
+			String url = Const.LOCATION_BASE_URL;
+			url += "?apiKey=" + Const.LOCATION_API_KEY;
 			url += "&ip=" + getIp();
 			HttpGet request = new HttpGet(url);
 			HttpResponse response = client.execute(request);

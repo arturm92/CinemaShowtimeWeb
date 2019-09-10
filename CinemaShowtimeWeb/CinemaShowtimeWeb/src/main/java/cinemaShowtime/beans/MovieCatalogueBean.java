@@ -14,7 +14,7 @@ import cinemaShowtime.filters.Filter;
 import cinemaShowtime.filters.FilterInterfaceImpl;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
-import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
@@ -61,8 +61,8 @@ public class MovieCatalogueBean extends FilterInterfaceImpl {
 		ApiFilter filter = new ApiFilter();
 		filter.addFilterParam(ApiFilter.Parameter.INCLUDE_OUTDATED,
 				String.valueOf(!getMovieFilter().isRuntimeMovies()));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
-		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Consts.COUNTRIES);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Const.COUNTRIES);
 		if (!getMovieFilter().getSelectedYear().isEmpty()) {
 			String dateFrom = getMovieFilter().getSelectedYear() + "-01-01";
 			String dateTo = getMovieFilter().getSelectedYear() + "-12-31";

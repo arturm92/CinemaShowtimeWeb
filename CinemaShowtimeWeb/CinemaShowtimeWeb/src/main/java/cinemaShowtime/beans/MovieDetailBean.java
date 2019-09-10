@@ -15,7 +15,7 @@ import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.LocationApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Application;
-import cinemaShowtime.utils.Consts;
+import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import model.json.City;
 import model.json.Showtime;
@@ -38,7 +38,7 @@ public class MovieDetailBean {
 	private Showtimes showtimes;
 	private Showtimes displayShowtimes;
 
-	private int distance = Consts.DISTANCE;
+	private int distance = Const.DISTANCE;
 	private int days = 7;
 	private City selectedCity;
 	private Cinema selectedCinema;
@@ -98,7 +98,7 @@ public class MovieDetailBean {
 	}
 	
 	private void resetDistance() {
-		this.distance = Consts.DISTANCE;
+		this.distance = Const.DISTANCE;
 	}
 
 	public void selectCity(SelectEvent event) {
@@ -139,7 +139,7 @@ public class MovieDetailBean {
 		}
 
 		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(distance));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Consts.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
 		filter.addFilterParam(ApiFilter.Query.MOVIE_ID, movie.getId().toString());
 		filter.addFilterParam(ApiFilter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
 		filter.addFilterParam(ApiFilter.Parameter.TIME_TO, df.convertSimpleDateToTimezone(df.getDaysFromToday(days)));
