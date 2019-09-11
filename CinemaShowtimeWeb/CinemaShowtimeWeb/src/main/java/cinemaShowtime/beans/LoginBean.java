@@ -3,53 +3,41 @@ package cinemaShowtime.beans;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
-import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
+import cinemaShowtime.database.HibernateSession;
+import cinemaShowtime.database.model.Account;
 import cinemaShowtime.utils.HibernateSetting;
-import model.database.User;
 
 @ManagedBean(name = "loginBean", eager = true)
 @SessionScoped
 public class LoginBean {
 
-	private String userName;
-	private String userPassword;
+	private String accountName;
+	private String accountPassword;
+	private Account loggedAccount;
+	private HibernateSession hibernateSession = new HibernateSession();
 
-	public void registerUser() {
-	};
-
-	public void loginUser() {
-		Configuration cfg = new Configuration().setProperty("hibernate.dialect", HibernateSetting.DIALECT)
-				.setProperty("hibernate.connection.driver_class", HibernateSetting.DRIVER_CLASS)
-				.setProperty("hibernate.connection.url", HibernateSetting.URL)
-				.setProperty("hibernate.connection.username", HibernateSetting.USERNAME)
-				.setProperty("hibernate.connection.password", HibernateSetting.PASSWORD)
-				.setProperty("hibernate.connection.pool_size", HibernateSetting.POOL_SIZE)
-				.addAnnotatedClass(User.class);
-
-		SessionFactory sessions = cfg.buildSessionFactory();
-		Session session = sessions.openSession();
+	public void registerAccount() {
+		Session session = hibernateSession.getSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
-			List<User> userList = session.createQuery("from user").list();
-			for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
-				User user = (User) iterator.next();
-				System.out.println("Id: " + user.getId());
-				System.out.println("Name: " + user.getName());
-				System.out.println("Password" + user.getPassword());
-			}
+			Account account = new Account(accountName,accountPassword);
+			Integer accountID = (Integer) session.save(account);
+			System.out.println(accountID);
 			tx.commit();
-		}
-
-		catch (Exception e) {
+		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
@@ -58,19 +46,68 @@ public class LoginBean {
 		}
 	}
 
-	public String getUserName() {
-		return userName;
+	public void loginAccount() {
+		if (checkLoginParameter()) {
+			Session session = hibernateSession.getSession();
+			Transaction tx = null;
+			try {
+				tx = session.beginTransaction();
+				Query query = session.createQuery("from ACCOUNT where USERNAME = :userName and PASSWORD = :password");
+				query.setParameter("userName", accountName);
+				query.setParameter("password", accountPassword);
+				List<Account> accountList = query.list();
+				if (accountList.isEmpty()) {
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Błąd logowania!", "\nPodano nieprawidłowe dane logowania. Spróbuj ponownie."));
+				}
+				for (Iterator<Account> iterator = accountList.iterator(); iterator.hasNext();) {
+					loggedAccount = iterator.next();
+					FacesContext.getCurrentInstance().addMessage(null,
+							new FacesMessage(FacesMessage.SEVERITY_INFO, "Zalogowano!", loggedAccount.getName()));
+				}
+				tx.commit();
+			} catch (Exception e) {
+				if (tx != null)
+					tx.rollback();
+				e.printStackTrace();
+			} finally {
+				session.close();
+			}
+		}
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	private boolean checkLoginParameter() {
+		if (accountName == null || accountName.isEmpty() || accountPassword == null || accountPassword.isEmpty()) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Błąd logowania!", "Podano niekompletne dane logowania. Spróbuj ponownie."));
+			return false;
+		} else {
+			return true;
+		}
 	}
 
-	public String getUserPassword() {
-		return userPassword;
+	public String getAccountName() {
+		return accountName;
 	}
 
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
 	}
+
+	public String getAccountPassword() {
+		return accountPassword;
+	}
+
+	public void setAccountPassword(String accountPassword) {
+		this.accountPassword = accountPassword;
+	}
+
+	public Account getLoggedAccount() {
+		return loggedAccount;
+	}
+
+	public void setLoggedAccount(Account loggedAccount) {
+		this.loggedAccount = loggedAccount;
+	}
+
 }

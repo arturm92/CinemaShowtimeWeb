@@ -83,11 +83,10 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>5.4.3.Final</version>
 		</dependency>
-
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.17</version>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.6</version>
 		</dependency>
 
 	</dependencies>

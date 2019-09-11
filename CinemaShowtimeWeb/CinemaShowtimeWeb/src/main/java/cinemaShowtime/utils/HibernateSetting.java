@@ -2,11 +2,13 @@ package cinemaShowtime.utils;
 
 public class HibernateSetting {
 
-	public static final String DIALECT = "org.hibernate.dialect.MySQLDialect";
-	public static final String DRIVER_CLASS = "com.mysql.jdbc.Driver";
-	public static final String URL = "jdbc:mysql://127.0.0.1:3306/showtime?serverTimezone=UTC";
-	public static final String USERNAME = "root";
+	public static final String DIALECT = "org.hibernate.dialect.PostgreSQL10Dialect";
+	public static final String DRIVER_CLASS = "org.postgresql.Driver";
+	public static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+	public static final String USERNAME = "postgres";
 	public static final String PASSWORD = "root";
 	public static final String POOL_SIZE = "1";
+	public static final String SHOW_SQL = "true";
+	public static final String SESSION_CONTEXT = "thread";
 	
 }

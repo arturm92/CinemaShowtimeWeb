@@ -6,6 +6,8 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<h:form>
+			<p:messages id="messages" closable="true" showSummary="true"
+				showDetail="true" style="padding-top: 2%;" />
 			<div>
 				<p:ring value="#{headerBean.headerMoviesList}" var="item">
 					<h:commandLink action="#{headerBean.clickMovie}">
@@ -39,18 +41,21 @@
 						<i class="fa fa-fw fa-location-arrow" style="margin-top: 10px;"></i>
 						<h:outputText value="#{homePageBean.currentCity}"
 							style="padding-right: 10px;" />
-						<p:commandButton id="userButton" icon="fa fa-user" type="button" />
+						<p:commandButton id="userButton"
+							value="#{loginBean.loggedAccount.name}" icon="fa fa-user"
+							type="button" />
 						<p:overlayPanel id="userPanel" for="userButton" hideEffect="fade">
 							<h:panelGrid columns="2">
 								<h:outputText value="LOGIN" />
-								<p:inputText value="#{loginBean.userName}" />
+								<p:inputText value="#{loginBean.accountName}" />
 								<h:outputText value="HASŁO" />
-								<p:password id="passwordInput" value="#{loginBean.userPassword}"
-									feedback="true" />
-								<p:commandButton value="ZALOGUJ" action="#{loginBean.loginUser}"
-									ajax="false" />
+								<p:password id="passwordInput"
+									value="#{loginBean.accountPassword}" />
+								<p:commandButton value="ZALOGUJ"
+									action="#{loginBean.loginAccount}" ajax="false"
+									update="userButton" />
 								<p:commandButton value="ZAREJESTURJ"
-									action="#{loginBean.registerUser}" ajax="false" />
+									action="#{loginBean.registerAccount}" ajax="false" />
 							</h:panelGrid>
 						</p:overlayPanel>
 					</f:facet>
