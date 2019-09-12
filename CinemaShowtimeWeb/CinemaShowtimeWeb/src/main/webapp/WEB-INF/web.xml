@@ -44,4 +44,8 @@
 		<param-name>primefaces.THEME</param-name>
 		<param-value>luna-amber</param-value>
 	</context-param>
+
+	<listener>
+		<listener-class>cinemaShowtime.context.ContextListener</listener-class>
+	</listener>
 </web-app>

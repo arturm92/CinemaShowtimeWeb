@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<p:steps activeIndex="0" readonly="false">
+			<p:menuitem value="WYBIERZ GATUNKI" />
+			<p:menuitem value="WYBIERZ FILMY" />
+			<p:menuitem value="WYBIERZ KINA" />
+			<p:menuitem value="PODSUMOWANIE" />
+		</p:steps>
+
+		<p:selectManyCheckbox value="#{bean.selectedGenreList}" layout="grid"
+			columns="3" converter="genreConverter"
+			style="font-size:22;color:white;">
+			<f:selectItems value="#{bean.genreList}" var="genre"
+				itemLabel="#{genre.name}" itemValue="#{genre}" />
+		</p:selectManyCheckbox>
+
+	</h:body>
+</ui:composition>

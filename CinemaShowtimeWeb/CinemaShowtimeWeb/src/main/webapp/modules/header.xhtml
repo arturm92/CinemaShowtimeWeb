@@ -43,7 +43,10 @@
 							style="padding-right: 10px;" />
 						<p:commandButton id="userButton"
 							value="#{loginBean.loggedAccount.name}" icon="fa fa-user"
-							type="button" />
+							disabled="#{loginBean.loggedAccount != null}" />
+						<p:commandButton action="#{loginBean.logoutAccount}"
+							rendered="#{loginBean.loggedAccount != null}"
+							icon="fa fa-fw fa-reply-all" ajax="false" update="userButton" />
 						<p:overlayPanel id="userPanel" for="userButton" hideEffect="fade">
 							<h:panelGrid columns="2">
 								<h:outputText value="LOGIN" />

@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+
+		<h:form id="accountForm" style="color:white;">
+
+			<h:panelGroup id="informationPanelGroup">
+				<h:outputText style="font-size:22;"
+					value="Uzupełnij preferencje by spersonalizować wyświetlane informację." />
+				<p:commandButton value="POMIŃ" action="#{bean.goToHomePage}" />
+			</h:panelGroup>
+			<h:panelGroup id="genreSelectionPanelGroup"
+				rendered="#{bean.genreSelectionVisible}">
+				<ui:include src="genreSelection.xhtml">
+					<ui:param name="bean" value="#{bean}" />
+				</ui:include>
+			</h:panelGroup>
+
+			<h:panelGroup id="movieSelectionPanelGroup"
+				rendered="#{bean.movieSelectionVisible}">
+				<ui:include src="movieSelection.xhtml">
+					<ui:param name="bean" value="#{bean}" />
+				</ui:include>
+			</h:panelGroup>
+
+			<h:panelGroup id="cinemaSelectionPanelGroup"
+				rendered="#{bean.cinemaSelectionVisible}">
+				<ui:include src="cinemaSelection.xhtml">
+					<ui:param name="bean" value="#{bean}" />
+				</ui:include>
+			</h:panelGroup>
+			
+			<h:panelGroup id="summaryPanelGroup"
+				rendered="#{bean.summaryVisible}">
+				<ui:include src="summary.xhtml">
+					<ui:param name="bean" value="#{bean}" />
+				</ui:include>
+			</h:panelGroup>
+
+			<p:commandButton value="DALEJ" action="#{bean.goToNextStep}"
+				style="text-align:right;" rendered="#{!bean.summaryVisible}"
+				update="accountForm" />
+		</h:form>
+	</h:body>
+</ui:composition>

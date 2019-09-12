@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<p:steps activeIndex="3" readonly="false">
+			<p:menuitem value="WYBIERZ GATUNKI"
+				actionListener="#{bean.firstStepClicked}" update="accountForm" />
+			<p:menuitem value="WYBIERZ FILMY"
+				actionListener="#{bean.secondStepClicked}" update="accountForm" />
+			<p:menuitem value="WYBIERZ KINA"
+				actionListener="#{bean.thirdStepClicked}" update="accountForm" />
+			<p:menuitem value="PODSUMOWANIE" />
+		</p:steps>
+
+		<br />
+		<h:outputText value="TWOJE ULUBIONE GATUNKI FILMÓW" />
+		<p:separator />
+		<p:dataTable id="selectedGenreDataTable" var="genre"
+			value="#{bean.selectedGenreList}" styleClass="noHeader">
+			<p:column>
+				<h:outputText value="#{genre.name}" />
+			</p:column>
+		</p:dataTable>
+
+		<br />
+		<h:outputText value="TWOJE ULUBIONE KINA" />
+		<p:separator />
+
+		<p:dataTable id="selectedCinemaDataTable" var="cinema"
+			value="#{bean.selectedCinemaList}" styleClass="noHeader">
+			<p:column>
+				<h:outputText value="#{cinema.name}" />
+			</p:column>
+		</p:dataTable>
+
+		<p:commandButton value="ZAPISZ" action="#{bean.savePreference}">
+			<p:confirm header="POTWIERDZENIE" message="JESTEŚ PEWIEN WYBORU?"
+				icon="pi pi-exclamation-triangle" />
+		</p:commandButton>
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="TAK" type="button"
+				styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+			<p:commandButton value="NIE" type="button"
+				styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+		</p:confirmDialog>
+	</h:body>
+</ui:composition>

@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.DateFormater;
@@ -86,11 +83,6 @@ public class MovieFilter {
 			updateFilterFlag(true);
 		}
 		this.runtimeMovies = runtimeMovies;
-	}
-
-	private void showMessage(String msg) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Błąd parametrów filtra!", msg));
 	}
 
 	public List<Genre> getGenreList() {

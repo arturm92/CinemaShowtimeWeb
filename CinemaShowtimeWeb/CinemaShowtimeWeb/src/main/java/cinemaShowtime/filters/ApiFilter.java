@@ -21,6 +21,7 @@ public class ApiFilter {
 		public static final String DISTANCE = "distance";
 		public static final String TIME_FROM = "time_from";
 		public static final String TIME_TO = "time_to";
+		public static final String PAGE_SIZE = "page_size";
 	}
 
 	public class Query {
@@ -31,6 +32,7 @@ public class ApiFilter {
 	public class Field {
 		public static final String MOVIE_STANDARD_FIELDS = "id,title,original_title,poster_image.flat,release_dates,ratings,genres,synopsis,website,cast,crew";
 		public static final String MOVIE_POSTER_FIELDS = "id,poster_image.flat";
+		public static final String MOVIE_SHORT_FIELDS = "id,title";
 	}
 
 	private boolean isFirst;

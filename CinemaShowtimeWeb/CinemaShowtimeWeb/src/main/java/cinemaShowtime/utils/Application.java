@@ -2,13 +2,17 @@ package cinemaShowtime.utils;
 
 import java.util.List;
 
+import cinemaShowtime.database.model.Account;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
+import model.json.complex.Movies;
 import model.json.movie.Genre;
 
 public class Application {
 
 	private static Application instance = null;
+	private Account account;
+	private Movies movies;
 	private Cities cities;
 	private Cinemas cinemas;
 	private List<Genre> genreList;
@@ -18,6 +22,14 @@ public class Application {
 			instance = new Application();
 		}
 		return instance;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public void setCities(Cities cities) {
@@ -42,6 +54,14 @@ public class Application {
 
 	public void setGenreList(List<Genre> genreList) {
 		this.genreList = genreList;
+	}
+
+	public Movies getMovies() {
+		return movies;
+	}
+
+	public void setMovies(Movies movies) {
+		this.movies = movies;
 	}
 
 

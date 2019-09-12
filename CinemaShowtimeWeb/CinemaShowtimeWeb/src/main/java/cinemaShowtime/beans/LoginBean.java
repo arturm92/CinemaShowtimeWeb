@@ -1,23 +1,17 @@
 package cinemaShowtime.beans;
 
-import java.util.Iterator;
-import java.util.List;
+import java.io.IOException;
+import java.util.HashMap;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
-
-import cinemaShowtime.database.HibernateSession;
+import cinemaShowtime.database.dao.AccountDAO;
 import cinemaShowtime.database.model.Account;
-import cinemaShowtime.utils.HibernateSetting;
+import cinemaShowtime.utils.Application;
 
 @ManagedBean(name = "loginBean", eager = true)
 @SessionScoped
@@ -26,54 +20,41 @@ public class LoginBean {
 	private String accountName;
 	private String accountPassword;
 	private Account loggedAccount;
-	private HibernateSession hibernateSession = new HibernateSession();
+
+	private AccountDAO accountDAO = new AccountDAO();
 
 	public void registerAccount() {
-		Session session = hibernateSession.getSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			Account account = new Account(accountName,accountPassword);
-			Integer accountID = (Integer) session.save(account);
-			System.out.println(accountID);
-			tx.commit();
-		} catch (HibernateException e) {
-			if (tx != null)
-				tx.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
+		Account account = new Account(accountName, accountPassword);
+		Integer accountID = accountDAO.insert(account);
+		if  (accountID > 0) {
+			loginAccount();
 		}
 	}
 
 	public void loginAccount() {
 		if (checkLoginParameter()) {
-			Session session = hibernateSession.getSession();
-			Transaction tx = null;
-			try {
-				tx = session.beginTransaction();
-				Query query = session.createQuery("from ACCOUNT where USERNAME = :userName and PASSWORD = :password");
-				query.setParameter("userName", accountName);
-				query.setParameter("password", accountPassword);
-				List<Account> accountList = query.list();
-				if (accountList.isEmpty()) {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Błąd logowania!", "\nPodano nieprawidłowe dane logowania. Spróbuj ponownie."));
-				}
-				for (Iterator<Account> iterator = accountList.iterator(); iterator.hasNext();) {
-					loggedAccount = iterator.next();
-					FacesContext.getCurrentInstance().addMessage(null,
-							new FacesMessage(FacesMessage.SEVERITY_INFO, "Zalogowano!", loggedAccount.getName()));
-				}
-				tx.commit();
-			} catch (Exception e) {
-				if (tx != null)
-					tx.rollback();
-				e.printStackTrace();
-			} finally {
-				session.close();
+			HashMap<String,String> queryParamMap = new HashMap<String,String>();
+			queryParamMap.put("userName", accountName);
+			queryParamMap.put("password", accountPassword);
+			loggedAccount = accountDAO.find(queryParamMap);
+			if (loggedAccount != null) {
+				Application.getInstance().setAccount(loggedAccount);
+				goToAccountPage();
 			}
 		}
+	}
+	
+	private void goToAccountPage() {
+		try {
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.redirect("/CinemaShowtimeWeb/account/index.xhtml");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void logoutAccount() {
+		loggedAccount = null;
 	}
 
 	private boolean checkLoginParameter() {

@@ -68,5 +68,16 @@ public class Movies extends BaseComplexModel implements JsonList<MovieFormatted>
 			movieMap.put(movie.getId(), movie);
 		}
 	}
+	
+	public Movie findMovieByTitle(String title) {
+		if (title != null && !title.isEmpty()) {
+			for (Movie movie : list) {
+				if (movie.getTitle().equals(title)) {
+					return movie;
+				}
+			}
+		}
+		return null;
+	}
 
 }
