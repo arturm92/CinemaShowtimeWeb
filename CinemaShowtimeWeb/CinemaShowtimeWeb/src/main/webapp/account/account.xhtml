@@ -9,10 +9,9 @@
 		<h:form id="accountForm" style="color:white;">
 
 			<h:panelGroup id="informationPanelGroup">
-				<h:outputText style="font-size:22;"
-					value="Uzupełnij preferencje by spersonalizować wyświetlane informację." />
-				<p:commandButton value="POMIŃ" action="#{bean.goToHomePage}" />
+				<h:outputText style="font-size:22;" value="USTAWIENIA PREFERENCJI" />
 			</h:panelGroup>
+			
 			<h:panelGroup id="genreSelectionPanelGroup"
 				rendered="#{bean.genreSelectionVisible}">
 				<ui:include src="genreSelection.xhtml">
@@ -33,7 +32,7 @@
 					<ui:param name="bean" value="#{bean}" />
 				</ui:include>
 			</h:panelGroup>
-			
+
 			<h:panelGroup id="summaryPanelGroup"
 				rendered="#{bean.summaryVisible}">
 				<ui:include src="summary.xhtml">

@@ -71,7 +71,7 @@ public class AccountDAO implements HibernateDAO<Account> {
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "finally" })
 	@Override
-	public List<Account> findAll() {
+	public List<Account> findList(HashMap<String, Object> queryParamMap) {
 		Session session = hibernateSession.getSession();
 		Transaction tx = null;
 		List<Account> accountList = null;
@@ -92,14 +92,14 @@ public class AccountDAO implements HibernateDAO<Account> {
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "finally" })
 	@Override
-	public Account find(HashMap<String, String> queryParamMap) {
+	public Account find(HashMap<String, Object> queryParamMap) {
 		Session session = hibernateSession.getSession();
 		Transaction tx = null;
 		Account foundAccount = null;
 		try {
 			tx = session.beginTransaction();
 			Query query = session.createQuery("from ACCOUNT where USERNAME = :userName and PASSWORD = :password");
-			for (Map.Entry<String, String> entry : queryParamMap.entrySet()) {
+			for (Map.Entry<String, Object> entry : queryParamMap.entrySet()) {
 				query.setParameter(entry.getKey(), entry.getValue());
 			}
 			List<Account> accountList = query.list();

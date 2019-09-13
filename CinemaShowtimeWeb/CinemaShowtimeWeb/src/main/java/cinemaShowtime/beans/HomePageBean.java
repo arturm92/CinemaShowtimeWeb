@@ -42,7 +42,8 @@ public class HomePageBean {
 	private Cinema selectedCinema;
 	private int distance = Const.DISTANCE;
 	private String timeTo;
-
+	private int index;
+	
 	public HomePageBean() {
 		try {
 			long startTime = System.currentTimeMillis();
@@ -79,6 +80,11 @@ public class HomePageBean {
 	}
 
 	private ApiFilter prepareMoviesInCinema(int days) {
+		if (days > 30) {
+			index++;
+			selectedCinema = cinemas.getList().get(index);
+			days=2;
+		}
 		DateFormater df = new DateFormater();
 		timeTo = df.convertSimpleDateToTimezone(df.getDaysFromToday(days));
 		ApiFilter filter = prepareMovieFilter();
@@ -197,7 +203,7 @@ public class HomePageBean {
 
 	public Cinema getSelectedCinema() {
 		if (selectedCinema == null) {
-			selectedCinema = cinemas.getList().get(0);
+			selectedCinema = cinemas.getList().get(index);
 		}
 		return selectedCinema;
 	}

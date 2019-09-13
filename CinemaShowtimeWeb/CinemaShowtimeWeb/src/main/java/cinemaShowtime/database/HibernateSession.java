@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import cinemaShowtime.database.model.Account;
+import cinemaShowtime.database.model.AccountPreferenceItem;
 import cinemaShowtime.utils.HibernateSetting;
 
 public class HibernateSession {
@@ -20,7 +21,8 @@ public class HibernateSession {
 				.setProperty("hibernate.connection.password", HibernateSetting.PASSWORD)
 				.setProperty("hibernate.connection.pool_size", HibernateSetting.POOL_SIZE)
 				.setProperty("hibernate.connection.show_sql", HibernateSetting.SHOW_SQL)
-				.addAnnotatedClass(Account.class);
+				.addAnnotatedClass(Account.class)
+				.addAnnotatedClass(AccountPreferenceItem.class);
 
 		sessionFactory = cfg.buildSessionFactory();
 		return sessionFactory.openSession();

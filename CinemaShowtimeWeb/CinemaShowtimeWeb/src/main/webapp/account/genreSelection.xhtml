@@ -14,7 +14,7 @@
 
 		<p:selectManyCheckbox value="#{bean.selectedGenreList}" layout="grid"
 			columns="3" converter="genreConverter"
-			style="font-size:22;color:white;">
+			style="font-size:22;color:white;width:100%;">
 			<f:selectItems value="#{bean.genreList}" var="genre"
 				itemLabel="#{genre.name}" itemValue="#{genre}" />
 		</p:selectManyCheckbox>

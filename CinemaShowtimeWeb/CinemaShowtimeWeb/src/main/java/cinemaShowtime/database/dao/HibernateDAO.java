@@ -11,7 +11,7 @@ public interface HibernateDAO <T>  {
 
 	public void delete(T entity);
 
-	public List<T> findAll();
+	public List<T> findList(HashMap<String, Object> queryParamMap);
 
-	public T find(HashMap<String, String> queryParamMap);
+	public T find(HashMap<String, Object> queryParamMap);
 }

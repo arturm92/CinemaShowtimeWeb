@@ -2,6 +2,8 @@ package cinemaShowtime.beans;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -11,7 +13,10 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.event.SelectEvent;
 
+import cinemaShowtime.database.dao.AccountPreferenceItemDAO;
 import cinemaShowtime.database.model.Account;
+import cinemaShowtime.database.model.AccountPreference;
+import cinemaShowtime.database.model.AccountPreferenceItem;
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
@@ -33,14 +38,14 @@ public class AccountBean {
 
 	private List<Genre> genreList;
 	private List<Genre> selectedGenreList;
-	
+
 	private Movies movies;
 	private Cities cities;
 	private Cinemas cinemas;
-	
+
 	private Movie movieToAdd;
 	private List<Movie> selectedMovieList;
-	
+
 	private City selectedCity;
 	private List<Cinema> selectedCinemaList;
 
@@ -49,11 +54,39 @@ public class AccountBean {
 	private boolean movieSelectionVisible;
 	private boolean summaryVisible;
 
+	private AccountPreferenceItemDAO accountPreferenceDAO = new AccountPreferenceItemDAO();
+
 	public AccountBean() {
 		this.account = Application.getInstance().getAccount();
-		setGenreSelectionVisible(true);
 
+		prepareAccountPreference();
+
+		setGenreSelectionVisible(true);
 		initGenres();
+	}
+
+	private void prepareAccountPreference() {
+		HashMap<String, Object> queryParamMap = new HashMap<String, Object>();
+		queryParamMap.put("accountID", account.getId());
+		List<AccountPreferenceItem> accPreferenceList = accountPreferenceDAO.findList(queryParamMap);
+		AccountPreference accPreference = new AccountPreference();
+		ArrayList<Integer> cinemaIds = new ArrayList<Integer>();
+		ArrayList<Integer> genreIds = new ArrayList<Integer>();
+
+		for (AccountPreferenceItem item : accPreferenceList) {
+			accPreference.setAccountID(item.getAccountID());
+			if (item.getGenreID() != null) {
+				genreIds.add(item.getGenreID());
+			}
+			if (item.getCinemaID() != null) {
+				cinemaIds.add(item.getCinemaID());
+			}
+		}
+		Integer[] integerArray;
+		integerArray = Arrays.copyOf(genreIds.toArray(), genreIds.toArray().length, Integer[].class);
+		accPreference.setGenreIds(integerArray);
+		integerArray = Arrays.copyOf(cinemaIds.toArray(), genreIds.toArray().length, Integer[].class);
+		accPreference.setCinemaIds(integerArray);
 	}
 
 	private void initGenres() {
@@ -62,32 +95,33 @@ public class AccountBean {
 		selectedGenreList = new ArrayList<Genre>();
 
 	}
+
 	private void initMovies() {
 		ApiFilter filter = prepareMovieFilter();
-		this.movies = ApiHelper.getMovies(filter); //TO DO ładowanie wszystkich filmów po tokenie strony
-		//MovieHelper.verifyList(movies, null, null);
-		/*filter.deleteFilterParam(ApiFilter.Parameter.LANG);
-		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
-		Movies moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
-		moviePosters.fillMovieMap();
-		MovieHelper.addPosterToMovie(movies, moviePosters);*/
+		this.movies = ApiHelper.getMovies(filter); // TO DO ładowanie wszystkich filmów po tokenie strony
+		// MovieHelper.verifyList(movies, null, null);
+		/*
+		 * filter.deleteFilterParam(ApiFilter.Parameter.LANG);
+		 * filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS); Movies moviePosters =
+		 * ApiHelper.getMoviesPosterEngishVersion(filter); moviePosters.fillMovieMap();
+		 * MovieHelper.addPosterToMovie(movies, moviePosters);
+		 */
 		Application.getInstance().setMovies(movies);
-		
+
 		selectedMovieList = new ArrayList<Movie>();
 	}
-	
+
 	public void initCities() {
 		this.cities = ApiHelper.getCitiesFromApi();
 		Application.getInstance().setCities(cities);
 	}
-	
+
 	public void initCinemas() {
 		ApiFilter filter = prepareCinemaFilter();
 		this.cinemas = ApiHelper.getCinemas(filter);
 		Application.getInstance().setCinemas(cinemas);
 	}
 
-	
 	private ApiFilter prepareMovieFilter() {
 		ApiFilter filter = new ApiFilter();
 		filter.setFields(ApiFilter.Field.MOVIE_SHORT_FIELDS);
@@ -97,7 +131,7 @@ public class AccountBean {
 		filter.addFilterParam(ApiFilter.Parameter.PAGE_SIZE, "100");
 		return filter;
 	}
-	
+
 	private ApiFilter prepareCinemaFilter() {
 		ApiFilter filter = new ApiFilter();
 		filter.addFilterParam(ApiFilter.Parameter.LOCATION, selectedCity.getLat() + "," + selectedCity.getLon());
@@ -105,23 +139,23 @@ public class AccountBean {
 		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
 		return filter;
 	}
-	
+
 	public void addMovie() {
 		if (movieToAdd != null && selectedMovieList.size() < 5) {
 			selectedMovieList.add(movieToAdd);
 			movieToAdd = null;
 		}
 	}
-	
+
 	public void savePreference() {
-		//TO DO
+		// TO DO
 		Logger.log("ZAPISUJE PREFERECJE");
 	}
-	
+
 	public void selectCity(SelectEvent event) {
 		initCinemas();
 	}
-	
+
 	public List<Movie> getMovieList(String prefix) {
 		List<Movie> returnList = new ArrayList<Movie>();
 		if (prefix.length() > 0) {
@@ -135,7 +169,7 @@ public class AccountBean {
 		}
 		return returnList;
 	}
-	
+
 	public List<City> getCityList(String prefix) {
 		List<City> returnList = new ArrayList<City>();
 		if (prefix.length() > 0) {
@@ -149,25 +183,25 @@ public class AccountBean {
 		}
 		return returnList;
 	}
-	
-	public List<Cinema> getCinemaList(){
+
+	public List<Cinema> getCinemaList() {
 		if (cinemas != null) {
 			return cinemas.getList();
 		}
 		return null;
-		
+
 	}
-	
+
 	public void goToNextStep() {
 		if (genreSelectionVisible) {
 			initCities();
 			setMovieSelectionVisible(false);
 			setCinemaSelectionVisible(true);
-			//initMovies();
+			// initMovies();
 			setGenreSelectionVisible(false);
 			setSummaryVisible(false);
-		} else if(movieSelectionVisible) {
-			//pominiety wybor filmow
+		} else if (movieSelectionVisible) {
+			// pominiety wybor filmow
 		} else if (cinemaSelectionVisible) {
 			setGenreSelectionVisible(false);
 			setMovieSelectionVisible(false);
@@ -198,7 +232,7 @@ public class AccountBean {
 		setCinemaSelectionVisible(false);
 		setSummaryVisible(false);
 	}
-	
+
 	public void thirdStepClicked() {
 		setGenreSelectionVisible(false);
 		setMovieSelectionVisible(false);
@@ -229,7 +263,7 @@ public class AccountBean {
 	public void setSelectedMovieList(List<Movie> selectedMovieList) {
 		this.selectedMovieList = selectedMovieList;
 	}
-	
+
 	public City getSelectedCity() {
 		return selectedCity;
 	}
@@ -285,6 +319,5 @@ public class AccountBean {
 	public void setSummaryVisible(boolean summaryVisible) {
 		this.summaryVisible = summaryVisible;
 	}
-	
 
 }

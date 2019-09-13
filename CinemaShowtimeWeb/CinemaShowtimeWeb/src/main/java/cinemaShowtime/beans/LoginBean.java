@@ -33,7 +33,7 @@ public class LoginBean {
 
 	public void loginAccount() {
 		if (checkLoginParameter()) {
-			HashMap<String,String> queryParamMap = new HashMap<String,String>();
+			HashMap<String,Object> queryParamMap = new HashMap<String,Object>();
 			queryParamMap.put("userName", accountName);
 			queryParamMap.put("password", accountPassword);
 			loggedAccount = accountDAO.find(queryParamMap);
