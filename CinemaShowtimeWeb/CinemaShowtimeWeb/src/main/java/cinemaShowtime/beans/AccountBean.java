@@ -3,11 +3,12 @@ package cinemaShowtime.beans;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -24,21 +25,24 @@ import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.Logger;
 import model.json.City;
 import model.json.cinema.Cinema;
+import model.json.cinema.comparator.CinemaNameComparator;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
+import model.json.complex.Genres;
 import model.json.complex.Movies;
 import model.json.movie.Genre;
 import model.json.movie.Movie;
 
 @ManagedBean(name = "accountBean", eager = true)
-@SessionScoped
+@ViewScoped
 public class AccountBean {
 
 	private Account account;
+	private AccountPreference accountPreference;
 
-	private List<Genre> genreList;
 	private List<Genre> selectedGenreList;
 
+	private Genres genres;
 	private Movies movies;
 	private Cities cities;
 	private Cinemas cinemas;
@@ -57,58 +61,82 @@ public class AccountBean {
 	private AccountPreferenceItemDAO accountPreferenceDAO = new AccountPreferenceItemDAO();
 
 	public AccountBean() {
+		initGenres();
+		initCities();
 		this.account = Application.getInstance().getAccount();
 
-		prepareAccountPreference();
-
-		setGenreSelectionVisible(true);
-		initGenres();
-	}
-
-	private void prepareAccountPreference() {
-		HashMap<String, Object> queryParamMap = new HashMap<String, Object>();
-		queryParamMap.put("accountID", account.getId());
-		List<AccountPreferenceItem> accPreferenceList = accountPreferenceDAO.findList(queryParamMap);
-		AccountPreference accPreference = new AccountPreference();
-		ArrayList<Integer> cinemaIds = new ArrayList<Integer>();
-		ArrayList<Integer> genreIds = new ArrayList<Integer>();
-
-		for (AccountPreferenceItem item : accPreferenceList) {
-			accPreference.setAccountID(item.getAccountID());
-			if (item.getGenreID() != null) {
-				genreIds.add(item.getGenreID());
+		accountPreference = prepareAccountPreference();
+		if (accountPreference != null) {
+			for (Integer genreId : accountPreference.getGenreIds()) {
+				if (genreId != null) {
+					selectedGenreList.add(genres.findGenreById(genreId));
+				}
 			}
-			if (item.getCinemaID() != null) {
-				cinemaIds.add(item.getCinemaID());
+			if (accountPreference.getCityId() != null) {
+				this.selectedCity = cities.findCityById(accountPreference.getCityId());
 			}
 		}
-		Integer[] integerArray;
-		integerArray = Arrays.copyOf(genreIds.toArray(), genreIds.toArray().length, Integer[].class);
-		accPreference.setGenreIds(integerArray);
-		integerArray = Arrays.copyOf(cinemaIds.toArray(), genreIds.toArray().length, Integer[].class);
-		accPreference.setCinemaIds(integerArray);
+		setGenreSelectionVisible(true);
+	}
+
+	private AccountPreference prepareAccountPreference() {
+		HashMap<String, Object> queryParamMap = new HashMap<String, Object>();
+		queryParamMap.put("accountId", account.getId());
+		List<AccountPreferenceItem> itemList = accountPreferenceDAO.findList(queryParamMap);
+		if (itemList != null && itemList.size() > 0) {
+			AccountPreference accPreference = new AccountPreference();
+			ArrayList<Integer> cinemaIds = new ArrayList<Integer>();
+			ArrayList<Integer> genreIds = new ArrayList<Integer>();
+
+			for (AccountPreferenceItem item : itemList) {
+				accPreference.setAccountId(item.getAccountId());
+				if (item.getCityId() != null) {
+					accPreference.setCityId(item.getCityId());
+				}
+				if (item.getGenreId() != null) {
+					genreIds.add(item.getGenreId());
+				}
+				if (item.getCinemaId() != null) {
+					cinemaIds.add(item.getCinemaId());
+				}
+			}
+			Integer[] integerArray;
+			integerArray = Arrays.copyOf(genreIds.toArray(), genreIds.toArray().length, Integer[].class);
+			accPreference.setGenreIds(integerArray);
+			integerArray = Arrays.copyOf(cinemaIds.toArray(), genreIds.toArray().length, Integer[].class);
+			accPreference.setCinemaIds(integerArray);
+			return accPreference;
+		} else {
+			return null;
+		}
 	}
 
 	private void initGenres() {
-		genreList = ApiHelper.getGenres().removeNullGenres().getList();
-		Application.getInstance().setGenreList(genreList);
+		genres = ApiHelper.getGenres().removeNullGenres();
+		Collections.sort(getGenreList());
+		Application.getInstance().setGenreList(getGenreList());
 		selectedGenreList = new ArrayList<Genre>();
 
 	}
 
-	private void initMovies() {
-		ApiFilter filter = prepareMovieFilter();
-		this.movies = ApiHelper.getMovies(filter); // TO DO ładowanie wszystkich filmów po tokenie strony
-		// MovieHelper.verifyList(movies, null, null);
-		/*
-		 * filter.deleteFilterParam(ApiFilter.Parameter.LANG);
-		 * filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS); Movies moviePosters =
-		 * ApiHelper.getMoviesPosterEngishVersion(filter); moviePosters.fillMovieMap();
-		 * MovieHelper.addPosterToMovie(movies, moviePosters);
-		 */
-		Application.getInstance().setMovies(movies);
-
-		selectedMovieList = new ArrayList<Movie>();
+	public void savePreference() {
+		Logger.log("ZAPISUJE PREFERENCJE");
+		//usuwa wszystkie poprzednie preferencje
+		accountPreferenceDAO.delete(new AccountPreferenceItem(account.getId(), null, null, null));
+		//zapisuje aktualne
+		List<AccountPreferenceItem> itemList = new ArrayList<AccountPreferenceItem>();
+		for (Genre genre : selectedGenreList) {
+			itemList.add(new AccountPreferenceItem(account.getId(), genre.getId().intValue(), null, null));
+		}
+		for (Cinema cinema : selectedCinemaList) {
+			itemList.add(new AccountPreferenceItem(account.getId(), null, cinema.getId().intValue(), null));
+		}
+		if (selectedCity != null) {
+			itemList.add(new AccountPreferenceItem(account.getId(), null, null, selectedCity.getId().intValue()));
+		}
+		for (AccountPreferenceItem item : itemList) {
+			Integer accountPreferenceId = accountPreferenceDAO.insert(item);
+		}
 	}
 
 	public void initCities() {
@@ -119,17 +147,9 @@ public class AccountBean {
 	public void initCinemas() {
 		ApiFilter filter = prepareCinemaFilter();
 		this.cinemas = ApiHelper.getCinemas(filter);
+		Collections.sort(getCinemaList(), new CinemaNameComparator());
 		Application.getInstance().setCinemas(cinemas);
-	}
-
-	private ApiFilter prepareMovieFilter() {
-		ApiFilter filter = new ApiFilter();
-		filter.setFields(ApiFilter.Field.MOVIE_SHORT_FIELDS);
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
-		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Const.COUNTRIES);
-		filter.addFilterParam(ApiFilter.Parameter.INCLUDE_OUTDATED, "true");
-		filter.addFilterParam(ApiFilter.Parameter.PAGE_SIZE, "100");
-		return filter;
+		selectedCinemaList = new ArrayList<Cinema>();
 	}
 
 	private ApiFilter prepareCinemaFilter() {
@@ -145,11 +165,6 @@ public class AccountBean {
 			selectedMovieList.add(movieToAdd);
 			movieToAdd = null;
 		}
-	}
-
-	public void savePreference() {
-		// TO DO
-		Logger.log("ZAPISUJE PREFERECJE");
 	}
 
 	public void selectCity(SelectEvent event) {
@@ -194,12 +209,19 @@ public class AccountBean {
 
 	public void goToNextStep() {
 		if (genreSelectionVisible) {
-			initCities();
 			setMovieSelectionVisible(false);
 			setCinemaSelectionVisible(true);
-			// initMovies();
 			setGenreSelectionVisible(false);
 			setSummaryVisible(false);
+
+			if (selectedCity != null) {
+				initCinemas();
+				for (Integer cinemaId : accountPreference.getCinemaIds()) {
+					if (cinemaId != null) {
+						selectedCinemaList.add(cinemas.findCinemaById(cinemaId));
+					}
+				}
+			}
 		} else if (movieSelectionVisible) {
 			// pominiety wybor filmow
 		} else if (cinemaSelectionVisible) {
@@ -245,7 +267,7 @@ public class AccountBean {
 	}
 
 	public List<Genre> getGenreList() {
-		return genreList;
+		return genres.getList();
 	}
 
 	public List<Genre> getSelectedGenreList() {

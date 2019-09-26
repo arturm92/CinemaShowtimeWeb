@@ -30,20 +30,17 @@ public class Cities extends BaseComplexModel implements JsonList<City> {
 		}
 	}
 
-	public City findCityById(String cityId) {
-		if (cityId != null && !cityId.isEmpty() ) {
-			Long id = Long.valueOf(cityId);
-			for (City city : list) {
-				if (city.getId().compareTo(id) == 0) {
-					return city;
-				}
+	public City findCityById(Integer cityId) {
+		for (City city : list) {
+			if (city.getId().compareTo(new Long(cityId)) == 0) {
+				return city;
 			}
 		}
 		return null;
 	}
 
 	public City findCityByName(String cityName) {
-		if (cityName != null && !cityName.isEmpty() ) {
+		if (cityName != null && !cityName.isEmpty()) {
 			for (City city : list) {
 				if (city.getName().equals(cityName)) {
 					return city;

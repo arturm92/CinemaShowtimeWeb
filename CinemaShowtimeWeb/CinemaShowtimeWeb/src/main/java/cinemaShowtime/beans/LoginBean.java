@@ -25,8 +25,8 @@ public class LoginBean {
 
 	public void registerAccount() {
 		Account account = new Account(accountName, accountPassword);
-		Integer accountID = accountDAO.insert(account);
-		if  (accountID > 0) {
+		Integer accountId = accountDAO.insert(account);
+		if  (accountId != null) {
 			loginAccount();
 		}
 	}

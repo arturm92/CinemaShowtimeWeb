@@ -14,13 +14,22 @@ public class AccountPreferenceItem {
 	@Column(name = "ID")
 	private int id;
 	@Column(name = "ACCOUNT_ID")
-	private int accountID;
+	private Integer accountId;
 	@Column(name = "GENRE_ID")
-	private Integer genreID;
+	private Integer genreId;
 	@Column(name = "CINEMA_ID")
-	private Integer cinemaID;
+	private Integer cinemaId;
+	@Column(name = "CITY_ID")
+	private Integer cityId;
 
 	public AccountPreferenceItem() {
+	};
+
+	public AccountPreferenceItem(Integer accountId, Integer genreId, Integer cinemaId, Integer cityId) {
+		this.accountId = accountId;
+		this.genreId = genreId;
+		this.cinemaId = cinemaId;
+		this.cityId = cityId;
 	};
 
 	public int getId() {
@@ -31,28 +40,36 @@ public class AccountPreferenceItem {
 		this.id = id;
 	}
 
-	public int getAccountID() {
-		return accountID;
+	public Integer getAccountId() {
+		return accountId;
 	}
 
-	public void setAccountID(int accountID) {
-		this.accountID = accountID;
+	public void setAccountId(Integer accountId) {
+		this.accountId = accountId;
 	}
 
-	public Integer getGenreID() {
-		return genreID;
+	public Integer getGenreId() {
+		return genreId;
 	}
 
-	public void setGenreID(Integer genreID) {
-		this.genreID = genreID;
+	public void setGenreId(Integer genreId) {
+		this.genreId = genreId;
 	}
 
-	public Integer getCinemaID() {
-		return cinemaID;
+	public Integer getCinemaId() {
+		return cinemaId;
 	}
 
-	public void setCinemaID(Integer cinemaID) {
-		this.cinemaID = cinemaID;
+	public void setCinemaId(Integer cinemaId) {
+		this.cinemaId = cinemaId;
+	}
+
+	public Integer getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(Integer cityId) {
+		this.cityId = cityId;
 	}
 
 }

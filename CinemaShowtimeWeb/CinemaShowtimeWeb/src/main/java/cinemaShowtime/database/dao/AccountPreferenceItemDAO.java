@@ -5,21 +5,39 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import cinemaShowtime.database.HibernateSession;
 import cinemaShowtime.database.model.AccountPreferenceItem;
+import cinemaShowtime.utils.Logger;
 
 public class AccountPreferenceItemDAO implements HibernateDAO<AccountPreferenceItem> {
 
 	private HibernateSession hibernateSession = new HibernateSession();
-	
+
+	@SuppressWarnings("finally")
 	@Override
-	public Integer insert(AccountPreferenceItem entity) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer insert(AccountPreferenceItem accountPreferenceItem) {
+		Session session = hibernateSession.getSession();
+		Transaction tx = null;
+		Integer id = null;
+		try {
+			tx = session.beginTransaction();
+			id = (Integer) session.save(accountPreferenceItem);
+			Logger.log("ACCOUNT PREFERENCE ID : " + id);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+			return id;
+		}
+
 	}
 
 	@Override
@@ -29,11 +47,23 @@ public class AccountPreferenceItemDAO implements HibernateDAO<AccountPreferenceI
 	}
 
 	@Override
-	public void delete(AccountPreferenceItem entity) {
-		// TODO Auto-generated method stub
-
+	public void delete(AccountPreferenceItem item) {
+		Session session = hibernateSession.getSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			Query query = session.createQuery("delete from ACCOUNT_PREFERENCE_ITEM where ACCOUNT_ID = :accountId");
+			query.setParameter("accountId", item.getAccountId());
+			query.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 	}
-
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "finally" })
 	@Override
@@ -43,7 +73,7 @@ public class AccountPreferenceItemDAO implements HibernateDAO<AccountPreferenceI
 		List<AccountPreferenceItem> accPreferenceList = null;
 		try {
 			tx = session.beginTransaction();
-			Query query = session.createQuery("from ACCOUNT_PREFERENCE_ITEM where ACCOUNT_ID = :accountID");
+			Query query = session.createQuery("from ACCOUNT_PREFERENCE_ITEM where ACCOUNT_ID = :accountId");
 			for (Map.Entry<String, Object> entry : queryParamMap.entrySet()) {
 				query.setParameter(entry.getKey(), entry.getValue());
 			}
@@ -67,7 +97,7 @@ public class AccountPreferenceItemDAO implements HibernateDAO<AccountPreferenceI
 		AccountPreferenceItem foundAccPreference = null;
 		try {
 			tx = session.beginTransaction();
-			Query query = session.createQuery("from ACCOUNT_PREFERENCE_ITEM where ACCOUNT_ID = :accountID");
+			Query query = session.createQuery("from ACCOUNT_PREFERENCE_ITEM where ACCOUNT_ID = :accountId");
 			for (Map.Entry<String, Object> entry : queryParamMap.entrySet()) {
 				query.setParameter(entry.getKey(), entry.getValue());
 			}

@@ -2,7 +2,8 @@ package cinemaShowtime.database.model;
 
 public class AccountPreference {
 
-	private int accountID;
+	private int accountId;
+	private Integer cityId;
 	private Integer[] genreIds;
 	private Integer[] cinemaIds;
 
@@ -11,12 +12,12 @@ public class AccountPreference {
 		this.cinemaIds = new Integer[] {};
 	}
 
-	public int getAccountID() {
-		return accountID;
+	public int getAccountId() {
+		return accountId;
 	}
 
-	public void setAccountID(int accountID) {
-		this.accountID = accountID;
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
 	}
 
 	public Integer[] getGenreIds() {
@@ -33,5 +34,13 @@ public class AccountPreference {
 
 	public void setCinemaIds(Integer[] cinemaIds) {
 		this.cinemaIds = cinemaIds;
+	}
+
+	public Integer getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(Integer cityId) {
+		this.cityId = cityId;
 	}
 }

@@ -41,4 +41,14 @@ public class Cinemas extends BaseComplexModel implements JsonList<Cinema> {
 		return null;
 	}
 
+	public Cinema findCinemaById(Integer cinemaId) {
+		for (Cinema cinema : list) {
+			Logger.log("CINEMA ID : " + cinema.getId() + "/" +cinema.getName());
+			if (cinema.getId().equals(new Long(cinemaId))) {
+				return cinema;
+			}
+		}
+		return null;
+	}
+
 }
