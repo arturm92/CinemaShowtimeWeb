@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.DateFormater;
@@ -35,9 +36,22 @@ public class MovieFilter {
 		genreList = ApiHelper.getGenres().removeNullGenres().getList();
 		Application.getInstance().setGenreList(genreList);
 		selectedGenreList = new ArrayList<Genre>();
-		Random random = new Random();
-		int randomIndex = random.nextInt(genreList.size() - 1);
-		selectedGenreList.add(genreList.get(randomIndex));
+
+		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
+		if (accountPreference != null) {
+			Long[] accountPreferenceGenreIds = accountPreference.getGenreIds();
+			for (int i = 0; i < accountPreferenceGenreIds.length; i++) {
+				for (Genre genre : genreList) {
+					if (genre.getId().compareTo(accountPreferenceGenreIds[i]) == 0) {
+						selectedGenreList.add(genre);
+					}
+				}
+			}
+		} else {
+			Random random = new Random();
+			int randomIndex = random.nextInt(genreList.size() - 1);
+			selectedGenreList.add(genreList.get(randomIndex));
+		}
 	}
 
 	private void initYearList() {
@@ -107,7 +121,7 @@ public class MovieFilter {
 
 	public void setSelectedYear(String selectedYear) {
 		if (!selectedYear.equals(this.selectedYear)) {
-		    Logger.log("ZMIENIONO ROK");
+			Logger.log("ZMIENIONO ROK");
 			updateFilterFlag(true);
 		}
 		this.selectedYear = selectedYear;
@@ -152,7 +166,7 @@ public class MovieFilter {
 	public boolean isRenderedRankingType() {
 		return renderedMap.get(Filter.Field.RANKING_TYPE);
 	}
-	
+
 	public boolean isRenderedReleaseDate() {
 		return renderedMap.get(Filter.Field.RELEASE_DATE);
 	}

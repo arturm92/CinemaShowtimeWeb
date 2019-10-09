@@ -34,9 +34,9 @@ public class Genres {
 		return this;
 	}
 
-	public Genre findGenreById(Integer id) {
+	public Genre findGenreById(Long id) {
 		for (Genre genre : list) {
-			if (genre.getId().compareTo(new Long(id)) == 0) {
+			if (genre.getId().compareTo(id) == 0) {
 				return genre;
 			}
 		}

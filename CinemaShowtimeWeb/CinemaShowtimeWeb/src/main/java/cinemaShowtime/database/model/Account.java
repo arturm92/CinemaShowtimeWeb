@@ -12,7 +12,7 @@ public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
-	private int id;
+	private Long id;
 	@Column(name = "USERNAME", nullable = false, unique = true)
 	private String name;
 	@Column(name = "PASSWORD", nullable = false)
@@ -26,11 +26,11 @@ public class Account {
 		this.password = password;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

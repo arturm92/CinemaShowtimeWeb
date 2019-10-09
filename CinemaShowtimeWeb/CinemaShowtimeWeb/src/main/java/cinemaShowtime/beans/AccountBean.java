@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -19,6 +20,7 @@ import cinemaShowtime.database.model.Account;
 import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.database.model.AccountPreferenceItem;
 import cinemaShowtime.filters.ApiFilter;
+import cinemaShowtime.helpers.AccountHelper;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.Const;
@@ -61,53 +63,34 @@ public class AccountBean {
 	private AccountPreferenceItemDAO accountPreferenceDAO = new AccountPreferenceItemDAO();
 
 	public AccountBean() {
-		initGenres();
-		initCities();
 		this.account = Application.getInstance().getAccount();
-
-		accountPreference = prepareAccountPreference();
-		if (accountPreference != null) {
-			for (Integer genreId : accountPreference.getGenreIds()) {
-				if (genreId != null) {
-					selectedGenreList.add(genres.findGenreById(genreId));
+		if (account != null) {
+			initGenres();
+			initCities();
+			accountPreference = getAccountPreferece();
+			if (accountPreference != null) {
+				for (Long genreId : accountPreference.getGenreIds()) {
+					if (genreId != null) {
+						selectedGenreList.add(genres.findGenreById(genreId));
+					}
+				}
+				if (accountPreference.getCityId() != null) {
+					this.selectedCity = cities.findCityById(accountPreference.getCityId());
 				}
 			}
-			if (accountPreference.getCityId() != null) {
-				this.selectedCity = cities.findCityById(accountPreference.getCityId());
-			}
+			Application.getInstance().setAccountPreference(accountPreference);
+			setGenreSelectionVisible(true);
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Zaloguj się!", "Aby przeglądać swoje konto musisz być zalogowany"));
 		}
-		setGenreSelectionVisible(true);
 	}
 
-	private AccountPreference prepareAccountPreference() {
-		HashMap<String, Object> queryParamMap = new HashMap<String, Object>();
-		queryParamMap.put("accountId", account.getId());
-		List<AccountPreferenceItem> itemList = accountPreferenceDAO.findList(queryParamMap);
-		if (itemList != null && itemList.size() > 0) {
-			AccountPreference accPreference = new AccountPreference();
-			ArrayList<Integer> cinemaIds = new ArrayList<Integer>();
-			ArrayList<Integer> genreIds = new ArrayList<Integer>();
-
-			for (AccountPreferenceItem item : itemList) {
-				accPreference.setAccountId(item.getAccountId());
-				if (item.getCityId() != null) {
-					accPreference.setCityId(item.getCityId());
-				}
-				if (item.getGenreId() != null) {
-					genreIds.add(item.getGenreId());
-				}
-				if (item.getCinemaId() != null) {
-					cinemaIds.add(item.getCinemaId());
-				}
-			}
-			Integer[] integerArray;
-			integerArray = Arrays.copyOf(genreIds.toArray(), genreIds.toArray().length, Integer[].class);
-			accPreference.setGenreIds(integerArray);
-			integerArray = Arrays.copyOf(cinemaIds.toArray(), genreIds.toArray().length, Integer[].class);
-			accPreference.setCinemaIds(integerArray);
-			return accPreference;
+	private AccountPreference getAccountPreferece() {
+		if (accountPreference == null) {
+			return AccountHelper.prepareAccountPreference();
 		} else {
-			return null;
+			return accountPreference;
 		}
 	}
 
@@ -121,21 +104,21 @@ public class AccountBean {
 
 	public void savePreference() {
 		Logger.log("ZAPISUJE PREFERENCJE");
-		//usuwa wszystkie poprzednie preferencje
+		// usuwa wszystkie poprzednie preferencje
 		accountPreferenceDAO.delete(new AccountPreferenceItem(account.getId(), null, null, null));
-		//zapisuje aktualne
+		// zapisuje aktualne
 		List<AccountPreferenceItem> itemList = new ArrayList<AccountPreferenceItem>();
 		for (Genre genre : selectedGenreList) {
-			itemList.add(new AccountPreferenceItem(account.getId(), genre.getId().intValue(), null, null));
+			itemList.add(new AccountPreferenceItem(account.getId(), genre.getId(), null, null));
 		}
 		for (Cinema cinema : selectedCinemaList) {
-			itemList.add(new AccountPreferenceItem(account.getId(), null, cinema.getId().intValue(), null));
+			itemList.add(new AccountPreferenceItem(account.getId(), null, cinema.getId(), null));
 		}
 		if (selectedCity != null) {
-			itemList.add(new AccountPreferenceItem(account.getId(), null, null, selectedCity.getId().intValue()));
+			itemList.add(new AccountPreferenceItem(account.getId(), null, null, selectedCity.getId()));
 		}
 		for (AccountPreferenceItem item : itemList) {
-			Integer accountPreferenceId = accountPreferenceDAO.insert(item);
+			Long accountPreferenceId = accountPreferenceDAO.insert(item);
 		}
 	}
 
@@ -216,7 +199,7 @@ public class AccountBean {
 
 			if (selectedCity != null) {
 				initCinemas();
-				for (Integer cinemaId : accountPreference.getCinemaIds()) {
+				for (Long cinemaId : accountPreference.getCinemaIds()) {
 					if (cinemaId != null) {
 						selectedCinemaList.add(cinemas.findCinemaById(cinemaId));
 					}

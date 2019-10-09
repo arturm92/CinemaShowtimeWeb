@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
 
-		<h:form id="accountForm" style="color:white;">
+		<h:form id="accountForm" style="color:white;" rendered="#{bean.account != null}">
 
 			<h:panelGroup id="informationPanelGroup">
 				<h:outputText style="font-size:22;" value="USTAWIENIA PREFERENCJI" />

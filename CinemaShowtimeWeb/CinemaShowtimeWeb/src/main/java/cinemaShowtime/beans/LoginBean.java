@@ -1,16 +1,15 @@
 package cinemaShowtime.beans;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import cinemaShowtime.database.dao.AccountDAO;
 import cinemaShowtime.database.model.Account;
+import cinemaShowtime.helpers.AccountHelper;
 import cinemaShowtime.utils.Application;
 
 @ManagedBean(name = "loginBean", eager = true)
@@ -25,7 +24,7 @@ public class LoginBean {
 
 	public void registerAccount() {
 		Account account = new Account(accountName, accountPassword);
-		Integer accountId = accountDAO.insert(account);
+		Long accountId = accountDAO.insert(account);
 		if  (accountId != null) {
 			loginAccount();
 		}
@@ -39,20 +38,11 @@ public class LoginBean {
 			loggedAccount = accountDAO.find(queryParamMap);
 			if (loggedAccount != null) {
 				Application.getInstance().setAccount(loggedAccount);
-				goToAccountPage();
+				AccountHelper.prepareAccountPreference();
 			}
 		}
 	}
 	
-	private void goToAccountPage() {
-		try {
-			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-			ec.redirect("/CinemaShowtimeWeb/account/index.xhtml");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void logoutAccount() {
 		loggedAccount = null;
 	}

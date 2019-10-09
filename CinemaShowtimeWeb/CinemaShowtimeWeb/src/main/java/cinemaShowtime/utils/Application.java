@@ -3,6 +3,7 @@ package cinemaShowtime.utils;
 import java.util.List;
 
 import cinemaShowtime.database.model.Account;
+import cinemaShowtime.database.model.AccountPreference;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
 import model.json.complex.Movies;
@@ -16,6 +17,7 @@ public class Application {
 	private Cities cities;
 	private Cinemas cinemas;
 	private List<Genre> genreList;
+	private AccountPreference accountPreference;
 
 	public static Application getInstance() {
 		if (instance == null) {
@@ -64,5 +66,12 @@ public class Application {
 		this.movies = movies;
 	}
 
+	public AccountPreference getAccountPreference() {
+		return accountPreference;
+	}
+
+	public void setAccountPreference(AccountPreference accountPreference) {
+		this.accountPreference = accountPreference;
+	}
 
 }

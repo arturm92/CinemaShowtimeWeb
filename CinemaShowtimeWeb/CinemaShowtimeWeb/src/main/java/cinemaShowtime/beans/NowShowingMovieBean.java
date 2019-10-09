@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -22,7 +22,7 @@ import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "nowShowingMovieBean", eager = true)
-@SessionScoped
+@ViewScoped
 public class NowShowingMovieBean extends FilterInterfaceImpl {
 
 	private Movies movies;

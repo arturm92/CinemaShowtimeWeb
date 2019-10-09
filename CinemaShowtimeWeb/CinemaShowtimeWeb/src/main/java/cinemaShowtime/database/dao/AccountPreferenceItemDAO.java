@@ -20,13 +20,13 @@ public class AccountPreferenceItemDAO implements HibernateDAO<AccountPreferenceI
 
 	@SuppressWarnings("finally")
 	@Override
-	public Integer insert(AccountPreferenceItem accountPreferenceItem) {
+	public Long insert(AccountPreferenceItem accountPreferenceItem) {
 		Session session = hibernateSession.getSession();
 		Transaction tx = null;
-		Integer id = null;
+		Long id = null;
 		try {
 			tx = session.beginTransaction();
-			id = (Integer) session.save(accountPreferenceItem);
+			id = (Long) session.save(accountPreferenceItem);
 			Logger.log("ACCOUNT PREFERENCE ID : " + id);
 			tx.commit();
 		} catch (HibernateException e) {

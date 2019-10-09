@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface HibernateDAO <T>  {
 
-	public Integer insert(T entity);
+	public Long insert(T entity);
 
 	public void update(T entity);
 

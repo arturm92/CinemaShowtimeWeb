@@ -30,9 +30,9 @@ public class Cities extends BaseComplexModel implements JsonList<City> {
 		}
 	}
 
-	public City findCityById(Integer cityId) {
+	public City findCityById(Long cityId) {
 		for (City city : list) {
-			if (city.getId().compareTo(new Long(cityId)) == 0) {
+			if (city.getId().compareTo(cityId) == 0) {
 				return city;
 			}
 		}

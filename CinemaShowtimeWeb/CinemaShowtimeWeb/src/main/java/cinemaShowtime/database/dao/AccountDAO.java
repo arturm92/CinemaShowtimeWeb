@@ -23,13 +23,13 @@ public class AccountDAO implements HibernateDAO<Account> {
 
 	@SuppressWarnings({ "finally" })
 	@Override
-	public Integer insert(Account account) {
+	public Long insert(Account account) {
 		Session session = hibernateSession.getSession();
 		Transaction tx = null;
-		Integer id = null;
+		Long id = null;
 		try {
 			tx = session.beginTransaction();
-			id = (Integer) session.save(account);
+			id = (Long) session.save(account);
 			if (id > 0) {
 				FacesContext.getCurrentInstance()
 						.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,

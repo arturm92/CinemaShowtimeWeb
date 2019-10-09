@@ -2,45 +2,45 @@ package cinemaShowtime.database.model;
 
 public class AccountPreference {
 
-	private int accountId;
-	private Integer cityId;
-	private Integer[] genreIds;
-	private Integer[] cinemaIds;
+	private Long accountId;
+	private Long cityId;
+	private Long[] genreIds;
+	private Long[] cinemaIds;
 
 	public AccountPreference() {
-		this.genreIds = new Integer[] {};
-		this.cinemaIds = new Integer[] {};
+		this.genreIds = new Long[] {};
+		this.cinemaIds = new Long[] {};
 	}
 
-	public int getAccountId() {
+	public Long getAccountId() {
 		return accountId;
 	}
 
-	public void setAccountId(int accountId) {
+	public void setAccountId(Long accountId) {
 		this.accountId = accountId;
 	}
 
-	public Integer[] getGenreIds() {
+	public Long[] getGenreIds() {
 		return genreIds;
 	}
 
-	public void setGenreIds(Integer[] genreIds) {
+	public void setGenreIds(Long[] genreIds) {
 		this.genreIds = genreIds;
 	}
 
-	public Integer[] getCinemaIds() {
+	public Long[] getCinemaIds() {
 		return cinemaIds;
 	}
 
-	public void setCinemaIds(Integer[] cinemaIds) {
+	public void setCinemaIds(Long[] cinemaIds) {
 		this.cinemaIds = cinemaIds;
 	}
 
-	public Integer getCityId() {
+	public Long getCityId() {
 		return cityId;
 	}
 
-	public void setCityId(Integer cityId) {
+	public void setCityId(Long cityId) {
 		this.cityId = cityId;
 	}
 }
