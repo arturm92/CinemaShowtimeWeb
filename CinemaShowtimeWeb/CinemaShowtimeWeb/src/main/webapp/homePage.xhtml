@@ -26,7 +26,7 @@
 					</div>
 					<div class="ui-grid-col-11" style="padding-left: 2%;">
 						<p:dataTable id="moviesDataTable" var="movie"
-							value="#{bean.movieList}" sortBy="#{movie.name}"
+							value="#{bean.filteredMovieList}" sortBy="#{movie.name}"
 							sortOrder="ascending">
 							<f:facet name="header">
 								<h:outputText value="#{bean.selectedCinema.name}" />

@@ -13,10 +13,12 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
 
+import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.LocationApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
+import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
@@ -27,6 +29,7 @@ import model.json.cinema.comparator.CinemaNameComparator;
 import model.json.complex.Cinemas;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
+import model.json.movie.Genre;
 import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "homePageBean", eager = true)
@@ -43,7 +46,7 @@ public class HomePageBean {
 	private int distance = Const.DISTANCE;
 	private String timeTo;
 	private int index;
-	
+
 	public HomePageBean() {
 		try {
 			long startTime = System.currentTimeMillis();
@@ -79,11 +82,40 @@ public class HomePageBean {
 		MovieHelper.addPosterToMovie(movies, moviePosters);
 	}
 
+	public List<MovieFormatted> getFilteredMovieList() {
+		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
+		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {
+			List<MovieFormatted> retrunMovieList = new ArrayList<MovieFormatted>();
+			Long[] genreIds = accountPreference.getGenreIds();
+			if (genreIds.length > 0) {
+				for (MovieFormatted movie : movies.getList()) {
+					boolean stop = false;
+					List<Genre> list = movie.getGenre();
+					for (Genre genre : list) {
+						for (int i = 0; i < genreIds.length; i++) {
+							if (genre.getId().compareTo(genreIds[i]) == 0) {
+								retrunMovieList.add(movie);
+								stop = true;
+								break;
+							}
+						}
+						if (stop) {
+							break;
+						}
+					}
+				}
+			}
+			return retrunMovieList;
+		} else {
+			return movies.getList();
+		}
+	}
+
 	private ApiFilter prepareMoviesInCinema(int days) {
 		if (days > 30) {
 			index++;
 			selectedCinema = cinemas.getList().get(index);
-			days=2;
+			days = 2;
 		}
 		DateFormater df = new DateFormater();
 		timeTo = df.convertSimpleDateToTimezone(df.getDaysFromToday(days));
@@ -191,10 +223,6 @@ public class HomePageBean {
 
 	public List<Cinema> getCinemaList() {
 		return cinemas.getList();
-	}
-
-	public List<MovieFormatted> getMovieList() {
-		return movies.getList();
 	}
 
 	public Movies getMovies() {
