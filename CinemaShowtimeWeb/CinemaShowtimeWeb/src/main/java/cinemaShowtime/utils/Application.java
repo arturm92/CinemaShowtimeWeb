@@ -18,6 +18,7 @@ public class Application {
 	private Cinemas cinemas;
 	private List<Genre> genreList;
 	private AccountPreference accountPreference;
+	private boolean preferenceHelp = false;
 
 	public static Application getInstance() {
 		if (instance == null) {
@@ -72,6 +73,14 @@ public class Application {
 
 	public void setAccountPreference(AccountPreference accountPreference) {
 		this.accountPreference = accountPreference;
+	}
+
+	public boolean isPreferenceHelp() {
+		return preferenceHelp;
+	}
+
+	public void setPreferenceHelp(boolean preferenceHelp) {
+		this.preferenceHelp = preferenceHelp;
 	}
 
 }

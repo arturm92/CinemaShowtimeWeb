@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
+import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
@@ -26,7 +27,7 @@ public class HeaderBean {
 
 	private Movies headerMovies;
 	private Movies moviePosters;
-
+	
 	public HeaderBean() {
 		long startTime = System.currentTimeMillis();
 
@@ -89,5 +90,13 @@ public class HeaderBean {
 
 	public List<MovieFormatted> getHeaderMoviesList() {
 		return headerMovies.getMoviesWithPosterList();
+	}
+
+	public boolean isPreferenceHelp() {
+		return Application.getInstance().isPreferenceHelp();
+	}
+
+	public void setPreferenceHelp(boolean preferenceHelp) {
+		Application.getInstance().setPreferenceHelp(preferenceHelp);
 	}
 }

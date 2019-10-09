@@ -39,6 +39,7 @@ public class LoginBean {
 			if (loggedAccount != null) {
 				Application.getInstance().setAccount(loggedAccount);
 				AccountHelper.prepareAccountPreference();
+				Application.getInstance().setPreferenceHelp(true);
 			}
 		}
 	}

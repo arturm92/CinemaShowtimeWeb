@@ -9,6 +9,12 @@
 			<p:messages id="messages" closable="true" showSummary="true"
 				showDetail="true" style="padding-top: 2%;" />
 			<div>
+				<p:selectBooleanCheckbox value="#{headerBean.preferenceHelp}"
+					itemLabel="Wsparcie" style="color:white;margin-left:92%;">
+					<p:ajax process="@this" event="change" />
+				</p:selectBooleanCheckbox>
+			</div>
+			<div>
 				<p:ring value="#{headerBean.headerMoviesList}" var="item">
 					<h:commandLink action="#{headerBean.clickMovie}">
 						<p:graphicImage value="#{item.posterImage}"

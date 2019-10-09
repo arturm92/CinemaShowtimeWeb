@@ -38,20 +38,28 @@ public class MovieFilter {
 		selectedGenreList = new ArrayList<Genre>();
 
 		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
-		if (accountPreference != null) {
+		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {
 			Long[] accountPreferenceGenreIds = accountPreference.getGenreIds();
-			for (int i = 0; i < accountPreferenceGenreIds.length; i++) {
-				for (Genre genre : genreList) {
-					if (genre.getId().compareTo(accountPreferenceGenreIds[i]) == 0) {
-						selectedGenreList.add(genre);
+			if (accountPreferenceGenreIds.length > 0) {
+				for (int i = 0; i < accountPreferenceGenreIds.length; i++) {
+					for (Genre genre : genreList) {
+						if (genre.getId().compareTo(accountPreferenceGenreIds[i]) == 0) {
+							selectedGenreList.add(genre);
+						}
 					}
 				}
+			} else {
+				randomizeGenre();
 			}
 		} else {
-			Random random = new Random();
-			int randomIndex = random.nextInt(genreList.size() - 1);
-			selectedGenreList.add(genreList.get(randomIndex));
+			randomizeGenre();
 		}
+	}
+
+	private void randomizeGenre() {
+		Random random = new Random();
+		int randomIndex = random.nextInt(genreList.size() - 1);
+		selectedGenreList.add(genreList.get(randomIndex));
 	}
 
 	private void initYearList() {
