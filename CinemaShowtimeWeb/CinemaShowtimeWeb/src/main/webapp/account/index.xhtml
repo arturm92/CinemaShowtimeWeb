@@ -11,14 +11,18 @@
 	<h:body>
 		<div id="header">
 			<ui:insert name="header">
-				<ui:include src="../modules/header.xhtml" />
+				<ui:include src="../modules/header.xhtml">
+					<ui:param name="contentBean" value="#{accountBean}" />
+				</ui:include>
 			</ui:insert>
 		</div>
-		<div id="content" style="color: white; padding-top: 2%;">
-			<ui:include src="account.xhtml">
-				<ui:param name="bean" value="#{accountBean}" />
-			</ui:include>
-		</div>
+		<h:panelGroup id="contentPanel">
+			<div id="content" style="color: white; padding-top: 2%;">
+				<ui:include src="account.xhtml">
+					<ui:param name="bean" value="#{accountBean}" />
+				</ui:include>
+			</div>
+		</h:panelGroup>
 		<div id="footer">
 			<ui:insert name="footer">
 				<ui:include src="../modules/footer.xhtml" />

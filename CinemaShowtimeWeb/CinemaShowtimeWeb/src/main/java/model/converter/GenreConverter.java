@@ -13,7 +13,7 @@ public class GenreConverter implements Converter {
 
 	public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
 		if (value != null && value.trim().length() > 0) {
-			for (Genre genre : Application.getInstance().getGenreList()) {
+			for (Genre genre : Application.getInstance().getGenres().getList()) {
 				if (genre.getName().equals(value)) {
 					return genre;
 				}

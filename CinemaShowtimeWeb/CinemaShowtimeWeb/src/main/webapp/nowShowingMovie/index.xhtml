@@ -11,14 +11,18 @@
 	<h:body>
 		<div id="header">
 			<ui:insert name="header">
-				<ui:include src="../modules/header.xhtml" />
+				<ui:include src="../modules/header.xhtml">
+					<ui:param name="contentBean" value="#{nowShowingMovieBean}" />
+				</ui:include>
 			</ui:insert>
 		</div>
-		<div id="content" style="text-align: left;">
-			<ui:include src="nowShowingMovie.xhtml">
-				<ui:param name="bean" value="#{nowShowingMovieBean}" />
-			</ui:include>
-		</div>
+		<h:panelGroup id="contentPanel">
+			<div id="content" style="text-align: left;">
+				<ui:include src="nowShowingMovie.xhtml">
+					<ui:param name="bean" value="#{nowShowingMovieBean}" />
+				</ui:include>
+			</div>
+		</h:panelGroup>
 		<div id="footer">
 			<ui:insert name="footer">
 				<ui:include src="../modules/footer.xhtml" />

@@ -11,6 +11,7 @@ import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
+import model.json.complex.Genres;
 import model.json.movie.Genre;
 
 public class MovieFilter {
@@ -33,8 +34,12 @@ public class MovieFilter {
 	}
 
 	private void initGenreList() {
-		genreList = ApiHelper.getGenres().removeNullGenres().getList();
-		Application.getInstance().setGenreList(genreList);
+		Genres genres = Application.getInstance().getGenres();
+		if (genres == null) {
+			genres = ApiHelper.getGenres().removeNullGenres();
+			Application.getInstance().setGenres(genres);
+		}
+		genreList = genres.getList();
 		selectedGenreList = new ArrayList<Genre>();
 
 		AccountPreference accountPreference = Application.getInstance().getAccountPreference();

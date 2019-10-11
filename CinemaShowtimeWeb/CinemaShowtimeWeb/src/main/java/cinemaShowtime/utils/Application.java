@@ -6,6 +6,7 @@ import cinemaShowtime.database.model.Account;
 import cinemaShowtime.database.model.AccountPreference;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
+import model.json.complex.Genres;
 import model.json.complex.Movies;
 import model.json.movie.Genre;
 
@@ -16,7 +17,7 @@ public class Application {
 	private Movies movies;
 	private Cities cities;
 	private Cinemas cinemas;
-	private List<Genre> genreList;
+	private Genres genres;
 	private AccountPreference accountPreference;
 	private boolean preferenceHelp = false;
 
@@ -51,12 +52,12 @@ public class Application {
 		this.cinemas = cinemas;
 	}
 
-	public List<Genre> getGenreList() {
-		return genreList;
+	public Genres getGenres() {
+		return genres;
 	}
 
-	public void setGenreList(List<Genre> genreList) {
-		this.genreList = genreList;
+	public void setGenres(Genres genres) {
+		this.genres = genres;
 	}
 
 	public Movies getMovies() {

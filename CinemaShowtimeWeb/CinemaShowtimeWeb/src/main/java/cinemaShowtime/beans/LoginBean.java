@@ -46,6 +46,9 @@ public class LoginBean {
 	
 	public void logoutAccount() {
 		loggedAccount = null;
+		Application.getInstance().setAccount(null);
+		Application.getInstance().setPreferenceHelp(false);
+		Application.getInstance().setAccountPreference(null);
 	}
 
 	private boolean checkLoginParameter() {

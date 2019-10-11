@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.filters.Filter;
 import cinemaShowtime.filters.FilterInterfaceImpl;
+import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Const;
@@ -23,7 +24,7 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "movieCatalogueBean", eager = true)
 @ViewScoped
-public class MovieCatalogueBean extends FilterInterfaceImpl {
+public class MovieCatalogueBean extends FilterInterfaceImpl implements ReloadInterface {
 
 	private Movies movies;
 	private Movies moviePosters;
@@ -107,6 +108,12 @@ public class MovieCatalogueBean extends FilterInterfaceImpl {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public void reloadPage() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

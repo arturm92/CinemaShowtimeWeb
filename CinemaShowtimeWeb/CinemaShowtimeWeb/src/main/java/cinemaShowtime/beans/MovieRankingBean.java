@@ -13,6 +13,7 @@ import org.primefaces.event.SelectEvent;
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.filters.Filter;
 import cinemaShowtime.filters.FilterInterfaceImpl;
+import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Const;
@@ -23,7 +24,7 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "movieRankingBean", eager = true)
 @ViewScoped
-public class MovieRankingBean extends FilterInterfaceImpl {
+public class MovieRankingBean extends FilterInterfaceImpl implements ReloadInterface {
 
 	private Movie selectedMovie;
 	private Movies rankingMovies;
@@ -147,6 +148,12 @@ public class MovieRankingBean extends FilterInterfaceImpl {
 
 	public void setSelectedMovie(Movie selectedMovie) {
 		this.selectedMovie = selectedMovie;
+	}
+
+	@Override
+	public void reloadPage() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

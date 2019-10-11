@@ -11,16 +11,20 @@
 	<h:body>
 		<div id="header">
 			<ui:insert>
-				<ui:include src="modules/header.xhtml" />
-			</ui:insert>
-		</div>
-		<div id="content">
-			<ui:insert>
-				<ui:include src="homePage.xhtml">
-					<ui:param name="bean" value="#{homePageBean}" />
+				<ui:include src="modules/header.xhtml">
+					<ui:param name="contentBean" value="#{homePageBean}" />
 				</ui:include>
 			</ui:insert>
 		</div>
+		<h:panelGroup id="contentPanel">
+			<div id="content">
+				<ui:insert>
+					<ui:include src="homePage.xhtml">
+						<ui:param name="bean" value="#{homePageBean}" />
+					</ui:include>
+				</ui:insert>
+			</div>
+		</h:panelGroup>
 		<div id="footer">
 			<ui:insert>
 				<ui:include src="modules/footer.xhtml" />

@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -15,6 +15,7 @@ import org.primefaces.PrimeFaces;
 
 import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.filters.ApiFilter;
+import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.LocationApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
@@ -22,22 +23,26 @@ import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
+import model.json.City;
 import model.json.Showtime;
 import model.json.cinema.Cinema;
 import model.json.cinema.LocationApi;
 import model.json.cinema.comparator.CinemaNameComparator;
 import model.json.complex.Cinemas;
+import model.json.complex.Cities;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
 import model.json.movie.Genre;
 import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "homePageBean", eager = true)
-@SessionScoped
-public class HomePageBean {
+@ViewScoped
+public class HomePageBean implements ReloadInterface {
 
-	private String currentCity;
+	private String locationApiCity;
+	private City currentCity;
 
+	private Cities cities;
 	private Cinemas cinemas;
 	private Movies movies;
 	private Movies moviePosters;
@@ -51,15 +56,39 @@ public class HomePageBean {
 		try {
 			long startTime = System.currentTimeMillis();
 
-			prepareCinemas();
-			customSortCinemas();
-			prepareMovies();
-			prepareShowtimes();
-
+			initCities();
+			reloadPage();
+		
 			long stopTime = System.currentTimeMillis();
 			Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void init() {
+		prepareCinemas();
+		customSortCinemas();
+		selectedCinema = getFilteredCinemaList().get(index);
+		prepareMovies();
+		prepareShowtimes();
+	}
+
+	public void reloadPage() {
+		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
+		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {
+			if (accountPreference.getCityId() != null) {
+				currentCity = cities.findCityById(accountPreference.getCityId());
+			}
+		}
+		init();
+	}
+
+	public void initCities() {
+		cities = Application.getInstance().getCities();
+		if (cities == null) {
+			cities = ApiHelper.getCities();
+			Application.getInstance().setCities(cities);
 		}
 	}
 
@@ -69,6 +98,26 @@ public class HomePageBean {
 		if (cinemas.getList().isEmpty()) {
 			distance += 25;
 			prepareCinemas();
+		}
+	}
+
+	public List<Cinema> getFilteredCinemaList() {
+		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
+		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {
+			List<Cinema> retrunCinemaList = new ArrayList<Cinema>();
+			Long[] cinemaIds = accountPreference.getCinemaIds();
+			if (cinemaIds.length > 0) {
+				for (Cinema cinema : cinemas.getList()) {
+					for (int i = 0; i < cinemaIds.length; i++) {
+						if (cinema.getId().compareTo(cinemaIds[i]) == 0) {
+							retrunCinemaList.add(cinema);
+						}
+					}
+				}
+			}
+			return retrunCinemaList;
+		} else {
+			return cinemas.getList();
 		}
 	}
 
@@ -107,14 +156,14 @@ public class HomePageBean {
 			}
 			return retrunMovieList;
 		} else {
-			return movies.getList();
+			return movies != null ? movies.getList() : null;
 		}
 	}
 
 	private ApiFilter prepareMoviesInCinema(int days) {
 		if (days > 30) {
 			index++;
-			selectedCinema = cinemas.getList().get(index);
+			selectedCinema = getFilteredCinemaList().get(index);
 			days = 2;
 		}
 		DateFormater df = new DateFormater();
@@ -140,12 +189,15 @@ public class HomePageBean {
 	}
 
 	private ApiFilter prepareCinemaFilter() {
-		LocationApi locationApi = LocationApiHelper.getLocation();
-		setCurrentCity(locationApi.getCity());
-
 		ApiFilter filter = new ApiFilter();
-		filter.addFilterParam(ApiFilter.Parameter.LOCATION,
-				locationApi.getLatitude() + "," + locationApi.getLongitude());
+		LocationApi locationApi = LocationApiHelper.getLocation();
+		if (currentCity == null) {
+			setLocationApiCity(locationApi.getCity());
+			filter.addFilterParam(ApiFilter.Parameter.LOCATION,
+					locationApi.getLatitude() + "," + locationApi.getLongitude());
+		} else {
+			filter.addFilterParam(ApiFilter.Parameter.LOCATION, currentCity.getLat() + "," + currentCity.getLon());
+		}
 		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(Const.DISTANCE));
 		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
 		return filter;
@@ -213,12 +265,12 @@ public class HomePageBean {
 		return cinemas;
 	}
 
-	public String getCurrentCity() {
-		return currentCity;
+	public String getLocationApiCity() {
+		return locationApiCity;
 	}
 
-	public void setCurrentCity(String currentCity) {
-		this.currentCity = currentCity;
+	public void setLocationApiCity(String currentCity) {
+		this.locationApiCity = currentCity;
 	}
 
 	public List<Cinema> getCinemaList() {
@@ -230,9 +282,6 @@ public class HomePageBean {
 	}
 
 	public Cinema getSelectedCinema() {
-		if (selectedCinema == null) {
-			selectedCinema = cinemas.getList().get(index);
-		}
 		return selectedCinema;
 	}
 

@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -22,7 +22,7 @@ import model.json.movie.MovieFormatted;
 import model.json.movie.comparator.MovieRatingComparator;
 
 @ManagedBean(name = "headerBean", eager = true)
-@SessionScoped
+@ViewScoped
 public class HeaderBean {
 
 	private Movies headerMovies;
@@ -32,15 +32,17 @@ public class HeaderBean {
 		long startTime = System.currentTimeMillis();
 
 		ApiFilter filter = prepareFilter();
-		headerMovies = ApiHelper.getNewestMovies(filter);
-		Collections.sort(headerMovies.getList(), Collections.reverseOrder(new MovieRatingComparator()));
-		headerMovies.setList(headerMovies.getList().subList(0, 20));
 		
-		filter.deleteFilterParam(ApiFilter.Parameter.LANG);
-		moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
-		moviePosters.fillMovieMap();
-		MovieHelper.addPosterToMovie(headerMovies, moviePosters);
-
+		headerMovies = ApiHelper.getNewestMovies(filter);
+		if (headerMovies != null) {
+			Collections.sort(headerMovies.getList(), Collections.reverseOrder(new MovieRatingComparator()));
+			headerMovies.setList(headerMovies.getList().subList(0, 20));
+			
+			filter.deleteFilterParam(ApiFilter.Parameter.LANG);
+			moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
+			moviePosters.fillMovieMap();
+			MovieHelper.addPosterToMovie(headerMovies, moviePosters);	
+		}
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
@@ -89,7 +91,11 @@ public class HeaderBean {
 	}
 
 	public List<MovieFormatted> getHeaderMoviesList() {
-		return headerMovies.getMoviesWithPosterList();
+		if (headerMovies != null) {
+			return headerMovies.getMoviesWithPosterList();	
+		}else {
+			return null;
+		}
 	}
 
 	public boolean isPreferenceHelp() {

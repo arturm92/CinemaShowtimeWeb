@@ -74,7 +74,7 @@ public class MovieDetailBean {
 	}
 
 	private void initCities() {
-		cities = ApiHelper.getCitiesFromApi();
+		cities = ApiHelper.getCities();
 		Application.getInstance().setCities(cities);
 	}
 

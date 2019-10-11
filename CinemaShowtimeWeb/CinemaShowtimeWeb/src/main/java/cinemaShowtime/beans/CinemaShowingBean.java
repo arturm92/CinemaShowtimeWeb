@@ -5,14 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
+import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.filters.ApiFilter;
+import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Application;
@@ -30,8 +32,8 @@ import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "cinemaShowingBean", eager = true)
-@SessionScoped
-public class CinemaShowingBean {
+@ViewScoped
+public class CinemaShowingBean implements ReloadInterface {
 
 	private Cities cities;
 	private Cinemas cinemas;
@@ -54,14 +56,29 @@ public class CinemaShowingBean {
 		long startTime = System.currentTimeMillis();
 		initCities();
 		createCitiesQuickSelection();
-		
+		reloadPage();
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
+	
+	public void reloadPage() {
+		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
+		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {
+			if (accountPreference.getCityId() != null) {
+				selectedCity = cities.findCityById(accountPreference.getCityId());
+				if (selectedCity != null) {
+					selectCityQuick();
+				}
+			}
+		}
+	}
 
 	public void initCities() {
-		this.cities = ApiHelper.getCitiesFromApi();
-		Application.getInstance().setCities(cities);
+		cities = Application.getInstance().getCities();
+		if (cities == null) {
+			cities = ApiHelper.getCities();
+			Application.getInstance().setCities(cities);
+		}
 		setCitySelectionVisible(true);
 	}
 
@@ -163,7 +180,7 @@ public class CinemaShowingBean {
 		setMovieSelectionVisible(false);
 		initShowtimes();
 	}
-	
+
 	public void selectShowtime() {
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		String link = externalContext.getRequestParameterMap().get("link");

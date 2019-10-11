@@ -2,9 +2,7 @@ package cinemaShowtime.beans;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -20,6 +18,7 @@ import cinemaShowtime.database.model.Account;
 import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.database.model.AccountPreferenceItem;
 import cinemaShowtime.filters.ApiFilter;
+import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.AccountHelper;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
@@ -37,7 +36,7 @@ import model.json.movie.Movie;
 
 @ManagedBean(name = "accountBean", eager = true)
 @ViewScoped
-public class AccountBean {
+public class AccountBean implements ReloadInterface {
 
 	private Account account;
 	private AccountPreference accountPreference;
@@ -95,9 +94,12 @@ public class AccountBean {
 	}
 
 	private void initGenres() {
-		genres = ApiHelper.getGenres().removeNullGenres();
+		genres = Application.getInstance().getGenres();
+		if (genres == null) {
+			genres = ApiHelper.getGenres().removeNullGenres();
+			Application.getInstance().setGenres(genres);
+		}
 		Collections.sort(getGenreList());
-		Application.getInstance().setGenreList(getGenreList());
 		selectedGenreList = new ArrayList<Genre>();
 
 	}
@@ -120,11 +122,17 @@ public class AccountBean {
 		for (AccountPreferenceItem item : itemList) {
 			Long accountPreferenceId = accountPreferenceDAO.insert(item);
 		}
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Udało się!", "Preferencje zapisano w systemie"));
+
 	}
 
 	public void initCities() {
-		this.cities = ApiHelper.getCitiesFromApi();
-		Application.getInstance().setCities(cities);
+		cities = Application.getInstance().getCities();
+		if (cities == null) {
+			this.cities = ApiHelper.getCities();
+			Application.getInstance().setCities(cities);
+		}
 	}
 
 	public void initCinemas() {
@@ -323,6 +331,12 @@ public class AccountBean {
 
 	public void setSummaryVisible(boolean summaryVisible) {
 		this.summaryVisible = summaryVisible;
+	}
+
+	@Override
+	public void reloadPage() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

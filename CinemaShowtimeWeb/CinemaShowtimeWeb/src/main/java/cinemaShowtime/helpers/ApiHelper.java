@@ -56,7 +56,7 @@ public class ApiHelper {
 		return result.toString();
 	}
 
-	public static Cities getCitiesFromApi() {
+	public static Cities getCities() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Cities> map = new TypeReference<Cities>() {
@@ -186,6 +186,7 @@ public class ApiHelper {
 		return null;
 	}
 
+	@SuppressWarnings("finally")
 	public static Movies getNewestMovies(ApiFilter filter) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
