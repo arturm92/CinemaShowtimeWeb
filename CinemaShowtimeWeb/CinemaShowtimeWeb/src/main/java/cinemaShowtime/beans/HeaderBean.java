@@ -6,23 +6,25 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.helpers.ApiHelper;
+import cinemaShowtime.helpers.LocationApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
+import model.json.cinema.LocationApi;
 import model.json.complex.Movies;
 import model.json.movie.MovieFormatted;
 import model.json.movie.comparator.MovieRatingComparator;
 
 @ManagedBean(name = "headerBean", eager = true)
-@ViewScoped
+@SessionScoped
 public class HeaderBean {
 
 	private Movies headerMovies;
@@ -31,6 +33,8 @@ public class HeaderBean {
 	public HeaderBean() {
 		long startTime = System.currentTimeMillis();
 
+		Application.getInstance().setLocationApi(LocationApiHelper.getLocation());
+		
 		ApiFilter filter = prepareFilter();
 		
 		headerMovies = ApiHelper.getNewestMovies(filter);
@@ -105,4 +109,14 @@ public class HeaderBean {
 	public void setPreferenceHelp(boolean preferenceHelp) {
 		Application.getInstance().setPreferenceHelp(preferenceHelp);
 	}
+	
+	public String getLocationApiCity() {
+		try {
+			return 	Application.getInstance().getLocationApi().getCity();	
+		}catch (NullPointerException e) {
+			return null;
+		}
+		
+	}
+
 }

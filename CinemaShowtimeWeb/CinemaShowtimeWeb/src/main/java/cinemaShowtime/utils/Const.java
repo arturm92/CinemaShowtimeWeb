@@ -26,5 +26,5 @@ public class Const {
 	
 	public static final String DEFAULT_POSTER = "/resources/img/default_poster.jpg";
 	public static final int DISTANCE = 25;
-	public static final boolean LOGGER = true;
+	public static final boolean LOGGER = false;
 }

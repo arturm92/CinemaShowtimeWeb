@@ -33,7 +33,7 @@ public class MovieFilter {
 		initYearList();
 	}
 
-	private void initGenreList() {
+	public void initGenreList() {
 		Genres genres = Application.getInstance().getGenres();
 		if (genres == null) {
 			genres = ApiHelper.getGenres().removeNullGenres();

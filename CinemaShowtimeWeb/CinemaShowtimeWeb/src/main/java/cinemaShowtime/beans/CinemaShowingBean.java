@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -32,7 +32,7 @@ import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "cinemaShowingBean", eager = true)
-@ViewScoped
+@SessionScoped
 public class CinemaShowingBean implements ReloadInterface {
 
 	private Cities cities;
@@ -54,13 +54,16 @@ public class CinemaShowingBean implements ReloadInterface {
 
 	public CinemaShowingBean() {
 		long startTime = System.currentTimeMillis();
+		
 		initCities();
 		createCitiesQuickSelection();
 		reloadPage();
+		
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
 	
+	@Override
 	public void reloadPage() {
 		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
 		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {

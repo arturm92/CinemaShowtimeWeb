@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -23,7 +23,7 @@ import model.json.movie.Genre;
 import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "cinemaPreviewBean", eager = true)
-@ViewScoped
+@SessionScoped
 public class CinemaPreviewBean extends FilterInterfaceImpl implements ReloadInterface {
 
 	private Movies movies;
@@ -35,13 +35,17 @@ public class CinemaPreviewBean extends FilterInterfaceImpl implements ReloadInte
 	public CinemaPreviewBean() {
 		long startTime = System.currentTimeMillis();
 
+		init();
+
+		long stopTime = System.currentTimeMillis();
+		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
+	}
+
+	private void init() {
 		setConfiguration(Filter.Configuration.PREVIEW);
 		initFilter();
 		dateFrom = df.getMonthFromToday(1);
 		prepareCinemaPreviewMoviesList();
-
-		long stopTime = System.currentTimeMillis();
-		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
 
 	private void prepareCinemaPreviewMoviesList() {
@@ -102,7 +106,7 @@ public class CinemaPreviewBean extends FilterInterfaceImpl implements ReloadInte
 
 	@Override
 	public void reloadPage() {
-		// TODO Auto-generated method stub
-		
+		getMovieFilter().initGenreList();
+		prepareCinemaPreviewMoviesList();
 	}
 }

@@ -5,11 +5,9 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
-		<p:steps activeIndex="2" readonly="false">
+		<p:steps activeIndex="1" readonly="false">
 			<p:menuitem value="WYBIERZ GATUNKI"
 				actionListener="#{bean.firstStepClicked}" update="accountForm" />
-			<p:menuitem value="WYBIERZ FILMY"
-				actionListener="#{bean.secondStepClicked}" update="accountForm" />
 			<p:menuitem value="WYBIERZ KINA" />
 			<p:menuitem value="PODSUMOWANIE" />
 		</p:steps>

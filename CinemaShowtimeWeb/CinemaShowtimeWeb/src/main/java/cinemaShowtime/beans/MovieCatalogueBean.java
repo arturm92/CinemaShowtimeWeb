@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -23,7 +23,7 @@ import model.json.movie.Genre;
 import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "movieCatalogueBean", eager = true)
-@ViewScoped
+@SessionScoped
 public class MovieCatalogueBean extends FilterInterfaceImpl implements ReloadInterface {
 
 	private Movies movies;
@@ -32,12 +32,16 @@ public class MovieCatalogueBean extends FilterInterfaceImpl implements ReloadInt
 	public MovieCatalogueBean() {
 		long startTime = System.currentTimeMillis();
 
-		setConfiguration(Filter.Configuration.CATALOGUE);
-		initFilter();
+		init();
 		prepareMovieCatalogueList();
 
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
+	}
+
+	private void init() {
+		setConfiguration(Filter.Configuration.CATALOGUE);
+		initFilter();
 	}
 
 	private void prepareMovieCatalogueList() {
@@ -112,8 +116,8 @@ public class MovieCatalogueBean extends FilterInterfaceImpl implements ReloadInt
 
 	@Override
 	public void reloadPage() {
-		// TODO Auto-generated method stub
-		
+		getMovieFilter().initGenreList();
+		prepareMovieCatalogueList();
 	}
 
 }

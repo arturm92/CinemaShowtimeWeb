@@ -11,7 +11,8 @@
 			<div>
 				<p:selectBooleanCheckbox value="#{headerBean.preferenceHelp}"
 					itemLabel="Wsparcie" style="color:white;margin-left:92%;">
-					<p:ajax process="@this" event="change" />
+					<p:ajax process="@this" event="change" update=":contentPanel"
+						listener="#{contentBean.reloadPage()}" />
 				</p:selectBooleanCheckbox>
 			</div>
 			<div>
@@ -25,7 +26,8 @@
 			</div>
 			<div style="padding-top: 110px;">
 				<p:menubar>
-					<p:menuitem url="/CinemaShowtimeWeb/index.xhtml" icon="pi pi-home" />
+					<p:menuitem url="/CinemaShowtimeWeb/index.xhtml" icon="pi pi-home">
+					</p:menuitem>
 					<p:menuitem value="REPERTUAR KIN"
 						url="/CinemaShowtimeWeb/showtimes/index.xhtml" icon="pi pi-search" />
 					<p:menuitem value="TERAZ GRANE"
@@ -47,14 +49,17 @@
 						url="/CinemaShowtimeWeb/account/index.xhtml" icon="fa fa-user" />
 					<f:facet name="options">
 						<i class="fa fa-fw fa-location-arrow" style="margin-top: 10px;"></i>
-						<h:outputText value="#{homePageBean.locationApiCity}"
+						<h:outputText value="#{headerBean.locationApiCity}"
 							style="padding-right: 10px;" />
 						<p:commandButton id="loginButton"
 							value="#{loginBean.loggedAccount.name}" icon="fa fa-user"
 							disabled="#{loginBean.loggedAccount != null}" />
-						<p:commandButton id="logoutButton" action="#{loginBean.logoutAccount}"
+						<p:commandButton id="logoutButton"
 							rendered="#{loginBean.loggedAccount != null}"
-							icon="fa fa-fw fa-reply-all" update="headerForm :contentPanel" />
+							icon="fa fa-fw fa-reply-all" update="headerForm :contentPanel">
+							<f:actionListener binding="#{loginBean.logoutAccount()}" />
+							<f:actionListener binding="#{contentBean.reloadPage()}" />
+						</p:commandButton>
 						<p:overlayPanel id="userPanel" for="loginButton" hideEffect="fade">
 							<h:panelGrid columns="2">
 								<h:outputText value="LOGIN" />
@@ -62,11 +67,13 @@
 								<h:outputText value="HASŁO" />
 								<p:password id="passwordInput"
 									value="#{loginBean.accountPassword}" />
-								<p:commandButton value="ZALOGUJ" update="headerForm :contentPanel">
+								<p:commandButton value="ZALOGUJ"
+									update="headerForm :contentPanel">
 									<f:actionListener binding="#{loginBean.loginAccount()}" />
 									<f:actionListener binding="#{contentBean.reloadPage()}" />
 								</p:commandButton>
-								<p:commandButton value="ZAREJESTURJ" update="headerForm :contentPanel">
+								<p:commandButton value="ZAREJESTURJ"
+									update="headerForm :contentPanel">
 									<f:actionListener binding="#{loginBean.registerAccount()}" />
 									<f:actionListener binding="#{contentBean.reloadPage()}" />
 								</p:commandButton>

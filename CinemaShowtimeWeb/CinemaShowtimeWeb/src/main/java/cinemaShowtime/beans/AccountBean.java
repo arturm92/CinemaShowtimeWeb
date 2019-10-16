@@ -56,12 +56,17 @@ public class AccountBean implements ReloadInterface {
 
 	private boolean genreSelectionVisible;
 	private boolean cinemaSelectionVisible;
-	private boolean movieSelectionVisible;
 	private boolean summaryVisible;
+
+	private String message = "";
 
 	private AccountPreferenceItemDAO accountPreferenceDAO = new AccountPreferenceItemDAO();
 
 	public AccountBean() {
+		init();
+	}
+
+	private void init() {
 		this.account = Application.getInstance().getAccount();
 		if (account != null) {
 			initGenres();
@@ -80,8 +85,7 @@ public class AccountBean implements ReloadInterface {
 			Application.getInstance().setAccountPreference(accountPreference);
 			setGenreSelectionVisible(true);
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Zaloguj się!", "Aby przeglądać swoje konto musisz być zalogowany"));
+			message = "Aby przeglądać swoje konto musisz być zalogowany. Zaloguj się!";
 		}
 	}
 
@@ -106,9 +110,7 @@ public class AccountBean implements ReloadInterface {
 
 	public void savePreference() {
 		Logger.log("ZAPISUJE PREFERENCJE");
-		// usuwa wszystkie poprzednie preferencje
 		accountPreferenceDAO.delete(new AccountPreferenceItem(account.getId(), null, null, null));
-		// zapisuje aktualne
 		List<AccountPreferenceItem> itemList = new ArrayList<AccountPreferenceItem>();
 		for (Genre genre : selectedGenreList) {
 			itemList.add(new AccountPreferenceItem(account.getId(), genre.getId(), null, null));
@@ -122,8 +124,11 @@ public class AccountBean implements ReloadInterface {
 		for (AccountPreferenceItem item : itemList) {
 			Long accountPreferenceId = accountPreferenceDAO.insert(item);
 		}
+		
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Udało się!", "Preferencje zapisano w systemie"));
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Udało się!", "Preferencje zapisano w systemie"));
+		
+		firstStepClicked();
 
 	}
 
@@ -200,7 +205,6 @@ public class AccountBean implements ReloadInterface {
 
 	public void goToNextStep() {
 		if (genreSelectionVisible) {
-			setMovieSelectionVisible(false);
 			setCinemaSelectionVisible(true);
 			setGenreSelectionVisible(false);
 			setSummaryVisible(false);
@@ -213,11 +217,8 @@ public class AccountBean implements ReloadInterface {
 					}
 				}
 			}
-		} else if (movieSelectionVisible) {
-			// pominiety wybor filmow
 		} else if (cinemaSelectionVisible) {
 			setGenreSelectionVisible(false);
-			setMovieSelectionVisible(false);
 			setCinemaSelectionVisible(false);
 			setSummaryVisible(true);
 		}
@@ -234,24 +235,16 @@ public class AccountBean implements ReloadInterface {
 
 	public void firstStepClicked() {
 		setGenreSelectionVisible(true);
-		setMovieSelectionVisible(false);
 		setCinemaSelectionVisible(false);
 		setSummaryVisible(false);
 	}
 
 	public void secondStepClicked() {
 		setGenreSelectionVisible(false);
-		setMovieSelectionVisible(true);
-		setCinemaSelectionVisible(false);
-		setSummaryVisible(false);
-	}
-
-	public void thirdStepClicked() {
-		setGenreSelectionVisible(false);
-		setMovieSelectionVisible(false);
 		setCinemaSelectionVisible(true);
 		setSummaryVisible(false);
 	}
+
 
 	public Account getAccount() {
 		return account;
@@ -317,14 +310,6 @@ public class AccountBean implements ReloadInterface {
 		this.cinemaSelectionVisible = cinemaSelectionVisible;
 	}
 
-	public boolean isMovieSelectionVisible() {
-		return movieSelectionVisible;
-	}
-
-	public void setMovieSelectionVisible(boolean movieSelectionVisible) {
-		this.movieSelectionVisible = movieSelectionVisible;
-	}
-
 	public boolean isSummaryVisible() {
 		return summaryVisible;
 	}
@@ -335,8 +320,19 @@ public class AccountBean implements ReloadInterface {
 
 	@Override
 	public void reloadPage() {
-		// TODO Auto-generated method stub
-		
+		init();
+		if (account == null) {
+			setCinemaSelectionVisible(false);
+			setGenreSelectionVisible(false);
+			setSummaryVisible(false);
+		}else {
+			setCinemaSelectionVisible(false);
+			setGenreSelectionVisible(true);
+			setSummaryVisible(false);
+		}
 	}
 
+	public String getMessage() {
+		return message;
+	}
 }

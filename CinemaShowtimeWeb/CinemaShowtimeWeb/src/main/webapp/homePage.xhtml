@@ -25,6 +25,14 @@
 						</p:dataTable>
 					</div>
 					<div class="ui-grid-col-11" style="padding-left: 2%;">
+						<div>
+							<p:selectBooleanCheckbox value="#{bean.allGenres}"
+								itemLabel="Wszystkie gatunki"
+								style="color:white;margin-left:80%;" rendered="#{bean.checkboxRendered}">
+								<p:ajax process="@this" event="change" update=":homePageForm" />
+							</p:selectBooleanCheckbox>
+						</div>
+
 						<p:dataTable id="moviesDataTable" var="movie"
 							value="#{bean.filteredMovieList}" sortBy="#{movie.name}"
 							sortOrder="ascending">

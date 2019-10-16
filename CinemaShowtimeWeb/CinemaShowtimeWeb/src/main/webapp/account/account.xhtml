@@ -5,23 +5,20 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:body>
+		<h:form style="color:white;" rendered="#{bean.account == null}">
+			<h:outputText style="font-size:22;" value="#{bean.message}" />
+		</h:form>
 
-		<h:form id="accountForm" style="color:white;" rendered="#{bean.account != null}">
+		<h:form id="accountForm" style="color:white;"
+			rendered="#{bean.account != null}">
 
 			<h:panelGroup id="informationPanelGroup">
 				<h:outputText style="font-size:22;" value="USTAWIENIA PREFERENCJI" />
 			</h:panelGroup>
-			
+
 			<h:panelGroup id="genreSelectionPanelGroup"
 				rendered="#{bean.genreSelectionVisible}">
 				<ui:include src="genreSelection.xhtml">
-					<ui:param name="bean" value="#{bean}" />
-				</ui:include>
-			</h:panelGroup>
-
-			<h:panelGroup id="movieSelectionPanelGroup"
-				rendered="#{bean.movieSelectionVisible}">
-				<ui:include src="movieSelection.xhtml">
 					<ui:param name="bean" value="#{bean}" />
 				</ui:include>
 			</h:panelGroup>
@@ -42,7 +39,7 @@
 
 			<p:commandButton value="DALEJ" action="#{bean.goToNextStep}"
 				style="text-align:right;" rendered="#{!bean.summaryVisible}"
-				update="accountForm" />
+				update=":contentPanel" />
 		</h:form>
 	</h:body>
 </ui:composition>

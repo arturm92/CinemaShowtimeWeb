@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -23,7 +23,7 @@ import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "movieRankingBean", eager = true)
-@ViewScoped
+@SessionScoped
 public class MovieRankingBean extends FilterInterfaceImpl implements ReloadInterface {
 
 	private Movie selectedMovie;
@@ -34,12 +34,16 @@ public class MovieRankingBean extends FilterInterfaceImpl implements ReloadInter
 	public MovieRankingBean() {
 		long startTime = System.currentTimeMillis();
 
-		setConfiguration(Filter.Configuration.RANKING);
-		initFilter();
+		init();
 		prepareDisplayRankingList();
 
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
+	}
+
+	private void init() {
+		setConfiguration(Filter.Configuration.RANKING);
+		initFilter();
 	}
 
 	private ApiFilter prepareFilter() {
@@ -152,8 +156,8 @@ public class MovieRankingBean extends FilterInterfaceImpl implements ReloadInter
 
 	@Override
 	public void reloadPage() {
-		// TODO Auto-generated method stub
-		
+		getMovieFilter().initGenreList();
+		prepareDisplayRankingList();
 	}
 
 }

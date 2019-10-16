@@ -1,14 +1,12 @@
 package cinemaShowtime.utils;
 
-import java.util.List;
-
 import cinemaShowtime.database.model.Account;
 import cinemaShowtime.database.model.AccountPreference;
+import model.json.cinema.LocationApi;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
 import model.json.complex.Genres;
 import model.json.complex.Movies;
-import model.json.movie.Genre;
 
 public class Application {
 
@@ -20,6 +18,7 @@ public class Application {
 	private Genres genres;
 	private AccountPreference accountPreference;
 	private boolean preferenceHelp = false;
+	private LocationApi locationApi;
 
 	public static Application getInstance() {
 		if (instance == null) {
@@ -82,6 +81,15 @@ public class Application {
 
 	public void setPreferenceHelp(boolean preferenceHelp) {
 		this.preferenceHelp = preferenceHelp;
+	}
+
+	public void setLocationApi(LocationApi locationApi) {
+		this.locationApi = locationApi;
+
+	}
+
+	public LocationApi getLocationApi() {
+		return locationApi;
 	}
 
 }
