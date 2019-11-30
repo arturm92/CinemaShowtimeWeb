@@ -8,7 +8,6 @@ import java.util.Enumeration;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import cinemaShowtime.utils.HibernateSetting;
 import cinemaShowtime.utils.Logger;
 
 public class ContextListener implements ServletContextListener {

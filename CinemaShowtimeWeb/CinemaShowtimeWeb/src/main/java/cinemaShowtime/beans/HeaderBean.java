@@ -18,7 +18,6 @@ import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.Const;
 import cinemaShowtime.utils.DateFormater;
 import cinemaShowtime.utils.Logger;
-import model.json.cinema.LocationApi;
 import model.json.complex.Movies;
 import model.json.movie.MovieFormatted;
 import model.json.movie.comparator.MovieRatingComparator;
@@ -32,16 +31,12 @@ public class HeaderBean {
 	
 	public HeaderBean() {
 		long startTime = System.currentTimeMillis();
-
 		Application.getInstance().setLocationApi(LocationApiHelper.getLocation());
-		
 		ApiFilter filter = prepareFilter();
-		
 		headerMovies = ApiHelper.getNewestMovies(filter);
 		if (headerMovies != null) {
 			Collections.sort(headerMovies.getList(), Collections.reverseOrder(new MovieRatingComparator()));
 			headerMovies.setList(headerMovies.getList().subList(0, 20));
-			
 			filter.deleteFilterParam(ApiFilter.Parameter.LANG);
 			moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 			moviePosters.fillMovieMap();
@@ -102,13 +97,6 @@ public class HeaderBean {
 		}
 	}
 
-	public boolean isPreferenceHelp() {
-		return Application.getInstance().isPreferenceHelp();
-	}
-
-	public void setPreferenceHelp(boolean preferenceHelp) {
-		Application.getInstance().setPreferenceHelp(preferenceHelp);
-	}
 	
 	public String getLocationApiCity() {
 		try {

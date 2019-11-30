@@ -37,7 +37,6 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 
 	public List<ShowtimeDay> getNormalizeList() {
 		List<ShowtimeDay> showtimeDayList = new ArrayList<ShowtimeDay>();
-
 		DateFormater df = new DateFormater();
 		ShowtimeDay showtimeDay = null;
 		for (Showtime showtime : list) {
@@ -46,7 +45,6 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 			showtimeHour.setHour(df.formatTimeOnly(showtime.getStartAt()));
 			showtimeHour.setBookingLink(showtime.getBookingLink());
 			showtimeDay = createShowtimeDayList(showtimeDayList, showtimeDay, showtimeDate, showtimeHour);
-
 		}
 		showtimeDayList.add(showtimeDay);
 		return showtimeDayList;
@@ -59,7 +57,6 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 			showtimeDay = new ShowtimeDay();
 			showtimeDay.setDate(showtimeDate);
 		}
-
 		if (showtimeDay.getHoursList() == null) {
 			hoursList = new ArrayList<ShowtimeHour>();
 			hoursList.add(showtimeHour);

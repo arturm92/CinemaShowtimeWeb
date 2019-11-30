@@ -5,10 +5,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import cinemaShowtime.utils.Logger;
 import model.json.cinema.Cinema;
 import model.json.movie.Genre;
 
-public class Genres {
+public class Genres implements JsonList<Genre> {
 
 	@JsonProperty("genres")
 	private List<Genre> list;
@@ -41,5 +42,13 @@ public class Genres {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void showAllElements() {
+		for (Genre genre : list) {
+			Logger.log("[GENRE]" + genre.getName() + "/" + genre.getId());
+		}
+		
 	}
 }

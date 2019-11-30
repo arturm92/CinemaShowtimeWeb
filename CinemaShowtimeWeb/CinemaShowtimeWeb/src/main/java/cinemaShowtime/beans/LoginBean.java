@@ -2,6 +2,7 @@ package cinemaShowtime.beans;
 
 import java.util.HashMap;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -9,8 +10,7 @@ import javax.faces.context.FacesContext;
 
 import cinemaShowtime.database.dao.AccountDAO;
 import cinemaShowtime.database.model.Account;
-import cinemaShowtime.helpers.AccountHelper;
-import cinemaShowtime.utils.Application;
+import cinemaShowtime.utils.Logger;
 
 @ManagedBean(name = "loginBean", eager = true)
 @SessionScoped
@@ -22,33 +22,36 @@ public class LoginBean {
 
 	private AccountDAO accountDAO = new AccountDAO();
 
+	public LoginBean() {
+		Logger.logCreateBeanInfo("LoginBean");
+	}
+	
+	@PostConstruct
+	public void init() {
+		long startTime = System.currentTimeMillis();
+		long stopTime = System.currentTimeMillis();
+		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
+	}
+
 	public void registerAccount() {
 		Account account = new Account(accountName, accountPassword);
 		Long accountId = accountDAO.insert(account);
-		if  (accountId != null) {
+		if (accountId != null) {
 			loginAccount();
 		}
 	}
 
 	public void loginAccount() {
 		if (checkLoginParameter()) {
-			HashMap<String,Object> queryParamMap = new HashMap<String,Object>();
+			HashMap<String, Object> queryParamMap = new HashMap<String, Object>();
 			queryParamMap.put("userName", accountName);
 			queryParamMap.put("password", accountPassword);
 			loggedAccount = accountDAO.find(queryParamMap);
-			if (loggedAccount != null) {
-				Application.getInstance().setAccount(loggedAccount);
-				AccountHelper.prepareAccountPreference();
-				Application.getInstance().setPreferenceHelp(true);
-			}
 		}
 	}
-	
+
 	public void logoutAccount() {
 		loggedAccount = null;
-		Application.getInstance().setAccount(null);
-		Application.getInstance().setPreferenceHelp(false);
-		Application.getInstance().setAccountPreference(null);
 	}
 
 	private boolean checkLoginParameter() {

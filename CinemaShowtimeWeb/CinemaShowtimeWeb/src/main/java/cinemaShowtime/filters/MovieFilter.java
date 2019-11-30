@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import cinemaShowtime.beans.BaseBean;
 import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
@@ -14,7 +15,7 @@ import cinemaShowtime.utils.Logger;
 import model.json.complex.Genres;
 import model.json.movie.Genre;
 
-public class MovieFilter {
+public class MovieFilter extends BaseBean {
 
 	private HashMap<String, Boolean> renderedMap;
 	private boolean filterChanged = false;
@@ -42,8 +43,8 @@ public class MovieFilter {
 		genreList = genres.getList();
 		selectedGenreList = new ArrayList<Genre>();
 
-		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
-		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {
+		AccountPreference accountPreference = getAccountPreference();
+		if (isPreferenceHelp() && accountPreference != null) {
 			Long[] accountPreferenceGenreIds = accountPreference.getGenreIds();
 			if (accountPreferenceGenreIds.length > 0) {
 				for (int i = 0; i < accountPreferenceGenreIds.length; i++) {

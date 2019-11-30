@@ -2,12 +2,16 @@ package cinemaShowtime.beans;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -19,7 +23,6 @@ import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.database.model.AccountPreferenceItem;
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.filters.ReloadInterface;
-import cinemaShowtime.helpers.AccountHelper;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
 import cinemaShowtime.utils.Const;
@@ -35,7 +38,7 @@ import model.json.movie.Genre;
 import model.json.movie.Movie;
 
 @ManagedBean(name = "accountBean", eager = true)
-@ViewScoped
+@SessionScoped
 public class AccountBean implements ReloadInterface {
 
 	private Account account;
@@ -61,18 +64,31 @@ public class AccountBean implements ReloadInterface {
 	private String message = "";
 
 	private AccountPreferenceItemDAO accountPreferenceDAO = new AccountPreferenceItemDAO();
+	
+	private boolean preferenceHelp = false;
+	
+	@ManagedProperty(value = "#{loginBean}")
+	private LoginBean loginBean;
 
 	public AccountBean() {
-		init();
+		Logger.logCreateBeanInfo("AccountBean");
 	}
 
-	private void init() {
-		this.account = Application.getInstance().getAccount();
+	@PostConstruct
+	public void init() {
+		long startTime = System.currentTimeMillis();
+		long stopTime = System.currentTimeMillis();
+		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
+	}
+
+	public void loadPreferences() {
+		this.account = loginBean.getLoggedAccount();
 		if (account != null) {
 			initGenres();
 			initCities();
 			accountPreference = getAccountPreferece();
 			if (accountPreference != null) {
+				preferenceHelp = true;
 				for (Long genreId : accountPreference.getGenreIds()) {
 					if (genreId != null) {
 						selectedGenreList.add(genres.findGenreById(genreId));
@@ -82,18 +98,59 @@ public class AccountBean implements ReloadInterface {
 					this.selectedCity = cities.findCityById(accountPreference.getCityId());
 				}
 			}
-			Application.getInstance().setAccountPreference(accountPreference);
 			setGenreSelectionVisible(true);
 		} else {
+			clear();
 			message = "Aby przeglądać swoje konto musisz być zalogowany. Zaloguj się!";
 		}
 	}
 
-	private AccountPreference getAccountPreferece() {
-		if (accountPreference == null) {
-			return AccountHelper.prepareAccountPreference();
-		} else {
-			return accountPreference;
+	private void clear() {
+		account = null;
+		preferenceHelp = false;
+		accountPreference= null;
+		selectedGenreList = null;
+		selectedCinemaList = null;
+		selectedCity = null;
+		setGenreSelectionVisible(false);
+	}
+
+	public AccountPreference getAccountPreferece() {
+		if (account != null && accountPreference == null) {
+			prepareAccountPreference();
+		}
+		return accountPreference;
+	}
+
+	public void prepareAccountPreference() {
+		AccountPreferenceItemDAO accountPreferenceItemDAO = new AccountPreferenceItemDAO();
+		HashMap<String, Object> queryParamMap = new HashMap<String, Object>();
+		queryParamMap.put("accountId", account.getId());
+		List<AccountPreferenceItem> itemList = accountPreferenceItemDAO.findList(queryParamMap);
+		if (itemList != null && itemList.size() > 0) {
+			AccountPreference accPreference = new AccountPreference();
+			ArrayList<Long> cinemaIds = new ArrayList<Long>();
+			ArrayList<Long> genreIds = new ArrayList<Long>();
+
+			for (AccountPreferenceItem item : itemList) {
+				accPreference.setAccountId(item.getAccountId());
+				if (item.getCityId() != null) {
+					accPreference.setCityId(item.getCityId());
+				}
+				if (item.getGenreId() != null) {
+					genreIds.add(item.getGenreId());
+				}
+				if (item.getCinemaId() != null) {
+					cinemaIds.add(item.getCinemaId());
+				}
+			}
+			Long[] longArray;
+			longArray = Arrays.copyOf(genreIds.toArray(), genreIds.toArray().length, Long[].class);
+			accPreference.setGenreIds(longArray);
+			longArray = Arrays.copyOf(cinemaIds.toArray(), genreIds.toArray().length, Long[].class);
+			accPreference.setCinemaIds(longArray);
+
+			this.accountPreference = accPreference;
 		}
 	}
 
@@ -124,10 +181,10 @@ public class AccountBean implements ReloadInterface {
 		for (AccountPreferenceItem item : itemList) {
 			Long accountPreferenceId = accountPreferenceDAO.insert(item);
 		}
-		
+
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Udało się!", "Preferencje zapisano w systemie"));
-		
+
 		firstStepClicked();
 
 	}
@@ -165,20 +222,6 @@ public class AccountBean implements ReloadInterface {
 
 	public void selectCity(SelectEvent event) {
 		initCinemas();
-	}
-
-	public List<Movie> getMovieList(String prefix) {
-		List<Movie> returnList = new ArrayList<Movie>();
-		if (prefix.length() > 0) {
-			for (Movie movie : movies.getList()) {
-				if (movie.getTitle().toLowerCase().contains(prefix.toLowerCase())) {
-					returnList.add(movie);
-				}
-			}
-		} else {
-			returnList.addAll(movies.getList());
-		}
-		return returnList;
 	}
 
 	public List<City> getCityList(String prefix) {
@@ -244,7 +287,6 @@ public class AccountBean implements ReloadInterface {
 		setCinemaSelectionVisible(true);
 		setSummaryVisible(false);
 	}
-
 
 	public Account getAccount() {
 		return account;
@@ -325,7 +367,7 @@ public class AccountBean implements ReloadInterface {
 			setCinemaSelectionVisible(false);
 			setGenreSelectionVisible(false);
 			setSummaryVisible(false);
-		}else {
+		} else {
 			setCinemaSelectionVisible(false);
 			setGenreSelectionVisible(true);
 			setSummaryVisible(false);
@@ -334,5 +376,21 @@ public class AccountBean implements ReloadInterface {
 
 	public String getMessage() {
 		return message;
+	}
+
+	public LoginBean getLoginBean() {
+		return loginBean;
+	}
+
+	public void setLoginBean(LoginBean loginBean) {
+		this.loginBean = loginBean;
+	}
+
+	public boolean isPreferenceHelp() {
+		return preferenceHelp;
+	}
+
+	public void setPreferenceHelp(boolean preferenceHelp) {
+		this.preferenceHelp = preferenceHelp;
 	}
 }

@@ -28,8 +28,11 @@
 						<div>
 							<p:selectBooleanCheckbox value="#{bean.allGenres}"
 								itemLabel="Wszystkie gatunki"
-								style="color:white;margin-left:80%;" rendered="#{bean.checkboxRendered}">
-								<p:ajax process="@this" event="change" update=":homePageForm" />
+								style="color:white;margin-left:80%;"
+								rendered="#{bean.checkboxRendered}">
+								<p:ajax process="@this" event="change"
+									listener="#{bean.calculateFilteredMovieList}"
+									update=":contentPanel" />
 							</p:selectBooleanCheckbox>
 						</div>
 

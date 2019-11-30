@@ -7,7 +7,7 @@ public class Const {
 	public static final String COUNTRIES = "PL,US";
 	
 	public static final String BASE_URL = "https://api.internationalshowtimes.com/v4/";
-	public static final String API_KEY = "wYcRfnnFtMy65bZFbkcPX01x1hDNBdFi";
+	public static final String API_KEY = "eQYqRPwx0bybdAZGWMHTA4Kq7ns2smFk";
 	
 	public static final String LOCATION_BASE_URL = "https://api.ipgeolocation.io/ipgeo";
 	public static final String LOCATION_API_KEY= "7e0c13dce3d54d898899d8d501003bc3";
@@ -26,5 +26,5 @@ public class Const {
 	
 	public static final String DEFAULT_POSTER = "/resources/img/default_poster.jpg";
 	public static final int DISTANCE = 25;
-	public static final boolean LOGGER = false;
+	public static final boolean LOGGER = true;
 }

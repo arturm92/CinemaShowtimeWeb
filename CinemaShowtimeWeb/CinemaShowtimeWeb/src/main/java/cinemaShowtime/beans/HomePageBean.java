@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -29,6 +30,7 @@ import model.json.cinema.LocationApi;
 import model.json.cinema.comparator.CinemaNameComparator;
 import model.json.complex.Cinemas;
 import model.json.complex.Cities;
+import model.json.complex.Genres;
 import model.json.complex.Movies;
 import model.json.complex.Showtimes;
 import model.json.movie.Genre;
@@ -36,7 +38,7 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "homePageBean", eager = true)
 @ViewScoped
-public class HomePageBean implements ReloadInterface {
+public class HomePageBean extends BaseBean implements ReloadInterface {
 
 	private City currentCity;
 
@@ -51,38 +53,49 @@ public class HomePageBean implements ReloadInterface {
 	private int index;
 	private boolean allGenres = false;
 
+	private List<Cinema> filteredCinemaList;
+	private List<MovieFormatted> filteredMovieList;
+
 	public HomePageBean() {
+		Logger.logCreateBeanInfo("HomePageBean");
+	}
+
+	@PostConstruct
+	private void init() {
 		try {
 			long startTime = System.currentTimeMillis();
 
-			initCities();
-			reloadPage();
+			prepareData();
 
 			long stopTime = System.currentTimeMillis();
 			Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
-	private void init() {
+	private void prepareData() {
+		initCities();
 		allGenres = false;
 		prepareCinemas();
 		customSortCinemas();
-		selectedCinema = getFilteredCinemaList().get(index);
+		calculateFilteredCinemaList();
+		selectedCinema = filteredCinemaList.get(index);
 		prepareMovies();
+		calculateFilteredMovieList();
 		prepareShowtimes();
 	}
 
 	@Override
 	public void reloadPage() {
-		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
-		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {
+		AccountPreference accountPreference = getAccountPreference();
+		if (isPreferenceHelp() && accountPreference != null) {
 			if (accountPreference.getCityId() != null) {
 				currentCity = cities.findCityById(accountPreference.getCityId());
 			}
 		}
-		init();
+		prepareData();
 	}
 
 	public void initCities() {
@@ -103,8 +116,12 @@ public class HomePageBean implements ReloadInterface {
 	}
 
 	public List<Cinema> getFilteredCinemaList() {
-		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
-		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {
+		return filteredCinemaList;
+	}
+
+	public void calculateFilteredCinemaList() {
+		AccountPreference accountPreference = getAccountPreference();
+		if (isPreferenceHelp() && accountPreference != null) {
 			List<Cinema> retrunCinemaList = new ArrayList<Cinema>();
 			Long[] cinemaIds = accountPreference.getCinemaIds();
 			if (cinemaIds.length > 0) {
@@ -116,9 +133,9 @@ public class HomePageBean implements ReloadInterface {
 					}
 				}
 			}
-			return retrunCinemaList;
+			filteredCinemaList = retrunCinemaList;
 		} else {
-			return cinemas.getList();
+			filteredCinemaList = cinemas.getList();
 		}
 	}
 
@@ -133,17 +150,29 @@ public class HomePageBean implements ReloadInterface {
 	}
 
 	public List<MovieFormatted> getFilteredMovieList() {
-		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
-		if (Application.getInstance().isPreferenceHelp() && accountPreference != null && !isAllGenres()) {
+		return filteredMovieList;
+	}
+
+	public void calculateFilteredMovieList() {
+		Logger.log("**********TEST FILTROWANIA FILMÓW**********");
+		try {
+			Logger.log("Ilość filmów w początkowej liście:" + movies.getList().size());
+		} catch (NullPointerException e) {
+		}
+		AccountPreference accountPreference = getAccountPreference();
+		if (isPreferenceHelp() && accountPreference != null && !isAllGenres()) {
 			List<MovieFormatted> retrunMovieList = new ArrayList<MovieFormatted>();
 			Long[] genreIds = accountPreference.getGenreIds();
 			if (genreIds.length > 0) {
+				logGenresPreference(genreIds);
 				for (MovieFormatted movie : movies.getList()) {
+					String decision = "NIEZGODNE";
 					boolean stop = false;
 					List<Genre> list = movie.getGenre();
 					for (Genre genre : list) {
 						for (int i = 0; i < genreIds.length; i++) {
 							if (genre.getId().compareTo(genreIds[i]) == 0) {
+								decision = "ZGODNE";
 								retrunMovieList.add(movie);
 								stop = true;
 								break;
@@ -153,12 +182,31 @@ public class HomePageBean implements ReloadInterface {
 							break;
 						}
 					}
+					Logger.log(
+							"Gatunki dla filmu " + movie.getTitle() + " to : " + movie.getGenreInfo() + " " + decision);
 				}
 			}
-			return retrunMovieList;
+			Logger.log("Ilość filmów w wynikowej liście:" + retrunMovieList.size());
+			Logger.log("**********KONIEC TESTU**********");
+			filteredMovieList = retrunMovieList;
 		} else {
-			return movies != null ? movies.getList() : null;
+			filteredMovieList = movies.getList();
 		}
+	}
+
+	private void logGenresPreference(Long[] genreIds) {
+		String genreMessage = "";
+		Genres genres = Application.getInstance().getGenres();
+		if (genres == null) {
+			genres = ApiHelper.getGenres().removeNullGenres();
+			Application.getInstance().setGenres(genres);
+		}
+		for (int i = 0; i < genreIds.length; i++) {
+			Genre genre = genres.findGenreById(genreIds[i]);
+			genreMessage += "[" + genre.getName() + "] ";
+		}
+		Logger.log("Preferowane gatunki filmów:" + genreMessage);
+
 	}
 
 	private ApiFilter prepareMoviesInCinema(int days) {
@@ -287,7 +335,7 @@ public class HomePageBean implements ReloadInterface {
 
 	public void setAllGenres(boolean allGenres) {
 		try {
-			int size = Application.getInstance().getAccountPreference().getGenreIds().length;
+			int size = getAccountPreference().getGenreIds().length;
 			this.allGenres = allGenres;
 		} catch (NullPointerException e) {
 			this.allGenres = true;
@@ -295,7 +343,7 @@ public class HomePageBean implements ReloadInterface {
 	}
 
 	public boolean isCheckboxRendered() {
-		return Application.getInstance().getAccount() != null ? true : false;
+		return getAccountBean().getAccount() != null ? true : false;
 	}
 
 }

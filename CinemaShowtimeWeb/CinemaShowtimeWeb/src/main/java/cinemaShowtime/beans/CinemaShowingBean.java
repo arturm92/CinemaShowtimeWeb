@@ -33,7 +33,7 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "cinemaShowingBean", eager = true)
 @SessionScoped
-public class CinemaShowingBean implements ReloadInterface {
+public class CinemaShowingBean extends BaseBean implements ReloadInterface {
 
 	private Cities cities;
 	private Cinemas cinemas;
@@ -65,8 +65,8 @@ public class CinemaShowingBean implements ReloadInterface {
 	
 	@Override
 	public void reloadPage() {
-		AccountPreference accountPreference = Application.getInstance().getAccountPreference();
-		if (Application.getInstance().isPreferenceHelp() && accountPreference != null) {
+		AccountPreference accountPreference = getAccountPreference();
+		if (isPreferenceHelp() && accountPreference != null) {
 			if (accountPreference.getCityId() != null) {
 				selectedCity = cities.findCityById(accountPreference.getCityId());
 				if (selectedCity != null) {

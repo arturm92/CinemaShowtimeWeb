@@ -9,7 +9,7 @@
 			<p:messages id="messages" closable="true" showSummary="true"
 				showDetail="true" style="padding-top: 2%;" />
 			<div>
-				<p:selectBooleanCheckbox value="#{headerBean.preferenceHelp}"
+				<p:selectBooleanCheckbox value="#{accountBean.preferenceHelp}"
 					itemLabel="Wsparcie" style="color:white;margin-left:92%;">
 					<p:ajax process="@this" event="change" update=":contentPanel"
 						listener="#{contentBean.reloadPage()}" />
@@ -26,8 +26,7 @@
 			</div>
 			<div style="padding-top: 110px;">
 				<p:menubar>
-					<p:menuitem url="/CinemaShowtimeWeb/index.xhtml" icon="pi pi-home">
-					</p:menuitem>
+					<p:menuitem url="/CinemaShowtimeWeb/index.xhtml" icon="pi pi-home" />
 					<p:menuitem value="REPERTUAR KIN"
 						url="/CinemaShowtimeWeb/showtimes/index.xhtml" icon="pi pi-search" />
 					<p:menuitem value="TERAZ GRANE"
@@ -58,6 +57,7 @@
 							rendered="#{loginBean.loggedAccount != null}"
 							icon="fa fa-fw fa-reply-all" update="headerForm :contentPanel">
 							<f:actionListener binding="#{loginBean.logoutAccount()}" />
+							<f:actionListener binding="#{accountBean.loadPreferences()}" />
 							<f:actionListener binding="#{contentBean.reloadPage()}" />
 						</p:commandButton>
 						<p:overlayPanel id="userPanel" for="loginButton" hideEffect="fade">
@@ -70,11 +70,13 @@
 								<p:commandButton value="ZALOGUJ"
 									update="headerForm :contentPanel">
 									<f:actionListener binding="#{loginBean.loginAccount()}" />
+									<f:actionListener binding="#{accountBean.loadPreferences()}" />
 									<f:actionListener binding="#{contentBean.reloadPage()}" />
 								</p:commandButton>
 								<p:commandButton value="ZAREJESTURJ"
 									update="headerForm :contentPanel">
 									<f:actionListener binding="#{loginBean.registerAccount()}" />
+									<f:actionListener binding="#{accountBean.loadPreferences()}" />
 									<f:actionListener binding="#{contentBean.reloadPage()}" />
 								</p:commandButton>
 							</h:panelGrid>
