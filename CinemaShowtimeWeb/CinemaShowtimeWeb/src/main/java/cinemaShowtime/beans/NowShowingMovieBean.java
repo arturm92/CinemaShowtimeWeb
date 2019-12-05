@@ -3,6 +3,7 @@ package cinemaShowtime.beans;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -10,7 +11,9 @@ import javax.faces.context.FacesContext;
 
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.filters.Filter;
-import cinemaShowtime.filters.FilterInterfaceImpl;
+import cinemaShowtime.filters.MovieFilter;
+import cinemaShowtime.filters.MovieSorter;
+import cinemaShowtime.filters.PageFilter;
 import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
@@ -24,25 +27,34 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "nowShowingMovieBean", eager = true)
 @SessionScoped
-public class NowShowingMovieBean extends FilterInterfaceImpl implements ReloadInterface {
+public class NowShowingMovieBean extends BaseBean implements ReloadInterface {
 
 	private Movies movies;
 	private Movies moviePosters;
 	private Movie selectedMovie;
 
-	public NowShowingMovieBean() {
-		long startTime = System.currentTimeMillis();
+	private PageFilter pageFilter;
 
-		init();
+	public NowShowingMovieBean() {
+		Logger.logCreateBeanInfo("NowShowingMovieBean");
+	}
+
+	@PostConstruct
+	private void init() {
+		long startTime = System.currentTimeMillis();
+		
+		initPageFilter();
 		prepareMovies();
 
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
-	}
 
-	private void init() {
-		setConfiguration(Filter.Configuration.NOW_SHOWING);
-		initFilter();
+	}
+	
+	private void initPageFilter() {
+		pageFilter = new PageFilter(getAccountBean());
+		pageFilter.setConfiguration(Filter.Configuration.NOW_SHOWING);
+		pageFilter.initFilter();
 	}
 
 	private void prepareMovies() {
@@ -112,5 +124,13 @@ public class NowShowingMovieBean extends FilterInterfaceImpl implements ReloadIn
 	public void reloadPage() {
 		getMovieFilter().initGenreList();
 		prepareMovies();
+	}
+	
+	public MovieFilter getMovieFilter() {
+		return pageFilter.getMovieFilter();
+	}
+
+	public MovieSorter getMovieSorter() {
+		return pageFilter.getMovieSorter();
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -53,16 +54,21 @@ public class CinemaShowingBean extends BaseBean implements ReloadInterface {
 	private boolean showtimeSelectionVisible;
 
 	public CinemaShowingBean() {
+		Logger.logCreateBeanInfo("CinemaShowingBean");
+	}
+
+	@PostConstruct
+	private void init() {
 		long startTime = System.currentTimeMillis();
-		
+
 		initCities();
 		createCitiesQuickSelection();
 		reloadPage();
-		
+
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
-	
+
 	@Override
 	public void reloadPage() {
 		AccountPreference accountPreference = getAccountPreference();

@@ -3,6 +3,7 @@ package cinemaShowtime.beans;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -12,7 +13,9 @@ import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.filters.Filter;
-import cinemaShowtime.filters.FilterInterfaceImpl;
+import cinemaShowtime.filters.MovieFilter;
+import cinemaShowtime.filters.MovieSorter;
+import cinemaShowtime.filters.PageFilter;
 import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
@@ -24,26 +27,35 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "movieRankingBean", eager = true)
 @SessionScoped
-public class MovieRankingBean extends FilterInterfaceImpl implements ReloadInterface {
+public class MovieRankingBean extends BaseBean implements ReloadInterface {
 
 	private Movie selectedMovie;
 	private Movies rankingMovies;
 	private Movies moviePosters;
 	private List<MovieFormatted> displayRankingList;
 
+	private PageFilter pageFilter;
+
 	public MovieRankingBean() {
+		Logger.logCreateBeanInfo("MovieRankingBean");
+	}
+
+	@PostConstruct
+	private void init() {
 		long startTime = System.currentTimeMillis();
 
-		init();
+		initPageFilter();
 		prepareDisplayRankingList();
 
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
+
 	}
 
-	private void init() {
-		setConfiguration(Filter.Configuration.RANKING);
-		initFilter();
+	private void initPageFilter() {
+		pageFilter = new PageFilter(getAccountBean());
+		pageFilter.setConfiguration(Filter.Configuration.NOW_SHOWING);
+		pageFilter.initFilter();
 	}
 
 	private ApiFilter prepareFilter() {
@@ -158,6 +170,14 @@ public class MovieRankingBean extends FilterInterfaceImpl implements ReloadInter
 	public void reloadPage() {
 		getMovieFilter().initGenreList();
 		prepareDisplayRankingList();
+	}
+
+	public MovieFilter getMovieFilter() {
+		return pageFilter.getMovieFilter();
+	}
+
+	public MovieSorter getMovieSorter() {
+		return pageFilter.getMovieSorter();
 	}
 
 }

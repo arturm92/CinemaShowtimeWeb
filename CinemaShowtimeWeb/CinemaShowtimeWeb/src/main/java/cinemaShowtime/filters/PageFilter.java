@@ -2,16 +2,21 @@ package cinemaShowtime.filters;
 
 import java.util.HashMap;
 
-public class FilterInterfaceImpl implements FilterInterface {
+import cinemaShowtime.beans.AccountBean;
+
+public class PageFilter implements FilterInterface {
 
 	private MovieFilter movieFilter;
 	private MovieSorter movieSorter;
 	private String configuration;
 
+	public PageFilter(AccountBean accountBean) {
+		movieFilter = new MovieFilter(accountBean);
+		movieSorter = new MovieSorter();
+	}
+	
 	@Override
 	public void initFilter() {
-		movieFilter = new MovieFilter();
-		movieSorter = new MovieSorter();
 		initRenderedMap();
 	}
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -11,7 +12,9 @@ import javax.faces.context.FacesContext;
 
 import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.filters.Filter;
-import cinemaShowtime.filters.FilterInterfaceImpl;
+import cinemaShowtime.filters.MovieFilter;
+import cinemaShowtime.filters.MovieSorter;
+import cinemaShowtime.filters.PageFilter;
 import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
@@ -24,26 +27,42 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "movieCatalogueBean", eager = true)
 @SessionScoped
-public class MovieCatalogueBean extends FilterInterfaceImpl implements ReloadInterface {
+public class MovieCatalogueBean extends BaseBean implements ReloadInterface {
 
 	private Movies movies;
 	private Movies moviePosters;
 
 	public MovieCatalogueBean() {
+		Logger.logCreateBeanInfo("MovieCatalogueBean");
+	}
+
+	@PostConstruct
+	private void init() {
 		long startTime = System.currentTimeMillis();
 
-		init();
+		initPageFilter();
 		prepareMovieCatalogueList();
 
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
-
-	private void init() {
-		setConfiguration(Filter.Configuration.CATALOGUE);
-		initFilter();
+	
+	private PageFilter pageFilter;
+	
+	private void initPageFilter() {
+		pageFilter = new PageFilter(getAccountBean());
+		pageFilter.setConfiguration(Filter.Configuration.NOW_SHOWING);
+		pageFilter.initFilter();
+	}
+	
+	public MovieFilter getMovieFilter() {
+		return pageFilter.getMovieFilter();
 	}
 
+	public MovieSorter getMovieSorter() {
+		return pageFilter.getMovieSorter();
+	}
+	
 	private void prepareMovieCatalogueList() {
 		ApiFilter filter = prepareFilter();
 		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);

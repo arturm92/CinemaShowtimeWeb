@@ -26,9 +26,11 @@
 			</div>
 			<div style="padding-top: 110px;">
 				<p:menubar>
-					<p:menuitem url="/CinemaShowtimeWeb/index.xhtml" icon="pi pi-home" />
+					<p:menuitem url="/CinemaShowtimeWeb/index.xhtml" icon="pi pi-home"
+						actionListener="#{homePageBean.reloadPage}" />
 					<p:menuitem value="REPERTUAR KIN"
-						url="/CinemaShowtimeWeb/showtimes/index.xhtml" icon="pi pi-search" />
+						url="/CinemaShowtimeWeb/showtimes/index.xhtml" icon="pi pi-search"
+						actionListener="#{cinemaShowingBean.reloadPage}" />
 					<p:menuitem value="TERAZ GRANE"
 						url="/CinemaShowtimeWeb/nowShowingMovie/index.xhtml"
 						icon="fa fa-fw fa-play-circle-o" />
