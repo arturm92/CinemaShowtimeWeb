@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cinemaShowtime.filters.ApiFilter;
-import cinemaShowtime.utils.Const;
+import cinemaShowtime.utils.AppParameter;
 import cinemaShowtime.utils.Logger;
 import model.json.cinema.Cinema;
 import model.json.complex.Cinemas;
@@ -35,7 +35,7 @@ public class ApiHelper {
 			Logger.log("QUERY: " + url);
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpGet request = new HttpGet(url);
-			request.addHeader("X-API-Key", Const.API_KEY);
+			request.addHeader("X-API-Key", AppParameter.API_KEY);
 			HttpResponse response = client.execute(request);
 			return readResultContent(response);
 		} catch (ClientProtocolException e) {
@@ -61,8 +61,8 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Cities> map = new TypeReference<Cities>() {
 			};
-			String params = "?lang=" + Const.LANGUAGE;
-			String json = getDataFromApi(Const.CITIES + params);
+			String params = "?lang=" + AppParameter.LANGUAGE;
+			String json = getDataFromApi(AppParameter.CITIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -79,7 +79,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Cinemas> map = new TypeReference<Cinemas>() {
 			};
-			String json = getDataFromApi(Const.CINEMAS + filter.prepareParameters());
+			String json = getDataFromApi(AppParameter.CINEMAS + filter.prepareParameters());
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -96,7 +96,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
-			String json = getDataFromApi(Const.MOVIES + filter.prepareParameters());
+			String json = getDataFromApi(AppParameter.MOVIES + filter.prepareParameters());
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -115,8 +115,8 @@ public class ApiHelper {
 			};
 			String params = "?cinema_id=" + cinema.getId();
 			params += "&fields=id,title,original_title,synopsis,website,cast,crew,genres";
-			params += "&lang=" + Const.LANGUAGE;
-			String json = getDataFromApi(Const.MOVIES + params);
+			params += "&lang=" + AppParameter.LANGUAGE;
+			String json = getDataFromApi(AppParameter.MOVIES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -133,7 +133,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Showtimes> map = new TypeReference<Showtimes>() {
 			};
-			String json = getDataFromApi(Const.SHOWTIMES + filter.prepareParameters());
+			String json = getDataFromApi(AppParameter.SHOWTIMES + filter.prepareParameters());
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -152,9 +152,9 @@ public class ApiHelper {
 			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
 			String params = "/" + movieId;
 			params += "?fields=id,poster_image.flat,scene_images.flat,trailers,ratings,synopsis";
-			params += "&lang=" + Const.MULTIMEDIA_LANGUAGE;
-			params += "&countries=" + Const.COUNTRIES;
-			String json = getDataFromApi(Const.MOVIES + params);
+			params += "&lang=" + AppParameter.MULTIMEDIA_LANGUAGE;
+			params += "&countries=" + AppParameter.COUNTRIES;
+			String json = getDataFromApi(AppParameter.MOVIES + params);
 			return mapper.readValue(json, MovieFormatted.class);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -172,9 +172,9 @@ public class ApiHelper {
 			mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
 			String params = "/" + movieId;
 			params += "?fields=id,title,original_title,synopsis,website,cast,crew,genres,release_dates,age_limits";
-			params += "&lang=" + Const.LANGUAGE;
-			params += "&countries=" + Const.COUNTRIES;
-			String json = getDataFromApi(Const.MOVIES + params);
+			params += "&lang=" + AppParameter.LANGUAGE;
+			params += "&countries=" + AppParameter.COUNTRIES;
+			String json = getDataFromApi(AppParameter.MOVIES + params);
 			return mapper.readValue(json, MovieFormatted.class);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -192,7 +192,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
-			String json = getDataFromApi(Const.MOVIES + filter.prepareParameters());
+			String json = getDataFromApi(AppParameter.MOVIES + filter.prepareParameters());
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -210,7 +210,7 @@ public class ApiHelper {
 			TypeReference<Genres> map = new TypeReference<Genres>() {
 			};
 			String params = "?lang=pl";
-			String json = getDataFromApi(Const.GENRES + params);
+			String json = getDataFromApi(AppParameter.GENRES + params);
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -227,7 +227,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
-			String json = getDataFromApi(Const.MOVIES + filter.prepareParameters());
+			String json = getDataFromApi(AppParameter.MOVIES + filter.prepareParameters());
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -244,7 +244,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
-			String json = getDataFromApi(Const.MOVIES + filter.prepareParameters());
+			String json = getDataFromApi(AppParameter.MOVIES + filter.prepareParameters());
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -261,7 +261,7 @@ public class ApiHelper {
 			ObjectMapper mapper = new ObjectMapper();
 			TypeReference<Movies> map = new TypeReference<Movies>() {
 			};
-			String json = getDataFromApi(Const.MOVIES + filter.prepareParameters());
+			String json = getDataFromApi(AppParameter.MOVIES + filter.prepareParameters());
 			return mapper.readValue(json, map);
 		} catch (JsonParseException e) {
 			e.printStackTrace();

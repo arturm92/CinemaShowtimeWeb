@@ -15,9 +15,7 @@
 							selection="#{bean.selectedCinema}" rowKey="#{cinema.id}"
 							styleClass="noHeader">
 							<p:ajax event="rowSelect" listener="#{bean.selectCinema}"
-								process="cinemasDataTable"
-								update=":homePageForm:moviesDataTable" />
-
+								process="cinemasDataTable" update=":homePageForm" />
 							<p:column>
 								<h:outputText value="#{cinema.name}" />
 								<p:separator />
@@ -38,7 +36,7 @@
 
 						<p:dataTable id="moviesDataTable" var="movie"
 							value="#{bean.filteredMovieList}" sortBy="#{movie.name}"
-							sortOrder="ascending">
+							sortOrder="ascending" `>
 							<f:facet name="header">
 								<h:outputText value="#{bean.selectedCinema.name}" />
 							</f:facet>

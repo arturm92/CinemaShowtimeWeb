@@ -15,11 +15,10 @@ import org.primefaces.event.SelectEvent;
 
 import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.filters.ApiFilter;
-import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Application;
-import cinemaShowtime.utils.Const;
+import cinemaShowtime.utils.AppParameter;
 import cinemaShowtime.utils.Logger;
 import model.json.City;
 import model.json.Showtime;
@@ -34,7 +33,7 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "cinemaShowingBean", eager = true)
 @SessionScoped
-public class CinemaShowingBean extends BaseBean implements ReloadInterface {
+public class CinemaShowingBean extends BaseBean {
 
 	private Cities cities;
 	private Cinemas cinemas;
@@ -63,7 +62,6 @@ public class CinemaShowingBean extends BaseBean implements ReloadInterface {
 
 		initCities();
 		createCitiesQuickSelection();
-		reloadPage();
 
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
@@ -120,7 +118,7 @@ public class CinemaShowingBean extends BaseBean implements ReloadInterface {
 		ApiFilter filter = new ApiFilter();
 		filter.addFilterParam(ApiFilter.Parameter.LOCATION, selectedCity.getLat() + "," + selectedCity.getLon());
 		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, "10");
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
 		return filter;
 	}
 
@@ -128,7 +126,7 @@ public class CinemaShowingBean extends BaseBean implements ReloadInterface {
 		ApiFilter filter = new ApiFilter();
 		filter.addQueryParam(ApiFilter.Query.CINEMA_ID, selectedCinema.getId().toString());
 		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
 		return filter;
 	}
 
@@ -200,7 +198,7 @@ public class CinemaShowingBean extends BaseBean implements ReloadInterface {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");
-			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
+			getMovieDetailBean().initMovieDetailBean(movieId);
 			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
 		} catch (IOException e) {
 			e.printStackTrace();

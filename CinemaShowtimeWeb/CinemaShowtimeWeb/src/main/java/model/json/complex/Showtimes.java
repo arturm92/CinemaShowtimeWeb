@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.DateFormatter;
 import cinemaShowtime.utils.Logger;
 import model.json.Showtime;
 import model.json.ShowtimeDay;
@@ -37,7 +37,7 @@ public class Showtimes extends BaseComplexModel implements JsonList<Showtime> {
 
 	public List<ShowtimeDay> getNormalizeList() {
 		List<ShowtimeDay> showtimeDayList = new ArrayList<ShowtimeDay>();
-		DateFormater df = new DateFormater();
+		DateFormatter df = new DateFormatter();
 		ShowtimeDay showtimeDay = null;
 		for (Showtime showtime : list) {
 			String showtimeDate = df.formatDateShort(showtime.getStartAt());

@@ -10,7 +10,7 @@ import cinemaShowtime.beans.AccountBean;
 import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.DateFormatter;
 import cinemaShowtime.utils.Logger;
 import model.json.complex.Genres;
 import model.json.movie.Genre;
@@ -82,7 +82,7 @@ public class MovieFilter {
 			yearList.add(String.valueOf(year));
 			year++;
 		}
-		DateFormater df = new DateFormater();
+		DateFormatter df = new DateFormatter();
 		setSelectedYear(String.valueOf(df.getCurrentYear()));
 	}
 

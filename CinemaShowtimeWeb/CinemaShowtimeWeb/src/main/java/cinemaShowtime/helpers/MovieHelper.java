@@ -7,8 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import cinemaShowtime.utils.Const;
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.AppParameter;
+import cinemaShowtime.utils.DateFormatter;
 import cinemaShowtime.utils.Logger;
 import cinemaShowtime.utils.Util;
 import model.json.complex.Movies;
@@ -53,7 +53,7 @@ public class MovieHelper {
 	}
 
 	private static boolean chcekReleaseDate(Date dateFrom, LinkedHashMap<String, Object> releaseDateMap) {
-		DateFormater df = new DateFormater();
+		DateFormatter df = new DateFormatter();
 		for (Map.Entry entry : releaseDateMap.entrySet()) {
 			List<Object> list = (List<Object>) entry.getValue();
 			LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) list.get(0);
@@ -93,11 +93,11 @@ public class MovieHelper {
 
 	public static void addPosterToMovie(Movies movies, Movies moviePosters) {
 		for (Movie movie : movies.getList()) {
-			if (movie.getPosterImage() == null || movie.getPosterImage().equals(Const.DEFAULT_POSTER)) {
+			if (movie.getPosterImage() == null || movie.getPosterImage().equals(AppParameter.DEFAULT_POSTER)) {
 				try {
 					String moviePoster = moviePosters.getMovieMap().get(movie.getId()).getPosterImage();
 					if (moviePoster == null) {
-						moviePoster = Const.DEFAULT_POSTER;
+						moviePoster = AppParameter.DEFAULT_POSTER;
 					}
 					movie.setPosterImages(moviePoster);
 				} catch (NullPointerException e) {
@@ -126,7 +126,7 @@ public class MovieHelper {
 			movie.setReleaseDate(movieDescripstion.getReleaseDate());
 			movie.setAgeLimit(movieDescripstion.getAgeLimit());
 			if (movie.getPosterImage() == null) {
-				movie.setPosterImages(Const.DEFAULT_POSTER);
+				movie.setPosterImages(AppParameter.DEFAULT_POSTER);
 			}
 		}
 	}

@@ -7,8 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -16,12 +17,11 @@ import org.primefaces.PrimeFaces;
 
 import cinemaShowtime.database.model.AccountPreference;
 import cinemaShowtime.filters.ApiFilter;
-import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Application;
-import cinemaShowtime.utils.Const;
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.AppParameter;
+import cinemaShowtime.utils.DateFormatter;
 import cinemaShowtime.utils.Logger;
 import model.json.City;
 import model.json.Showtime;
@@ -37,8 +37,8 @@ import model.json.movie.Genre;
 import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "homePageBean", eager = true)
-@ViewScoped
-public class HomePageBean extends BaseBean implements ReloadInterface {
+@SessionScoped
+public class HomePageBean extends BaseBean {
 
 	private City currentCity;
 
@@ -48,7 +48,7 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 	private Movies moviePosters;
 	private Showtimes showtimes;
 	private Cinema selectedCinema;
-	private int distance = Const.DISTANCE;
+	private int distance = AppParameter.DISTANCE;
 	private String timeTo;
 	private int index;
 	private boolean allGenres = false;
@@ -66,7 +66,7 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 			long startTime = System.currentTimeMillis();
 
 			prepareData();
-
+			setPrepared(true);
 			long stopTime = System.currentTimeMillis();
 			Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 		} catch (Exception e) {
@@ -76,6 +76,8 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 	}
 
 	private void prepareData() {
+		Logger.log("PREPARING DATA");
+
 		initCities();
 		allGenres = false;
 		prepareCinemas();
@@ -89,13 +91,19 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 
 	@Override
 	public void reloadPage() {
-		AccountPreference accountPreference = getAccountPreference();
-		if (isPreferenceHelp() && accountPreference != null) {
-			if (accountPreference.getCityId() != null) {
-				currentCity = cities.findCityById(accountPreference.getCityId());
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "LOADING...", null));
+
+		if (!isPrepared()) {
+			AccountPreference accountPreference = getAccountPreference();
+			if (isPreferenceHelp() && accountPreference != null) {
+				if (accountPreference.getCityId() != null) {
+					currentCity = cities.findCityById(accountPreference.getCityId());
+				}
 			}
+			prepareData();
 		}
-		prepareData();
+		setPrepared(false);
 	}
 
 	public void initCities() {
@@ -127,7 +135,7 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 			if (cinemaIds.length > 0) {
 				for (Cinema cinema : cinemas.getList()) {
 					for (int i = 0; i < cinemaIds.length; i++) {
-						if (cinema.getId().compareTo(cinemaIds[i]) == 0) {
+						if (cinemaIds[i] != null && cinema.getId().compareTo(cinemaIds[i]) == 0) {
 							retrunCinemaList.add(cinema);
 						}
 					}
@@ -171,7 +179,7 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 					List<Genre> list = movie.getGenre();
 					for (Genre genre : list) {
 						for (int i = 0; i < genreIds.length; i++) {
-							if (genre.getId().compareTo(genreIds[i]) == 0) {
+							if (genreIds[i] != null && genre.getId().compareTo(genreIds[i]) == 0) {
 								decision = "ZGODNE";
 								retrunMovieList.add(movie);
 								stop = true;
@@ -215,8 +223,7 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 			selectedCinema = getFilteredCinemaList().get(index);
 			days = 2;
 		}
-		DateFormater df = new DateFormater();
-		timeTo = df.convertSimpleDateToTimezone(df.getDaysFromToday(days));
+		timeTo = getDateFormatter().convertSimpleDateToTimezone(getDateFormatter().getDaysFromToday(days));
 		ApiFilter filter = prepareMovieFilter();
 		movies = ApiHelper.getMoviesInCinema(filter);
 		if (movies.getList().isEmpty()) {
@@ -246,24 +253,24 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 		} else {
 			filter.addFilterParam(ApiFilter.Parameter.LOCATION, currentCity.getLat() + "," + currentCity.getLon());
 		}
-		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(Const.DISTANCE));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(AppParameter.DISTANCE));
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
 		return filter;
 	}
 
 	private ApiFilter prepareMovieFilter() {
-		DateFormater df = new DateFormater();
+		DateFormatter df = new DateFormatter();
 		ApiFilter filter = new ApiFilter();
 		filter.addQueryParam(ApiFilter.Query.CINEMA_ID, getSelectedCinema().getId().toString());
 		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 		filter.addFilterParam(ApiFilter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
 		filter.addFilterParam(ApiFilter.Parameter.TIME_TO, timeTo);
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
 		return filter;
 	}
 
 	private ApiFilter prepareShowtimeFilter() {
-		DateFormater df = new DateFormater();
+		DateFormatter df = new DateFormatter();
 		ApiFilter filter = new ApiFilter();
 		filter.addQueryParam(ApiFilter.Query.CINEMA_ID, selectedCinema.getId().toString());
 		filter.addFilterParam(ApiFilter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
@@ -273,6 +280,7 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 
 	public void selectCinema() {
 		prepareMovies();
+		calculateFilteredMovieList();
 		prepareShowtimes();
 	}
 
@@ -280,7 +288,7 @@ public class HomePageBean extends BaseBean implements ReloadInterface {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");
-			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
+			getMovieDetailBean().initMovieDetailBean(movieId);
 			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
 		} catch (IOException e) {
 			e.printStackTrace();

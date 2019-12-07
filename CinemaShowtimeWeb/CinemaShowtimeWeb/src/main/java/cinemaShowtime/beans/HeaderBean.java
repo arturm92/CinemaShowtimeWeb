@@ -15,8 +15,8 @@ import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.LocationApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Application;
-import cinemaShowtime.utils.Const;
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.AppParameter;
+import cinemaShowtime.utils.DateFormatter;
 import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
 import model.json.movie.MovieFormatted;
@@ -24,11 +24,11 @@ import model.json.movie.comparator.MovieRatingComparator;
 
 @ManagedBean(name = "headerBean", eager = true)
 @SessionScoped
-public class HeaderBean {
+public class HeaderBean extends BaseBean {
 
 	private Movies headerMovies;
 	private Movies moviePosters;
-	
+
 	public HeaderBean() {
 		long startTime = System.currentTimeMillis();
 		Application.getInstance().setLocationApi(LocationApiHelper.getLocation());
@@ -40,7 +40,7 @@ public class HeaderBean {
 			filter.deleteFilterParam(ApiFilter.Parameter.LANG);
 			moviePosters = ApiHelper.getMoviesPosterEngishVersion(filter);
 			moviePosters.fillMovieMap();
-			MovieHelper.addPosterToMovie(headerMovies, moviePosters);	
+			MovieHelper.addPosterToMovie(headerMovies, moviePosters);
 		}
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
@@ -48,12 +48,12 @@ public class HeaderBean {
 
 	private ApiFilter prepareFilter() {
 		ApiFilter filter = new ApiFilter();
-		DateFormater df = new DateFormater();
+		DateFormatter df = new DateFormatter();
 		filter.setFields(ApiFilter.Field.MOVIE_POSTER_FIELDS);
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(df.getMonthFromToday(-1)));
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, df.formatDateShort(df.getMonthFromToday(1)));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
-		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Const.COUNTRIES);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, AppParameter.COUNTRIES);
 		return filter;
 	}
 
@@ -61,7 +61,7 @@ public class HeaderBean {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");
-			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
+			getMovieDetailBean().initMovieDetailBean(movieId);
 			updateHeaderMovieList(movieId);
 			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
 		} catch (IOException e) {
@@ -91,20 +91,23 @@ public class HeaderBean {
 
 	public List<MovieFormatted> getHeaderMoviesList() {
 		if (headerMovies != null) {
-			return headerMovies.getMoviesWithPosterList();	
-		}else {
+			return headerMovies.getMoviesWithPosterList();
+		} else {
 			return null;
 		}
 	}
 
-	
 	public String getLocationApiCity() {
 		try {
-			return 	Application.getInstance().getLocationApi().getCity();	
-		}catch (NullPointerException e) {
+			return Application.getInstance().getLocationApi().getCity();
+		} catch (NullPointerException e) {
 			return null;
 		}
-		
+
+	}
+
+	@Override
+	public void reloadPage() {
 	}
 
 }

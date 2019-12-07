@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -15,8 +18,9 @@ import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.LocationApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
 import cinemaShowtime.utils.Application;
-import cinemaShowtime.utils.Const;
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.AppParameter;
+import cinemaShowtime.utils.DateFormatter;
+import cinemaShowtime.utils.Logger;
 import model.json.City;
 import model.json.Showtime;
 import model.json.ShowtimeDay;
@@ -28,37 +32,38 @@ import model.json.complex.Showtimes;
 import model.json.movie.Movie;
 import model.json.movie.MovieFormatted;
 
+@ManagedBean(name = "movieDetailBean", eager = false)
+@SessionScoped
 public class MovieDetailBean {
 
-	private static MovieDetailBean instance = null;
 	private MovieFormatted movie;
-
 	private Cities cities;
 	private Cinemas cinemas;
 	private Showtimes showtimes;
 	private Showtimes displayShowtimes;
 
-	private int distance = Const.DISTANCE;
+	private int distance = AppParameter.DISTANCE;
 	private int days = 7;
 	private City selectedCity;
 	private Cinema selectedCinema;
 	private LocationApi locationApi;
 
-	public static MovieDetailBean getInstance() {
-		if (instance == null) {
-			instance = new MovieDetailBean();
-		}
-		return instance;
+	public MovieDetailBean(){
+		Logger.logCreateBeanInfo("movieDeailBean");
 	}
-
+	
+	@PostConstruct
+	public void init() {
+		initLocationApi();
+		initCities();
+		resetDistance();
+	}
+	
 	public void initMovieDetailBean(String movieId) {
 		movie = ApiHelper.getMovieMultimedia(Long.valueOf(movieId));
 		MovieFormatted movieDescripstion = ApiHelper.getMovieDescription(movie.getId());
 		MovieHelper.mergeMovieDetails(movie, movieDescripstion);
 
-		initLocationApi();
-		initCities();
-		resetDistance();
 		initCinemas();
 		if (!cinemas.getList().isEmpty()) {
 			selectedCity = cities.findCityByName(getSelectedCinema().getLoaction().getAddress().getCity());
@@ -68,14 +73,17 @@ public class MovieDetailBean {
 			showtimes.showAllElements();
 		}
 	}
-	
+
 	private void initLocationApi() {
 		locationApi = LocationApiHelper.getLocation();
 	}
 
 	private void initCities() {
-		cities = ApiHelper.getCities();
-		Application.getInstance().setCities(cities);
+		cities = Application.getInstance().getCities();
+		if (cities == null) {
+			cities = ApiHelper.getCities();
+			Application.getInstance().setCities(cities);
+		}
 	}
 
 	private int initCinemas() {
@@ -96,9 +104,9 @@ public class MovieDetailBean {
 		showtimes = ApiHelper.getMovieShowtimesInCinema(filter);
 		filterShowtimes();
 	}
-	
+
 	private void resetDistance() {
-		this.distance = Const.DISTANCE;
+		this.distance = AppParameter.DISTANCE;
 	}
 
 	public void selectCity(SelectEvent event) {
@@ -130,7 +138,7 @@ public class MovieDetailBean {
 
 	private ApiFilter prepareCinemaFilter() {
 		ApiFilter filter = new ApiFilter();
-		DateFormater df = new DateFormater();
+		DateFormatter df = new DateFormatter();
 		if (selectedCity != null) {
 			filter.addFilterParam(ApiFilter.Parameter.LOCATION, selectedCity.getLat() + "," + selectedCity.getLon());
 		} else {
@@ -139,7 +147,7 @@ public class MovieDetailBean {
 		}
 
 		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, String.valueOf(distance));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
 		filter.addFilterParam(ApiFilter.Query.MOVIE_ID, movie.getId().toString());
 		filter.addFilterParam(ApiFilter.Parameter.TIME_FROM, df.convertSimpleDateToTimezone(new Date()));
 		filter.addFilterParam(ApiFilter.Parameter.TIME_TO, df.convertSimpleDateToTimezone(df.getDaysFromToday(days)));
@@ -148,7 +156,7 @@ public class MovieDetailBean {
 
 	private ApiFilter prepareShowtimeFilter() {
 		ApiFilter filter = new ApiFilter();
-		DateFormater df = new DateFormater();
+		DateFormatter df = new DateFormatter();
 		if (selectedCity != null) {
 			filter.addFilterParam(ApiFilter.Parameter.LOCATION, selectedCity.getLat() + "," + selectedCity.getLon());
 		} else {

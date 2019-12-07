@@ -25,7 +25,7 @@ import cinemaShowtime.filters.ApiFilter;
 import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.utils.Application;
-import cinemaShowtime.utils.Const;
+import cinemaShowtime.utils.AppParameter;
 import cinemaShowtime.utils.Logger;
 import model.json.City;
 import model.json.cinema.Cinema;
@@ -64,9 +64,9 @@ public class AccountBean implements ReloadInterface {
 	private String message = "";
 
 	private AccountPreferenceItemDAO accountPreferenceDAO = new AccountPreferenceItemDAO();
-	
+
 	private boolean preferenceHelp = false;
-	
+
 	@ManagedProperty(value = "#{loginBean}")
 	private LoginBean loginBean;
 
@@ -108,7 +108,7 @@ public class AccountBean implements ReloadInterface {
 	private void clear() {
 		account = null;
 		preferenceHelp = false;
-		accountPreference= null;
+		accountPreference = null;
 		selectedGenreList = null;
 		selectedCinemaList = null;
 		selectedCity = null;
@@ -184,7 +184,8 @@ public class AccountBean implements ReloadInterface {
 
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Udało się!", "Preferencje zapisano w systemie"));
-
+		
+		prepareAccountPreference();
 		firstStepClicked();
 
 	}
@@ -209,7 +210,7 @@ public class AccountBean implements ReloadInterface {
 		ApiFilter filter = new ApiFilter();
 		filter.addFilterParam(ApiFilter.Parameter.LOCATION, selectedCity.getLat() + "," + selectedCity.getLon());
 		filter.addFilterParam(ApiFilter.Parameter.DISTANCE, "10");
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
 		return filter;
 	}
 

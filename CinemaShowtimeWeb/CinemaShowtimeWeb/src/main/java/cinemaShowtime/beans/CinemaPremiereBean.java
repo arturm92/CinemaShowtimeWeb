@@ -15,11 +15,9 @@ import cinemaShowtime.filters.Filter;
 import cinemaShowtime.filters.MovieFilter;
 import cinemaShowtime.filters.MovieSorter;
 import cinemaShowtime.filters.PageFilter;
-import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
-import cinemaShowtime.utils.Const;
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.AppParameter;
 import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
 import model.json.movie.Genre;
@@ -27,13 +25,12 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "cinemaPremiereBean", eager = true)
 @SessionScoped
-public class CinemaPremiereBean extends BaseBean implements ReloadInterface {
+public class CinemaPremiereBean extends BaseBean {
 
 	private Movies movies;
 	private Movies moviePosters;
-
-	private DateFormater df = new DateFormater();
 	private Date dateFrom;
+	private PageFilter pageFilter;
 
 	public CinemaPremiereBean() {
 		Logger.logCreateBeanInfo("CinemaPremiereBean");
@@ -44,15 +41,14 @@ public class CinemaPremiereBean extends BaseBean implements ReloadInterface {
 		long startTime = System.currentTimeMillis();
 
 		initPageFilter();
-		dateFrom = df.getMonthFromToday(0);
+		dateFrom = getDateFormatter().getMonthFromToday(0);
 		prepareCinemaPremiereMoviesList();
+		setPrepared(true);
 
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 
 	}
-
-	private PageFilter pageFilter;
 
 	private void initPageFilter() {
 		pageFilter = new PageFilter(getAccountBean());
@@ -69,6 +65,8 @@ public class CinemaPremiereBean extends BaseBean implements ReloadInterface {
 	}
 
 	private void prepareCinemaPremiereMoviesList() {
+		Logger.log("PREPARING DATA");
+
 		ApiFilter filter = prepareFilter();
 		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 		movies = ApiHelper.getMovies(filter);
@@ -80,7 +78,6 @@ public class CinemaPremiereBean extends BaseBean implements ReloadInterface {
 		moviePosters.fillMovieMap();
 		MovieHelper.addPosterToMovie(movies, moviePosters);
 
-		// setCinemaPremiereMoviesList(movies.getMoviesWithPosterList());
 		getMovieSorter().setMovies(movies);
 		getMovieSorter().setSortType(false);
 		getMovieSorter().dateSort();
@@ -89,10 +86,11 @@ public class CinemaPremiereBean extends BaseBean implements ReloadInterface {
 
 	private ApiFilter prepareFilter() {
 		ApiFilter filter = new ApiFilter();
-		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, df.formatDateShort(dateFrom));
-		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, df.formatDateShort(df.getMonthFromToday(1)));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
-		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Const.COUNTRIES);
+		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, getDateFormatter().formatDateShort(dateFrom));
+		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO,
+				getDateFormatter().formatDateShort(getDateFormatter().getMonthFromToday(1)));
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, AppParameter.COUNTRIES);
 		if (!getMovieFilter().getSelectedGenreList().isEmpty()) {
 			String genre_ids = "";
 			for (Genre genre : getMovieFilter().getSelectedGenreList()) {
@@ -113,7 +111,7 @@ public class CinemaPremiereBean extends BaseBean implements ReloadInterface {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");
-			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
+			getMovieDetailBean().initMovieDetailBean(movieId);
 			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -126,8 +124,11 @@ public class CinemaPremiereBean extends BaseBean implements ReloadInterface {
 
 	@Override
 	public void reloadPage() {
-		getMovieFilter().initGenreList();
-		prepareCinemaPremiereMoviesList();
+		if (!isPrepared()) {
+			getMovieFilter().initGenreList();
+			prepareCinemaPremiereMoviesList();
+		}
+		setPrepared(false);
 	}
 
 }

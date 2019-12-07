@@ -15,11 +15,9 @@ import cinemaShowtime.filters.Filter;
 import cinemaShowtime.filters.MovieFilter;
 import cinemaShowtime.filters.MovieSorter;
 import cinemaShowtime.filters.PageFilter;
-import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
-import cinemaShowtime.utils.Const;
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.AppParameter;
 import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
 import model.json.movie.Genre;
@@ -27,7 +25,7 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "movieCatalogueBean", eager = true)
 @SessionScoped
-public class MovieCatalogueBean extends BaseBean implements ReloadInterface {
+public class MovieCatalogueBean extends BaseBean {
 
 	private Movies movies;
 	private Movies moviePosters;
@@ -42,19 +40,19 @@ public class MovieCatalogueBean extends BaseBean implements ReloadInterface {
 
 		initPageFilter();
 		prepareMovieCatalogueList();
-
+		setPrepared(true);
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 	}
-	
+
 	private PageFilter pageFilter;
-	
+
 	private void initPageFilter() {
 		pageFilter = new PageFilter(getAccountBean());
 		pageFilter.setConfiguration(Filter.Configuration.NOW_SHOWING);
 		pageFilter.initFilter();
 	}
-	
+
 	public MovieFilter getMovieFilter() {
 		return pageFilter.getMovieFilter();
 	}
@@ -62,8 +60,10 @@ public class MovieCatalogueBean extends BaseBean implements ReloadInterface {
 	public MovieSorter getMovieSorter() {
 		return pageFilter.getMovieSorter();
 	}
-	
+
 	private void prepareMovieCatalogueList() {
+		Logger.log("PREPARING DATA");
+
 		ApiFilter filter = prepareFilter();
 		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 		movies = ApiHelper.getMoviesCatalogue(filter);
@@ -85,8 +85,8 @@ public class MovieCatalogueBean extends BaseBean implements ReloadInterface {
 		ApiFilter filter = new ApiFilter();
 		filter.addFilterParam(ApiFilter.Parameter.INCLUDE_OUTDATED,
 				String.valueOf(!getMovieFilter().isRuntimeMovies()));
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
-		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Const.COUNTRIES);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, AppParameter.COUNTRIES);
 		if (!getMovieFilter().getSelectedYear().isEmpty()) {
 			String dateFrom = getMovieFilter().getSelectedYear() + "-01-01";
 			String dateTo = getMovieFilter().getSelectedYear() + "-12-31";
@@ -113,7 +113,7 @@ public class MovieCatalogueBean extends BaseBean implements ReloadInterface {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");
-			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
+			getMovieDetailBean().initMovieDetailBean(movieId);
 			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -125,9 +125,8 @@ public class MovieCatalogueBean extends BaseBean implements ReloadInterface {
 	}
 
 	private Date getDateFrom() {
-		DateFormater df = new DateFormater();
 		if (!getMovieFilter().getSelectedYear().isEmpty()) {
-			return df.parseString(getMovieFilter().getSelectedYear() + "-01-01");
+			return getDateFormatter().parseString(getMovieFilter().getSelectedYear() + "-01-01");
 		} else {
 			return null;
 		}
@@ -135,8 +134,11 @@ public class MovieCatalogueBean extends BaseBean implements ReloadInterface {
 
 	@Override
 	public void reloadPage() {
-		getMovieFilter().initGenreList();
-		prepareMovieCatalogueList();
+		if (!isPrepared()) {
+			getMovieFilter().initGenreList();
+			prepareMovieCatalogueList();
+		}
+		setPrepared(false);
 	}
 
 }

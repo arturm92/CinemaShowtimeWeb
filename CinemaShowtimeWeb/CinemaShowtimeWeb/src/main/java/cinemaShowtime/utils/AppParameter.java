@@ -1,13 +1,13 @@
 package cinemaShowtime.utils;
 
-public class Const {
+public class AppParameter {
 	
 	public static final String LANGUAGE = "pl";
 	public static final String MULTIMEDIA_LANGUAGE = "en";
 	public static final String COUNTRIES = "PL,US";
 	
 	public static final String BASE_URL = "https://api.internationalshowtimes.com/v4/";
-	public static final String API_KEY = "eQYqRPwx0bybdAZGWMHTA4Kq7ns2smFk";
+	public static final String API_KEY = "Ekjq2bmli23ZYuLsHqtUlrZbe7YWNq7Z";
 	
 	public static final String LOCATION_BASE_URL = "https://api.ipgeolocation.io/ipgeo";
 	public static final String LOCATION_API_KEY= "7e0c13dce3d54d898899d8d501003bc3";

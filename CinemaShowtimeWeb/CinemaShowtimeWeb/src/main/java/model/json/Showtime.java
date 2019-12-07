@@ -2,7 +2,7 @@ package model.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.DateFormatter;
 
 public class Showtime {
  
@@ -94,7 +94,7 @@ public class Showtime {
 	}
 	
 	public String getFormattedDate() {
-		DateFormater df = new DateFormater();
+		DateFormatter df = new DateFormatter();
 		return df.formatDateWithTimezone(getStartAt()); 
 	}
 	

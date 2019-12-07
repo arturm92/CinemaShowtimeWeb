@@ -16,10 +16,9 @@ import cinemaShowtime.filters.Filter;
 import cinemaShowtime.filters.MovieFilter;
 import cinemaShowtime.filters.MovieSorter;
 import cinemaShowtime.filters.PageFilter;
-import cinemaShowtime.filters.ReloadInterface;
 import cinemaShowtime.helpers.ApiHelper;
 import cinemaShowtime.helpers.MovieHelper;
-import cinemaShowtime.utils.Const;
+import cinemaShowtime.utils.AppParameter;
 import cinemaShowtime.utils.Logger;
 import model.json.complex.Movies;
 import model.json.movie.Movie;
@@ -27,7 +26,7 @@ import model.json.movie.MovieFormatted;
 
 @ManagedBean(name = "movieRankingBean", eager = true)
 @SessionScoped
-public class MovieRankingBean extends BaseBean implements ReloadInterface {
+public class MovieRankingBean extends BaseBean {
 
 	private Movie selectedMovie;
 	private Movies rankingMovies;
@@ -46,7 +45,7 @@ public class MovieRankingBean extends BaseBean implements ReloadInterface {
 
 		initPageFilter();
 		prepareDisplayRankingList();
-
+		setPrepared(true);
 		long stopTime = System.currentTimeMillis();
 		Logger.logBeanStartTime(getClass().getName(), stopTime - startTime);
 
@@ -70,12 +69,14 @@ public class MovieRankingBean extends BaseBean implements ReloadInterface {
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_FROM, dateFrom);
 		filter.addFilterParam(ApiFilter.Parameter.RELEASE_DATE_TO, dateTo);
 
-		filter.addFilterParam(ApiFilter.Parameter.LANG, Const.LANGUAGE);
-		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, Const.COUNTRIES);
+		filter.addFilterParam(ApiFilter.Parameter.LANG, AppParameter.LANGUAGE);
+		filter.addFilterParam(ApiFilter.Parameter.COUNTRIES, AppParameter.COUNTRIES);
 		return filter;
 	}
 
 	private void prepareDisplayRankingList() {
+		Logger.log("PREPARING DATA");
+
 		ApiFilter filter = prepareFilter();
 		filter.setFields(ApiFilter.Field.MOVIE_STANDARD_FIELDS);
 		rankingMovies = ApiHelper.getMovies(filter);
@@ -102,7 +103,7 @@ public class MovieRankingBean extends BaseBean implements ReloadInterface {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			String movieId = ec.getRequestParameterMap().get("movieId");
-			MovieDetailBean.getInstance().initMovieDetailBean(movieId);
+			getMovieDetailBean().initMovieDetailBean(movieId);
 			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -147,7 +148,7 @@ public class MovieRankingBean extends BaseBean implements ReloadInterface {
 	public void select(SelectEvent selectEvent) {
 		try {
 			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-			MovieDetailBean.getInstance().initMovieDetailBean(selectedMovie.getId().toString());
+			getMovieDetailBean().initMovieDetailBean(selectedMovie.getId().toString());
 			ec.redirect("/CinemaShowtimeWeb/movieDetail/index.xhtml");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -168,8 +169,11 @@ public class MovieRankingBean extends BaseBean implements ReloadInterface {
 
 	@Override
 	public void reloadPage() {
-		getMovieFilter().initGenreList();
-		prepareDisplayRankingList();
+		if (!isPrepared()) {
+			getMovieFilter().initGenreList();
+			prepareDisplayRankingList();
+		}
+		setPrepared(false);
 	}
 
 	public MovieFilter getMovieFilter() {

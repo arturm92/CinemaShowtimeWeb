@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import cinemaShowtime.utils.DateFormater;
+import cinemaShowtime.utils.DateFormatter;
 import model.json.ShowtimeDay;
 
 public class MovieFormatted extends Movie {
@@ -173,7 +173,7 @@ public class MovieFormatted extends Movie {
 					return null;
 				}
 			}
-			DateFormater df = new DateFormater();
+			DateFormatter df = new DateFormatter();
 			return df.parseString(map.get("date"));
 		}
 		return null;
